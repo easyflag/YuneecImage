@@ -11,9 +11,16 @@ import java.io.FileOutputStream;
 
  
 public class PdfReport {
+
+	private static PdfReport pdfReport;
+	public static PdfReport getInstance() {
+		if (pdfReport == null) {
+			pdfReport = new PdfReport();
+		}
+		return pdfReport;
+	}
  
-    // main测试
-    public static void creat(String fileName) throws Exception {
+    public void creat(String fileName, String imagePath) throws Exception {
         try {
             // 1.新建document对象
             Document document = new Document(PageSize.A4);// 建立一个Document对象
@@ -32,7 +39,7 @@ public class PdfReport {
 			document.addCreator("Creator@umiz`s");// 创建者
  
             // 4.向文档中添加内容
-            new PdfReport().generatePDF(document);
+            new PdfReport().generatePDF(document,imagePath);
  
             // 5.关闭文档
             document.close();
@@ -42,7 +49,7 @@ public class PdfReport {
     }
  
     // 定义全局的字体静态变量
-	private static Font titlefont;
+	private static Font titlefont,titlefontChinese;
 	private static Font headfont;
 	private static Font keyfont;
 	private static Font textfont;
@@ -53,10 +60,12 @@ public class PdfReport {
         try {
             // 不同字体（这里定义为同一种字体：包含不同字号、不同style）
             BaseFont bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-            titlefont = new Font(bfChinese, 16, Font.BOLD);
-            headfont = new Font(bfChinese, 14, Font.BOLD);
-            keyfont = new Font(bfChinese, 10, Font.BOLD);
-            textfont = new Font(bfChinese, 10, Font.NORMAL);
+			BaseFont bfEnglish = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
+			titlefontChinese = new Font(bfChinese, 18, Font.BOLD);
+            titlefont = new Font(bfEnglish, 18, Font.BOLD);
+            headfont = new Font(bfEnglish, 16, Font.BOLD);
+            keyfont = new Font(bfEnglish, 10, Font.BOLD);
+            textfont = new Font(bfEnglish, 10, Font.NORMAL);
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,10 +73,11 @@ public class PdfReport {
     }
  
     // 生成PDF文件
-	public void generatePDF(Document document) throws Exception {
+	public void generatePDF(Document document,String imagePath) throws Exception {
  
     	// 段落
-		Paragraph paragraph = new Paragraph("Yuneec Image红外相机报告！", titlefont);
+		Paragraph paragraph = new Paragraph("Yuneec Image", titlefont);
+		paragraph.add(new Phrase(" 红外相机报告！",titlefontChinese));
 		paragraph.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右
 		paragraph.setIndentationLeft(12); //设置左缩进
 		paragraph.setIndentationRight(12); //设置右缩进
@@ -75,7 +85,7 @@ public class PdfReport {
 		paragraph.setLeading(20f); //行间距
 		paragraph.setSpacingBefore(5f); //设置段落上空白
 		paragraph.setSpacingAfter(10f); //设置段落下空白
- 
+
 		// 直线
 		Paragraph p1 = new Paragraph();
 		p1.add(new Chunk(new LineSeparator()));
@@ -93,19 +103,21 @@ public class PdfReport {
 //		gotoP.setReference("#top");
  
 		// 添加图片
-		Image image = Image.getInstance("C:\\Users\\Administrator\\Pictures\\image\\1.png");
+		Image image = Image.getInstance(imagePath);
 		image.setAlignment(Image.ALIGN_CENTER);
 		image.scalePercent(40); //依照比例缩放
- 
+
 		// 表格
-		PdfPTable table = createTable(new float[] { 40, 120, 120, 120, 80, 80 });
-		table.addCell(createCell("Pictures\\image\\1.png", headfont, Element.ALIGN_LEFT, 6, false));
-		table.addCell(createCell("序号", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("名称1", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("名称2", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("名称3", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("名称4", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("名称5", keyfont, Element.ALIGN_CENTER));
+		PdfPTable table = createTable(new float[] { 80, 100, 100, 100, 80, 80 });
+		PdfPCell imagePathName = createCell(imagePath, headfont, Element.ALIGN_LEFT, 6, false);
+		imagePathName.setPaddingBottom(20.0f);
+		table.addCell(imagePathName);
+		table.addCell(createCell("Model", keyfont, Element.ALIGN_CENTER));
+		table.addCell(createCell("Make", keyfont, Element.ALIGN_CENTER));
+		table.addCell(createCell("Name/Info", keyfont, Element.ALIGN_CENTER));
+		table.addCell(createCell("Time", keyfont, Element.ALIGN_CENTER));
+		table.addCell(createCell("F-Number", keyfont, Element.ALIGN_CENTER));
+		table.addCell(createCell("Aperture Value", keyfont, Element.ALIGN_CENTER));
 		Integer totalQuantity = 0;
 		for (int i = 0; i < 5; i++) {
 			table.addCell(createCell(""+(i+1), textfont));
@@ -116,19 +128,23 @@ public class PdfReport {
 			table.addCell(createCell("55", textfont));
 			totalQuantity ++;
 		}
-		table.addCell(createCell("总计", keyfont));
+		table.addCell(createCell("total", keyfont));
 		table.addCell(createCell("", textfont));
 		table.addCell(createCell("", textfont));
 		table.addCell(createCell("", textfont));
-		table.addCell(createCell(String.valueOf(totalQuantity) + "名称", textfont));
-		table.addCell(createCell("", textfont));
- 
+		table.addCell(createCell(String.valueOf(totalQuantity) + " image", textfont));
+		table.addCell(createCell("end", textfont));
+
+		Paragraph paragraphEnd = new Paragraph("...", textfont);
+		paragraphEnd.setSpacingAfter(30f);
+
 		document.add(paragraph);
 //		document.add(anchor);
 		document.add(p2);
 //		document.add(gotoP);
 		document.add(p1);
 		document.add(table);
+		document.add(paragraphEnd);
 		document.add(image);
 	}
  

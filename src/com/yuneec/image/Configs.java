@@ -17,11 +17,12 @@ public class Configs {
 	
 	
 	public static String backgroundColor = "#252526";
-	public static String color1 = "#234F91"; //LeftPanel
-	public static String color2 = "#333333"; 
+	public static String blue_color = "#234F91";
+	public static String lightGray_color = "#333333";
 	public static String red_color = "#FF0000";
 	public static String grey_color = "#d9d6c3";
-	
+	public static String white_color = "#FFFFFF";
+
 	
 	static class RightPaneImageInfo{
 		static int row = 12;
@@ -32,7 +33,7 @@ public class Configs {
 		
 		static int startX = marginLeft;
 		static int startY = marginTop;
-		static int endX = Configs.RightPanelWidth - marginRight;
+		static int endX = RightPanelWidth - marginRight;
 		static int offsetX = (endX -marginLeft)/ 2;
 		static int offsetY = lineHeight;
 		static int endY = marginTop + offsetY * (row-1);

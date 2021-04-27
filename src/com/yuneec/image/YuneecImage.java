@@ -1,48 +1,31 @@
 package com.yuneec.image;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class YuneecImage extends Application {
 
@@ -50,8 +33,8 @@ public class YuneecImage extends Application {
 		launch(args);
 	}
 
-	Stage primaryStage;
-	HBox hBox;
+	private Stage primaryStage;
+	private HBox hBox;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -63,7 +46,7 @@ public class YuneecImage extends Application {
 		initMenu(root);
 
 		// root.setBackground(new Background(new
-		// BackgroundFill(Color.web(Configs.color2),null,null)));
+		// BackgroundFill(Color.web(Configs.lightGray_color),null,null)));
 		hBox = new HBox();
 		hBox.setPadding(new Insets(Configs.Spacing, 0, Configs.Spacing, 0));
 		hBox.setSpacing(1);
@@ -84,11 +67,14 @@ public class YuneecImage extends Application {
 		MenuBar menuBar = new MenuBar();
 		menuBar.setPrefHeight(Configs.MenuHeight);
 		menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
+//		menuBar.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color),null,null)));
 		root.setTop(menuBar);
-		Menu fileMenu = new Menu("File");
-		MenuItem openFileMenuItem = new MenuItem("Open");
+		Menu fileMenu = new Menu("Add File");
+//		fileMenu.setStyle("-fx-font-size:13px;");
+		MenuItem openFileMenuItem = new MenuItem("Open File");
 		openFileMenuItem.setOnAction(actionEvent -> openFile());
-		MenuItem saveMenuItem = new MenuItem("Save");
+		MenuItem openFolderMenuItem = new MenuItem("Open Folder");
+		openFolderMenuItem.setOnAction(actionEvent -> openFolder());
 		MenuItem exitMenuItem = new MenuItem("Exit");
 		exitMenuItem.setOnAction(actionEvent -> Platform.exit());
 		fileMenu.getItems().addAll(openFileMenuItem, new SeparatorMenuItem(),exitMenuItem);
@@ -110,28 +96,26 @@ public class YuneecImage extends Application {
 				new FileChooser.ExtensionFilter("All", "*.*"),
 				new FileChooser.ExtensionFilter("txt", "*.txt"));
 		File file = fileChooser.showSaveDialog(primaryStage);
-		System.out.println(file);
+		System.out.println("createReport:"+file);
 		if (file == null) {
 			return;
 		}
 		try {
-			PdfReport.creat(file.toString().replace("\\", "\\\\"));
+			PdfReport.getInstance().creat(file.toString().replace("\\", "\\\\"),openImagePath);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	Label fileNameLable;
-
+	private Label fileNameLable;
+	private FlowPane leftPane;
 	private void initLeftPanel() {
-		FlowPane leftPane = new FlowPane();
+		leftPane = new FlowPane();
 		leftPane.setPrefWidth(Configs.LeftPanelWidth);
-		// leftPane.setStyle("-fx-background-color: lightGray;");
 		leftPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
 		hBox.getChildren().add(leftPane);
-
-		// Buttons
+//		addDragFileToLeftPane();
 		Button openFile = new Button();
 		openFile.setTranslateX(10);
 		openFile.setTranslateY(10);
@@ -149,7 +133,7 @@ public class YuneecImage extends Application {
 		pane1.setPrefHeight(Configs.LineHeight);
 		pane1.setPrefWidth(Configs.LeftPanelWidth);
 		// pane1.setStyle("-fx-background-color: gray;");
-		pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.color1), null, null)));
+		pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
 
 		fileNameLable = new Label();
 		fileNameLable.setTranslateX(10);
@@ -168,23 +152,65 @@ public class YuneecImage extends Application {
 		leftPane.getChildren().add(pane1);
 	}
 
-	protected void openFile() {
+	private void addDragFileToLeftPane() {
+		leftPane.setOnDragOver(new EventHandler<DragEvent>() {
+			@Override
+			public void handle(DragEvent event) {
+				if (event.getGestureSource() != leftPane && event.getDragboard().hasFiles()) {
+					/* allow for both copying and moving, whatever user chooses */
+					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+				}
+				event.consume();
+			}
+		});
+		leftPane.setOnDragDropped(new EventHandler<DragEvent>() {
+			@Override
+			public void handle(DragEvent event) {
+				Dragboard db = event.getDragboard();
+				boolean success = false;
+				if (db.hasFiles()) {
+					success = true;
+					System.out.println("addDragFileToLeftPane:"+db.getFiles());
+					File file = db.getFiles().get(0);
+					String path = file.getAbsolutePath();
+					fileNameLable.setText(file.getName());
+					openImagePath = path.replace("\\", "\\\\");
+					openImage();
+				}
+				/* let the source know whether the string was successfully
+				 * transferred and used */
+				event.setDropCompleted(success);
+				event.consume();
+			}
+		});
+	}
+
+	private void openFile() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Choose File");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All", "*.*"));
 		File file = fileChooser.showOpenDialog(primaryStage);
 		if (file != null) {
 			String path = file.getAbsolutePath();
-			System.out.println(path);
+			System.out.println("openFile:"+path);
 			fileNameLable.setText(file.getName());
 			openImagePath = path.replace("\\", "\\\\");
 			openImage();
 		}
 	}
 
-	int imageX, imageY;
-	String openImagePath;
-	protected void openImage() {
+	private void openFolder(){
+		DirectoryChooser directoryChooser=new DirectoryChooser();
+		File file = directoryChooser.showDialog(primaryStage);
+		if (file != null) {
+			String path = file.getPath();
+			System.out.println(path);
+		}
+	}
+
+	private int imageX, imageY;
+	private String openImagePath;
+	private void openImage() {
 		ImageUtil.readImage(openImagePath);
 		showImageInfoToRightPane();
 		resetCenterSetting();
@@ -240,16 +266,16 @@ public class YuneecImage extends Application {
 		});
 	}
 
-	int startLineX = 0;
-	int startLineY = 0;
-	Line topLine, bottomLine, leftLine, rightLine;
+	private int startLineX = 0;
+	private int startLineY = 0;
+	private Line topLine, bottomLine, leftLine, rightLine;
 
 	private void addRectangleForImage(int x, int y) {
 		centerImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
-		topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.red_color,imageX,imageY); 
-		bottomLine = drawLine(startLineX, y, x, y,Configs.red_color,imageX,imageY); 
-		leftLine = drawLine(startLineX, startLineY, startLineX, y,Configs.red_color,imageX,imageY); 
-		rightLine = drawLine(x, startLineY, x, y,Configs.red_color,imageX,imageY); 
+		topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.white_color,imageX,imageY);
+		bottomLine = drawLine(startLineX, y, x, y,Configs.white_color,imageX,imageY);
+		leftLine = drawLine(startLineX, startLineY, startLineX, y,Configs.white_color,imageX,imageY);
+		rightLine = drawLine(x, startLineY, x, y,Configs.white_color,imageX,imageY);
 		centerImagePane.getChildren().addAll(topLine, bottomLine, leftLine, rightLine);
 	}
 
@@ -267,22 +293,22 @@ public class YuneecImage extends Application {
 		return line;
 	}
 
-	protected void addLabelInImage(int x, int y) {
+	private void addLabelInImage(int x, int y) {
 		Label label = new Label();
 		label.setText(new Random().nextInt(100) - 50 + "℃");
-		label.setTextFill(Color.BLUE);
+		label.setTextFill(Color.web(Configs.white_color));
 		label.setTranslateX(x + imageX + 5);
 		label.setTranslateY(y + imageY - 8);
 		centerImagePane.getChildren().add(label);
 		Circle circle = new Circle();
-		circle.setFill(Color.RED);
+		circle.setFill(Color.web(Configs.white_color));
 		circle.setCenterX(x + imageX);
 		circle.setCenterY(y + imageY);
 		circle.setRadius(3.0f);
 		centerImagePane.getChildren().add(circle);
 	}
 
-	Pane centerImagePane;
+	private Pane centerImagePane;
 	private void initCenterPanel() {
 		FlowPane centerPane = new FlowPane();
 		centerPane.setPrefWidth(Configs.CenterPanelWidth);
@@ -292,7 +318,7 @@ public class YuneecImage extends Application {
 		centerSettingPane.setPrefHeight(Configs.LineHeight);
 		centerSettingPane.setPrefWidth(Configs.CenterPanelWidth);
 		// pane1.setStyle("-fx-background-color: gray;");
-		centerSettingPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.color2), null, null)));
+		centerSettingPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
 		centerPane.getChildren().add(centerSettingPane);
 		
 		initCenterSettingPane(centerSettingPane);
@@ -311,7 +337,7 @@ public class YuneecImage extends Application {
 	private Background centerSettingButtonClickBackground;
 	private Button SingleClickButton,BoxChooseButton,ColorPaletteButton;
 	private void initCenterSettingPane(Pane centerSettingPane) {
-		centerSettingButtonUnclickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.color2), new CornerRadii(5), new Insets(1)));
+		centerSettingButtonUnclickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.lightGray_color), new CornerRadii(5), new Insets(1)));
 		centerSettingButtonClickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.backgroundColor), new CornerRadii(5), new Insets(1)));
 		
 		SingleClickButton = creatSettingButton("image/center_click.png",null);
@@ -374,10 +400,10 @@ public class YuneecImage extends Application {
 		centerSettingPane.getChildren().add(BoxChooseButton);
 		centerSettingPane.getChildren().add(ColorPaletteButton);
 	}
-	
-	Pane centerSettingColorPalettePane;
-	boolean centerSettingColorPalettePaneAdded = false;
-	protected void showColorPalettePane() {
+
+	private Pane centerSettingColorPalettePane;
+	private boolean centerSettingColorPalettePaneAdded = false;
+	private void showColorPalettePane() {
 		if(centerSettingColorPalettePaneAdded){
 			return;
 		}
@@ -386,18 +412,18 @@ public class YuneecImage extends Application {
 		centerSettingColorPalettePane.setPrefWidth(100);
 		centerSettingColorPalettePane.setTranslateX(10);
 		centerSettingColorPalettePane.setTranslateY(10);
-		centerSettingColorPalettePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.color2), new CornerRadii(5), null)));
+		centerSettingColorPalettePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), new CornerRadii(5), null)));
 		centerImagePane.getChildren().add(centerSettingColorPalettePane);
 		centerSettingColorPalettePaneAdded = true;
 		addColorPaletteButton();
 	}
-	
-	protected void dmissColorPalettePane() {
+
+	private void dmissColorPalettePane() {
 		centerImagePane.getChildren().remove(centerSettingColorPalettePane);
 		centerSettingColorPalettePaneAdded = false;
 	}
-	
-	ArrayList<Button> colorPaletteButtonList = new ArrayList<Button>();
+
+	private ArrayList<Button> colorPaletteButtonList = new ArrayList<Button>();
 	private void addColorPaletteButton() {
 		Button whiteHotButton = creatSettingButton(null,"WhiteHot");
 		whiteHotButton.setTranslateY(10);
@@ -475,7 +501,7 @@ public class YuneecImage extends Application {
 			button.setGraphic(imageView);
 		}
 		button.setBackground(centerSettingButtonUnclickBackground);
-		Border border = new Border(new BorderStroke(Paint.valueOf(Configs.color1),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
+		Border border = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
 		button.setBorder(border);
 		return button;
 	}
@@ -487,7 +513,7 @@ public class YuneecImage extends Application {
 		centerSettingFlag = 0;
 	}
 
-	Label showXYlabel;
+	private Label showXYlabel;
 
 	private void initRightPanel() {
 		FlowPane rightPane = new FlowPane();
@@ -498,7 +524,7 @@ public class YuneecImage extends Application {
 		pane1.setPrefHeight(Configs.LineHeight);
 		pane1.setPrefWidth(Configs.RightPanelWidth);
 		// pane1.setStyle("-fx-background-color: gray;");
-		pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.color2), null, null)));
+		pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
 
 		showXYlabel = new Label();
 		showXYlabel.setTranslateX(10);
@@ -521,13 +547,13 @@ public class YuneecImage extends Application {
 
 	}
 
-	Pane rightImageInfoPane;
+	private Pane rightImageInfoPane;
 	private void initRightPaneImageInfo() {
 		rightImageInfoPane = new Pane();
 		rightImageInfoPane.setPrefHeight(500);
 		rightImageInfoPane.setPrefWidth(Configs.RightPanelWidth);
 		rightImageInfoPane.setTranslateY(Configs.Spacing);
-		rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.color2), null, null)));
+		rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
 		
 		Label titlelabel = new Label();
 		titlelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
@@ -553,6 +579,8 @@ public class YuneecImage extends Application {
 	}
 
 	private void showImageInfoToRightPane() {
+		rightImageInfoPane.getChildren().removeAll(imageInfoLabelList);
+		imageInfoLabelList.clear();
 		int imageInfoListLength = ImageUtil.imageInfoList.size();
 //		System.out.println("imageInfoListLength:" + imageInfoListLength);
 		if (imageInfoListLength > 0) {
@@ -565,6 +593,7 @@ public class YuneecImage extends Application {
 		}
 	}
 
+	private ArrayList<Label> imageInfoLabelList = new ArrayList<Label>();
 	private void addImageInfoLabelToRightPane(String tagName,String description, int i) {
 		Label tagNamelabel = new Label();
 		tagNamelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
@@ -578,6 +607,9 @@ public class YuneecImage extends Application {
 		descriptionlabel.setText(description);
 		descriptionlabel.setTextFill(Color.WHITE);
 		rightImageInfoPane.getChildren().add(descriptionlabel);
+		imageInfoLabelList.add(tagNamelabel);
+		imageInfoLabelList.add(descriptionlabel);
 	}
+
 
 }
