@@ -36,7 +36,7 @@ public class CenterPane {
 
     public void getImageOffsetXY(){
         imageX = (int) (Configs.CenterPanelWidth / 2 - Global.currentOpenImageWidth / 2);
-        imageY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight - Configs.Spacing) / 2
+        imageY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight) / 2
                 - Global.currentOpenImageHeight / 2);
         if (imageView != null){
             imageView.setTranslateX(imageX);
@@ -137,7 +137,7 @@ public class CenterPane {
 //        int num = new Random().nextInt(100) - 50;
         label.setText(String.format("%1.2f", pointTemperature) + "℃");
         label.setTextFill(Color.web(Configs.white_color));
-        label.setTranslateX(x + imageX + 5);
+        label.setTranslateX(x + imageX + 7);
         label.setTranslateY(y + imageY - 8);
         centerImagePane.getChildren().add(label);
         Circle circle = new Circle();
@@ -146,6 +146,10 @@ public class CenterPane {
         circle.setCenterY(y + imageY);
         circle.setRadius(3.0f);
         centerImagePane.getChildren().add(circle);
+        int lineLEN = 7;
+        Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,Configs.white_color,imageX,imageY);
+        Line yLine = drawLine(x,y-lineLEN,x,y+lineLEN,Configs.white_color,imageX,imageY);
+        centerImagePane.getChildren().addAll(xLine,yLine);
     }
 
     public Pane centerImagePane;

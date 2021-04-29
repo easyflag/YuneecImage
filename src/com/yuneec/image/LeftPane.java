@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 
 import java.io.File;
 
@@ -43,6 +44,9 @@ public class LeftPane {
         pane1.setPrefWidth(Configs.LeftPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
         pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
+
+        Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color,-1,0);
+        pane1.getChildren().add(leftLine);
 
         fileNameLable = new Label();
         fileNameLable.setTranslateX(10);

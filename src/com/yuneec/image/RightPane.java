@@ -30,7 +30,7 @@ public class RightPane {
     public Label showXYlabel;
 
     private void initRightPane() {
-        FlowPane rightPane = new FlowPane();
+        Pane rightPane = new Pane();
         rightPane.setPrefWidth(Configs.RightPanelWidth);
         rightPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
 
@@ -39,6 +39,9 @@ public class RightPane {
         pane1.setPrefWidth(Configs.RightPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
         pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
+        pane1.setTranslateX(1);
+        Line leftLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color,0,0);
+        rightPane.getChildren().add(leftLine);
 
         showXYlabel = new Label();
         showXYlabel.setTranslateX(10);
@@ -51,12 +54,6 @@ public class RightPane {
         initRightPaneImageInfo();
         rightPane.getChildren().add(rightImageInfoPane);
 
-        Button reportButton = new Button();
-        reportButton.setTranslateX(120);
-        reportButton.setTranslateY(50);
-        reportButton.setText("Report");
-        // rightPane.getChildren().add(reportButton);
-
         Global.hBox.getChildren().add(rightPane);
 
     }
@@ -65,8 +62,10 @@ public class RightPane {
     private void initRightPaneImageInfo() {
         rightImageInfoPane = new Pane();
         rightImageInfoPane.setPrefHeight(500);
+        rightImageInfoPane.setTranslateX(1);
         rightImageInfoPane.setPrefWidth(Configs.RightPanelWidth);
-        rightImageInfoPane.setTranslateY(Configs.Spacing);
+        rightImageInfoPane.setTranslateY(Configs.LineHeight+10);
+//        rightImageInfoPane.setTranslateY(Configs.Spacing);
         rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
 
         Label titlelabel = new Label();

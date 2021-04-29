@@ -13,7 +13,7 @@ public class Configs {
 	public static int CenterPanelWidth = 800;
 	public static int RightPanelWidth = 320;
 	
-	public static int Spacing = 1;
+//	public static int Spacing = 1;
 	
 	
 	public static String backgroundColor = "#252526";

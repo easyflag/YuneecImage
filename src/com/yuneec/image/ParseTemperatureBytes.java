@@ -42,10 +42,9 @@ public class ParseTemperatureBytes {
         for (int i=0;i<findIndexList.size();i++){
             System.arraycopy(bytes,(Integer) findIndexList.get(i)+2+2,TemperatureBytes,bufLens[i],bufLens[i+1]-2);
         }
-
         System.out.println("TemperatureBytes---> " + TemperatureBytes.length);
+        System.out.println(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,100));
 
-        System.out.println(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,50));
         for (int i=0;i<50;i++){
             byte[] spotTempByte = new byte[4];
             System.arraycopy(TemperatureBytes,i,spotTempByte,3,1);
