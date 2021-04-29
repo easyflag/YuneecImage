@@ -48,9 +48,15 @@ public class TreeViewExample extends Application {
         root3.getChildren().addAll(item7, item8, item9);
 
         //列表查看学历
-        TreeItem<String> base = new TreeItem<String>("Folder:");
+        TreeItem<String> base = new TreeItem<String>("Yuneec Image Files:");
         base.setExpanded(true);
         base.getChildren().addAll(root1, root2, root3);
+
+        for (int i=0;i<5;i++){
+            TreeItem item10 = new TreeItem(i+"Image.jpg");
+            base.getChildren().add(item10);
+        }
+
         //创建一个TreeView项目
         TreeView treeView = new TreeView(base);
         treeView.setPrefHeight(300);

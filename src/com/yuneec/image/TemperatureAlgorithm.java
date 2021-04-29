@@ -38,6 +38,27 @@ public class TemperatureAlgorithm {
         return compensate_temp_with_env_temp((float) temp, AmbientTemperature);
     }
 
+    int tifWidth = 320;
+    int tifHeight = 256;
+    private short getTemperaByteForXY(int x, int y) {
+        short pixel_value = 0;
+        byte[] TemperatureBytes = ParseTemperatureBytes.getInstance().TemperatureBytes;
+        int index = (int) ((x / (Global.currentOpenImageWidth / tifWidth)) *
+                (y / (Global.currentOpenImageHeight / tifHeight)));
+        if (index % 2 != 0){
+            index += 1;
+        }
+        byte[] spotTempByte = new byte[2];
+//        System.arraycopy(TemperatureBytes,index,spotTempByte,2,2);
+        spotTempByte[0] = TemperatureBytes[index];
+        spotTempByte[1] = TemperatureBytes[index + 1];
+        pixel_value = ByteUtils.byteArrayToShort(spotTempByte,false);
+        System.out.print(" spotTempByte:" + ByteUtils.byteArrayToHexString(spotTempByte, 0,2));
+        System.out.println("x:" + x + " ,y:" + y + " ,index:" + index + " ,pixel_value:" + pixel_value);
+        System.out.println("********************************************");
+        return pixel_value;
+    }
+
     float compensate_temp_with_env_temp(float temp, float envTemp)
     {
        float caliTemp = (float) 23.0; /* calibration was done in env 23 */
@@ -127,27 +148,6 @@ public class TemperatureAlgorithm {
             temp = BOSON_MIN_TEMP;
         }
         return temp;
-    }
-
-    int tifWidth = 320;
-    int tifHeight = 256;
-    private short getTemperaByteForXY(int x, int y) {
-        short pixel_value = 0;
-        byte[] TemperatureBytes = ParseTemperatureBytes.getInstance().TemperatureBytes;
-        int index = (int) ((x / (Global.currentOpenImageWidth / tifWidth)) *
-                (y / (Global.currentOpenImageHeight / tifHeight)));
-        if (index % 2 != 0){
-            index += 1;
-        }
-        byte[] spotTempByte = new byte[2];
-//        System.arraycopy(TemperatureBytes,index,spotTempByte,2,2);
-        spotTempByte[0] = TemperatureBytes[index];
-        spotTempByte[1] = TemperatureBytes[index + 1];
-        pixel_value = ByteUtils.byteArrayToShort(spotTempByte,false);
-        System.out.print(" spotTempByte:" + ByteUtils.byteArrayToHexString(spotTempByte, 0,2));
-        System.out.println("x:" + x + " ,y:" + y + " ,index:" + index + " ,pixel_value:" + pixel_value);
-        System.out.println("********************************************");
-        return pixel_value;
     }
 
 

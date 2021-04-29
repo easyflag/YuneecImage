@@ -43,7 +43,7 @@ public class RightPane {
 
         showXYlabel = new Label();
         showXYlabel.setTranslateX(10);
-        showXYlabel.setTranslateY(10);
+        showXYlabel.setTranslateY(12);
         showXYlabel.setTextFill(Color.WHITE);
         pane1.getChildren().add(showXYlabel);
 
@@ -60,9 +60,8 @@ public class RightPane {
     private void initRightPaneImageInfo() {
         rightImageInfoPane = new Pane();
         rightImageInfoPane.setPrefHeight(500);
-        rightImageInfoPane.setTranslateX(1);
         rightImageInfoPane.setPrefWidth(Configs.RightPanelWidth);
-        rightImageInfoPane.setTranslateY(Configs.LineHeight+10);
+        rightImageInfoPane.setTranslateY(Configs.LineHeight+5);
 //        rightImageInfoPane.setTranslateY(Configs.Spacing);
         rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
 
