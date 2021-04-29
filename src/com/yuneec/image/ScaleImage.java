@@ -1,4 +1,4 @@
-package com.yuneec.image.demo;
+package com.yuneec.image;
 
 
 import java.io.File;
@@ -22,20 +22,21 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
-public class ImageMaxMin extends Application {
+public class ScaleImage extends Application {
     Point2D dragDistance = null;
     public void start(Stage primaryStage) {
 
+        String file = Global.currentOpenImagePath;
         ImageView imageView = new ImageView();
-        String file = "F:\\intellijSpace\\YuneecImage\\src\\image\\DJI_01.jpg";
         System.out.println(file);
         Image image = new Image("file:" + file);
         imageView.setImage(image);
 
-        double windowWidth = 1300;
-        double windowHeight = 700;
+        double windowWidth = 640;
+        double windowHeight = 512;
         final double w = image.getWidth();
         final double h = image.getHeight();
         System.out.println("image w:" + w + ",h:"+h);
@@ -47,17 +48,17 @@ public class ImageMaxMin extends Application {
 
         Pane pane = new Pane();
 
-        init4Pane();
+//        init4Pane();
 
         imageView.setX((pane.getWidth() - imageView.getFitWidth()) / 2);
         imageView.setY((pane.getHeight() - imageView.getFitHeight()) / 2);
 
-        pane.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
+//        pane.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
         StackPane stackPane = new StackPane(pane);
         stackPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         Scene scene = new Scene(stackPane, windowWidth, windowHeight);
         pane.getChildren().add(imageView);
-        pane.getChildren().add(topPane);
+//        pane.getChildren().add(topPane);
         pane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -72,7 +73,7 @@ public class ImageMaxMin extends Application {
             }
         });
 
-        final double scale = 5;
+        final double scale = 10;
         stackPane.addEventFilter(ScrollEvent.SCROLL, event -> {
             double rate = 0;
             if (event.getDeltaY() > 0) {
@@ -108,21 +109,17 @@ public class ImageMaxMin extends Application {
 
         draggable(stackPane);
 
+        scene.setFill(Paint.valueOf(Configs.backgroundColor));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     Pane topPane;
-    Pane imagePane;
     private void init4Pane() {
         topPane = new Pane();
         topPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
-        topPane.setPrefHeight(200);
-        topPane.setPrefWidth(1300);
-        imagePane = new Pane();
-        imagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
-        imagePane.setPrefHeight(512);
-        imagePane.setPrefWidth(640);
+        topPane.setPrefHeight(50);
+        topPane.setPrefWidth(640);
     }
 
     private static class Position {

@@ -41,17 +41,10 @@ public class ImageUtil {
 	public static void readImage(String name){
 		try {
 			byte[] bytes = read(name);
-//			int length = bytes.length;
-//			System.out.println("image bytes length: " + length);
-////			String s = ByteUtils.byteArrayToHexString(bytes);
-////			System.out.println(s);
-//			String s1 = ByteUtils.byteArrayToHexString(bytes, 0, 50);
-//			System.out.println(s1);
-//			String s2 = ByteUtils.byteArrayToHexString(bytes, length-50, length, length);
-//			System.out.println(s2);
-			
+
+			ParseTemperatureBytes.getInstance().init(bytes);
+
 			readPic(name);
-			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -107,24 +100,37 @@ public class ImageUtil {
                 System.err.println("ERROR: " + error);
             }
         }
+
+		try {
+			XMPUtil.getInstance().getXmp();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
-	public static String[] whiteList = {"Make","Model","Date/Time","F-Number","Aperture Value","Focal Length","Color Space"
-		,"Exif Image Width","Exif Image Height","Lens Specification"};
+	public static String[] whiteList = {"Make","Model","Date/Time","F-Number","ISO Speed","Brightness Value","Color Space"
+		,"Image Width","Image Height"};
 	public static ArrayList<ArrayList<String>> imageInfoList = new  ArrayList<ArrayList<String>>();
 	private static void storeImageInfo(Tag tag) {
 //		String s = tag.getDirectoryName() + " ; " + tag.getTagName()+ " ; " + tag.getDescription();
 //    	System.out.println("---> "+s);
+		String directoryName = tag.getDirectoryName();
     	String tagName = tag.getTagName();
     	String description = tag.getDescription();
-		if(Arrays.asList(whiteList).contains(tagName)){
+    	if(directoryName.startsWith("Exif")){
+			if(Arrays.asList(whiteList).contains(tagName)){
+				ArrayList<String> arrayList = new ArrayList<String>();
+				arrayList.add(tagName);
+				arrayList.add(description);
+				imageInfoList.add(arrayList);
+			}
+		}
+    	if(tagName.equals("File Size")){
 			ArrayList<String> arrayList = new ArrayList<String>();
 			arrayList.add(tagName);
 			arrayList.add(description);
 			imageInfoList.add(arrayList);
 		}
 	}
-	
-	
 
 }

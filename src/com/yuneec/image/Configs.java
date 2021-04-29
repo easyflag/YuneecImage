@@ -2,7 +2,7 @@ package com.yuneec.image;
 
 public class Configs {
 	
-	public static int SceneWidth = 1300;
+	public static int SceneWidth = 1320;
 	public static int SceneHeight = 700;
 	
 	public static int MenuHeight = 30;
@@ -11,7 +11,7 @@ public class Configs {
 	
 	public static int LeftPanelWidth = 200;
 	public static int CenterPanelWidth = 800;
-	public static int RightPanelWidth = 300;
+	public static int RightPanelWidth = 320;
 	
 	public static int Spacing = 1;
 	
@@ -28,7 +28,7 @@ public class Configs {
 		static int row = 12;
 		static int marginTop = 50;
 		static int marginLeft = 20;
-		static int marginRight = 20;
+		static int marginRight = 25;
 		static int lineHeight = 30;
 		
 		static int startX = marginLeft;

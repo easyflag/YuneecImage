@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,6 +33,19 @@ public class CenterPane {
     }
 
     private int imageX, imageY;
+
+    public void getImageOffsetXY(){
+        imageX = (int) (Configs.CenterPanelWidth / 2 - Global.currentOpenImageWidth / 2);
+        imageY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight - Configs.Spacing) / 2
+                - Global.currentOpenImageHeight / 2);
+        if (imageView != null){
+            imageView.setTranslateX(imageX);
+            imageView.setTranslateY(imageY);
+        }
+    }
+
+    double pointTemperature;
+    public ImageView imageView;
     public void showImage() {
         ImageUtil.readImage(Global.currentOpenImagePath);
         RightPane.getInstance().showImageInfoToRightPane();
@@ -38,19 +53,22 @@ public class CenterPane {
         centerSettingColorPalettePaneAdded = false;
         centerImagePane.getChildren().clear();
         Image image = new Image("file:" + Global.currentOpenImagePath);
-        ImageView imageView = new ImageView(image);
-        imageX = (int) (Configs.CenterPanelWidth / 2 - image.getWidth() / 2);
-        imageY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight - Configs.Spacing) / 2
-                - image.getHeight() / 2);
-        imageView.setTranslateX(imageX);
-        imageView.setTranslateY(imageY);
+        imageView = new ImageView(image);
+        Global.currentOpenImageWidth = image.getWidth();
+        Global.currentOpenImageHeight = image.getHeight();
+        getImageOffsetXY();
         centerImagePane.getChildren().add(imageView);
+
+//        ScaleImage.getInstance().init(Global.currentOpenImagePath);
 
         imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                String s = "x = " + (int) e.getX() + " y = " + (int) e.getY();
+                int x = (int) e.getX();
+                int y = (int) e.getY();
                 // System.out.println("MouseEvent:" + s);
+                pointTemperature = XMPUtil.getInstance().getTempera(x,y);
+                String s = "x = " + x + " y = " + y + " ,Temperature = " + String.format("%1.2f", pointTemperature);
                 RightPane.getInstance().showXYlabel.setText(s);
             }
         });
@@ -116,7 +134,8 @@ public class CenterPane {
 
     private void addLabelInImage(int x, int y) {
         Label label = new Label();
-        label.setText(new Random().nextInt(100) - 50 + "℃");
+//        int num = new Random().nextInt(100) - 50;
+        label.setText(String.format("%1.2f", pointTemperature) + "℃");
         label.setTextFill(Color.web(Configs.white_color));
         label.setTranslateX(x + imageX + 5);
         label.setTranslateY(y + imageY - 8);
@@ -129,13 +148,15 @@ public class CenterPane {
         centerImagePane.getChildren().add(circle);
     }
 
-    private Pane centerImagePane;
+    public Pane centerImagePane;
+    public FlowPane centerPane;
+    public Pane centerSettingPane;
     private void initCenterPane() {
-        FlowPane centerPane = new FlowPane();
+        centerPane = new FlowPane();
         centerPane.setPrefWidth(Configs.CenterPanelWidth);
         centerPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
 
-        Pane centerSettingPane = new FlowPane();
+        centerSettingPane = new FlowPane();
         centerSettingPane.setPrefHeight(Configs.LineHeight);
         centerSettingPane.setPrefWidth(Configs.CenterPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
@@ -174,7 +195,7 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
                 if (Utils.mouseLeftClick(e)) {
-                    System.out.println("initCenterSettingPane SingleClickButton MouseClicked ...");
+//                    System.out.println("initCenterSettingPane SingleClickButton MouseClicked ...");
                     SingleClickButton.setBackground(centerSettingButtonClickBackground);
                     BoxChooseButton.setBackground(centerSettingButtonUnclickBackground);
                     ColorPaletteButton.setBackground(centerSettingButtonUnclickBackground);
@@ -188,7 +209,7 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
                 if (Utils.mouseLeftClick(e)) {
-                    System.out.println("initCenterSettingPane BoxChooseButton MouseClicked ...");
+//                    System.out.println("initCenterSettingPane BoxChooseButton MouseClicked ...");
                     BoxChooseButton.setBackground(centerSettingButtonClickBackground);
                     SingleClickButton.setBackground(centerSettingButtonUnclickBackground);
                     ColorPaletteButton.setBackground(centerSettingButtonUnclickBackground);
@@ -202,7 +223,7 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
                 if (Utils.mouseLeftClick(e)) {
-                    System.out.println("initCenterSettingPane ColorPaletteButton MouseClicked ...");
+//                    System.out.println("initCenterSettingPane ColorPaletteButton MouseClicked ...");
                     SingleClickButton.setBackground(centerSettingButtonUnclickBackground);
                     BoxChooseButton.setBackground(centerSettingButtonUnclickBackground);
                     centerSettingFlag = 3;
@@ -294,6 +315,7 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
                 setButtonClickBackground(colorPaletteButtonList,MedicalButton);
+//                new ScaleImage().start(new Stage());
             }
         });
     }

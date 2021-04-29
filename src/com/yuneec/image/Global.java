@@ -7,4 +7,6 @@ public class Global {
     public static Stage primaryStage;
     public static HBox hBox;
     public static String currentOpenImagePath;
+    public static double currentOpenImageWidth;
+    public static double currentOpenImageHeight;
 }
