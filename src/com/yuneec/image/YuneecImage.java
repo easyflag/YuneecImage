@@ -13,6 +13,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -36,7 +37,11 @@ public class YuneecImage extends Application {
 //		Global.hBox.setSpacing(1);
 
 		LeftPane.getInstance().init();
+		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color,0,0);
+		Global.hBox.getChildren().add(leftLine);
 		CenterPane.getInstance().init();
+		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color,0,0);
+		Global.hBox.getChildren().add(rightLine);
 		RightPane.getInstance().init();
 
 		root.setCenter(Global.hBox);

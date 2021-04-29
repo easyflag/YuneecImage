@@ -31,10 +31,10 @@ public class LeftPane {
         initLeftPane();
     }
 
-    private FlowPane leftPane;
+    private Pane leftPane;
     public Label fileNameLable;
     private void initLeftPane() {
-        leftPane = new FlowPane();
+        leftPane = new Pane();
         leftPane.setPrefWidth(Configs.LeftPanelWidth);
         leftPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         Global.hBox.getChildren().add(leftPane);
@@ -44,9 +44,6 @@ public class LeftPane {
         pane1.setPrefWidth(Configs.LeftPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
         pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
-
-        Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color,-1,0);
-        pane1.getChildren().add(leftLine);
 
         fileNameLable = new Label();
         fileNameLable.setTranslateX(10);
@@ -63,6 +60,7 @@ public class LeftPane {
         });
 
         leftPane.getChildren().add(pane1);
+
     }
 
     private void addDragFileToLeftPane() {

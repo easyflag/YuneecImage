@@ -40,8 +40,6 @@ public class RightPane {
         // pane1.setStyle("-fx-background-color: gray;");
         pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
         pane1.setTranslateX(1);
-        Line leftLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color,0,0);
-        rightPane.getChildren().add(leftLine);
 
         showXYlabel = new Label();
         showXYlabel.setTranslateX(10);
