@@ -141,10 +141,11 @@ public class CenterPane {
         label.setTranslateY(y + imageY - 8);
         centerImagePane.getChildren().add(label);
         Circle circle = new Circle();
-        circle.setFill(Color.web(Configs.white_color));
+        circle.setStroke(Color.web(Configs.white_color));
+        circle.setFill(Color.TRANSPARENT);
         circle.setCenterX(x + imageX);
         circle.setCenterY(y + imageY);
-        circle.setRadius(3.0f);
+        circle.setRadius(3.5f);
         centerImagePane.getChildren().add(circle);
         int lineLEN = 7;
         Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,Configs.white_color,imageX,imageY);

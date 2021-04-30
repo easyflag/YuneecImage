@@ -7,6 +7,7 @@ import com.yuneec.image.Configs;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
@@ -108,6 +109,16 @@ public class ScaleImage extends Application {
         });
 
         draggable(stackPane);
+
+        imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                int x = (int) e.getX();
+                int y = (int) e.getY();
+                String s = "x = " + x + " y = " + y;
+                System.out.println("ScaleImage MouseEvent:" + s);
+            }
+        });
 
         scene.setFill(Paint.valueOf(Configs.backgroundColor));
         primaryStage.setScene(scene);

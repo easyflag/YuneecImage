@@ -10,7 +10,7 @@ public class TemperatureAlgorithm {
         return instance;
     }
 
-    static float CELSIUS_DEGREE_TO_KELVIN_DEGREE = 273.15f;
+    float CELSIUS_DEGREE_TO_KELVIN_DEGREE = 273.15f;
     int COMPENSATE_TEMP_HIGH_TEMP = 273;
     int COMPENSATE_TEMP_LOW_TEMP = 264;
     int BOSON_HIGH_GAIN_MAX_TEMP = 120;
