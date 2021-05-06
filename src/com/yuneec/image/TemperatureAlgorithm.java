@@ -47,25 +47,10 @@ public class TemperatureAlgorithm {
         return pointTemperature;
     }
 
-    int tifWidth = 320;
-    int tifHeight = 256;
     private int getTemperaByteForXY(int x, int y) {
         int pixel_value = 0;
-        int index = 0;
-        double ratio = Global.currentOpenImageWidth / tifWidth; //2
-        byte[] TemperatureBytes = ParseTemperatureBytes.getInstance().TemperatureBytes;
 
-//        index = x/ratio * y/ratio;
-        if (y <= 1) {
-            index = x;
-        }else if (x == 0) {
-            index = y / 2 * 640;
-        }else {
-            index = (((y / 2) * 640) + x);
-        }
-        if (index % 2 != 0) {
-            index++;
-        }
+        int index = getTemperaByteIndexForXY(x,y);
 
         byte[] spotTempByte = new byte[4];
 //        System.arraycopy(TemperatureBytes,index,spotTempByte,2,2);
@@ -73,13 +58,49 @@ public class TemperatureAlgorithm {
 //        spotTempByte[2] = TemperatureBytes[index + 1];
 //        pixel_value = ByteUtils.byteArrayToInt(spotTempByte,false);
 
-        spotTempByte[0] = TemperatureBytes[index];
-        spotTempByte[1] = TemperatureBytes[index + 1];
+        spotTempByte[0] = ParseTemperatureBytes.getInstance().TemperatureBytes[index];
+        spotTempByte[1] = ParseTemperatureBytes.getInstance().TemperatureBytes[index + 1];
         pixel_value = ByteUtils.getInt(spotTempByte);
 
 //        System.out.print(" spotTempByte:" + ByteUtils.byteArrayToHexString(spotTempByte, 0,spotTempByte.length-2));
 //        System.out.println(" x:" + x + " ,y:" + y + " ,index:" + index + " ,pixel_value:" + pixel_value);
         return pixel_value;
+    }
+
+    int tifWidth = 320;
+    int tifHeight = 256;
+    private int getTemperaByteIndexForXY(int x, int y) {
+        int index = 0;
+        int lineTemperaBytes = 0;
+
+        if (ParseTemperatureBytes.getInstance().TemperatureBytes.length == 163846){
+            tifWidth = 320;
+            tifHeight = 256;
+            lineTemperaBytes = tifWidth * 2;
+            int ratio = (int) (Global.currentOpenImageWidth / tifWidth);
+            if (y <= 1) {
+                index = x;
+            } else if (x == 0) {
+                index = (y / ratio * lineTemperaBytes);
+            } else {
+                index = (((y / ratio) * lineTemperaBytes) + x);
+            }
+            if (index % 2 != 0) {
+                index++;
+            }
+        }else {
+            tifWidth = 640;
+            tifHeight = 512;
+            lineTemperaBytes = tifWidth * 2;
+            if(y==0){
+                index = x * 2;
+            }else if(x==0){
+                index = y*lineTemperaBytes;
+            }else {
+                index = ((y * lineTemperaBytes) + x*2);
+            }
+        }
+        return index;
     }
 
     float compensate_temp_with_env_temp(float temp, float envTemp)

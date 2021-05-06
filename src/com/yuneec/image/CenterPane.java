@@ -44,7 +44,7 @@ public class CenterPane {
         }
     }
 
-    double pointTemperature;
+    float pointTemperature;
     public ImageView imageView;
     public void showImage() {
         ImageUtil.readImage(Global.currentOpenImagePath);
@@ -76,9 +76,9 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
 //				String s = "x=" + (int) e.getX() + " y=" + (int) e.getY();
-                // System.out.println("MouseClicked:" + s);
+//				System.out.println("MouseClicked:" + s);
                 if(centerSettingFlag == 1 && Utils.mouseLeftClick(e)){
-                    addLabelInImage((int) e.getX(), (int) e.getY());
+                    addLabelInImage((int) e.getX(), (int) e.getY(),pointTemperature,Configs.white_color);
                 }
             }
         });
@@ -88,6 +88,8 @@ public class CenterPane {
 //			System.out.println("setOnMouseDragged:" + s);
             if(centerSettingFlag == 2){
                 addRectangleForImage((int) event.getX(),(int) event.getY());
+                centerImagePane.getChildren().removeAll(oneTemperatureDrawMax);
+                centerImagePane.getChildren().removeAll(oneTemperatureDrawMin);
             }
         });
 
@@ -96,20 +98,47 @@ public class CenterPane {
 //			System.out.println("setOnMousePressed:" + s);
             startLineX = (int) event.getX();
             startLineY = (int) event.getY();
-
         });
 
         imageView.setOnMouseReleased(event->{
-//			String s = "x=" + (int) event.getX() + " y=" + (int) event.getY();
-//			System.out.println("setOnMouseReleased:" + s);
+//            String s = "x=" + (int) event.getX() + " y=" + (int) event.getY();
+//            System.out.println("setOnMouseReleased:" + s);
+            if (startLineX == (int) event.getX() && startLineY == (int) event.getY()){
+                return;
+            }
+            if(centerSettingFlag == 2){
+                BoxTemperatureUtil.getInstance().init(startLineX, startLineY, endLineX, endLineY, new BoxTemperatureUtil.MaxMinTemperature() {
+                    @Override
+                    public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY) {
+                        oneTemperatureDrawMax = addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
+                        oneTemperatureDrawMin = addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
+                    }
+                });
+            }
         });
     }
 
     private int startLineX = 0;
     private int startLineY = 0;
+    private int endLineX = 0;
+    private int endLineY = 0;
     private Line topLine, bottomLine, leftLine, rightLine;
 
     private void addRectangleForImage(int x, int y) {
+        if (x > Global.currentOpenImageWidth){
+            x = (int) Global.currentOpenImageWidth;
+        }
+        if (x < 0){
+            x = 0;
+        }
+        if (y > Global.currentOpenImageHeight){
+            y = (int) Global.currentOpenImageHeight;
+        }
+        if (y < 0){
+            y = 0;
+        }
+        endLineX = x;
+        endLineY = y;
         centerImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
         topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.white_color,imageX,imageY);
         bottomLine = drawLine(startLineX, y, x, y,Configs.white_color,imageX,imageY);
@@ -132,25 +161,34 @@ public class CenterPane {
         return line;
     }
 
-    private void addLabelInImage(int x, int y) {
+    ArrayList oneTemperatureDrawMax = new ArrayList();
+    ArrayList oneTemperatureDrawMin = new ArrayList();
+    ArrayList oneTemperatureDraw;
+    private ArrayList addLabelInImage(int x, int y ,float temperature,String color) {
+        oneTemperatureDraw = new ArrayList();
         Label label = new Label();
 //        int num = new Random().nextInt(100) - 50;
-        label.setText(String.format("%1.2f", pointTemperature) + "℃");
+        label.setText(String.format("%1.2f", temperature) + "℃");
         label.setTextFill(Color.web(Configs.white_color));
         label.setTranslateX(x + imageX + 7);
         label.setTranslateY(y + imageY - 8);
         centerImagePane.getChildren().add(label);
         Circle circle = new Circle();
-        circle.setStroke(Color.web(Configs.white_color));
+        circle.setStroke(Color.web(color));
         circle.setFill(Color.TRANSPARENT);
         circle.setCenterX(x + imageX);
         circle.setCenterY(y + imageY);
         circle.setRadius(3.5f);
         centerImagePane.getChildren().add(circle);
         int lineLEN = 7;
-        Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,Configs.white_color,imageX,imageY);
-        Line yLine = drawLine(x,y-lineLEN,x,y+lineLEN,Configs.white_color,imageX,imageY);
+        Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,color,imageX,imageY);
+        Line yLine = drawLine(x,y-lineLEN,x,y+lineLEN,color,imageX,imageY);
         centerImagePane.getChildren().addAll(xLine,yLine);
+        oneTemperatureDraw.add(label);
+        oneTemperatureDraw.add(circle);
+        oneTemperatureDraw.add(xLine);
+        oneTemperatureDraw.add(yLine);
+        return oneTemperatureDraw;
     }
 
     public Pane centerImagePane;
