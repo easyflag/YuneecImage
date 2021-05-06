@@ -68,7 +68,7 @@ public class CenterPane {
                 int y = (int) e.getY();
                 // System.out.println("MouseEvent:" + s);
                 pointTemperature = XMPUtil.getInstance().getTempera(x,y);
-                String s = "x = " + x + " y = " + y + " ,Temperature = " + String.format("%1.2f", pointTemperature);
+                String s = "x = " + x + " y = " + y + " ,Temperature = " + String.format("%1.2f", pointTemperature) + "℃";
                 RightPane.getInstance().showXYlabel.setText(s);
             }
         });

@@ -33,7 +33,7 @@ public class CenterScrollPane extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-		Pane root = new Pane();
+		AnchorPane root = new AnchorPane();
 		FlowPane centerPane = new FlowPane();
 		centerPane.setPrefWidth(Configs.CenterPanelWidth);
 		centerPane.setPrefHeight(Configs.SceneHeight);

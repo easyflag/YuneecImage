@@ -26,10 +26,10 @@ public class ParseTemperatureBytes {
 //			String s2 = ByteUtils.byteArrayToHexString(bytes, length-50, length, length);
 //			System.out.println(s2);
 
-        ArrayList findIndexList = simpleFind(bytes, 0, length, HEADER);
+        ArrayList findIndexList = simpleFind(bytes, 0, length, HEADER); //{5911,71447,136983}
         bufLens = new int[findIndexList.size() + 1];
-        bufLens[0] = 0;  // [0,65534,65534,33000]
-        int TemperatureBytesLen = 0;  // 164068
+        bufLens[0] = 0;  // [0,65534,65534,32778]
+        int TemperatureBytesLen = 0;  // 163846
         for (int i=0;i<findIndexList.size();i++){
 //            System.out.println("findIndexList ---> " + findIndexList.get(i));
             int bufLen = getBufLen(bytes, (Integer) findIndexList.get(i));
@@ -39,17 +39,14 @@ public class ParseTemperatureBytes {
         }
 
         TemperatureBytes = new byte[TemperatureBytesLen];
+        int desPos = 0;
         for (int i=0;i<findIndexList.size();i++){
-            System.arraycopy(bytes,(Integer) findIndexList.get(i)+2+2,TemperatureBytes,bufLens[i],bufLens[i+1]-2);
+            desPos += bufLens[i];
+            System.arraycopy(bytes,(int)findIndexList.get(i)+2+2,TemperatureBytes,desPos,bufLens[i+1]-2);
         }
-        System.out.println("TemperatureBytes---> " + TemperatureBytes.length);
+        System.out.println("TemperatureBytes---> " + TemperatureBytes.length +  " , " + TemperatureBytesLen);
         System.out.println(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,100));
-
-        for (int i=0;i<50;i++){
-            byte[] spotTempByte = new byte[4];
-            System.arraycopy(TemperatureBytes,i,spotTempByte,3,1);
-//            System.out.println(ByteUtils.byteArrayToHexString(spotTempByte, 0,spotTempByte.length) + " ,spotTemp:" + ByteUtils.byteArrayToInt(spotTempByte,true));
-        }
+        System.out.println(ByteUtils.byteArrayToHexString(bytes, TemperatureBytesLen-100, TemperatureBytesLen, TemperatureBytesLen));
     }
 
     private int getBufLen(byte[] bytes, int offset) {

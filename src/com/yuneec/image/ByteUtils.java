@@ -259,6 +259,15 @@ public class ByteUtils {
         return Float.intBitsToFloat(byteArrayToInt(b, false));
     }
 
+    public static double byteArrayToDouble(byte[] bytes){
+        long ff = 0xFF;
+        long bitLayoutLongValue = 0;
+        for (int i = 0; i < bytes.length; i++) {
+            bitLayoutLongValue |= (bytes[i] & ff) << (bytes.length - i - 1) * 8;
+        }
+        return Double.longBitsToDouble(bitLayoutLongValue);
+    }
+
     public static byte[] getBytes(short data) {
         byte[] bytes = new byte[2];
         bytes[0] = (byte) (data & 0xff);

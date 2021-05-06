@@ -27,23 +27,10 @@ public class YuneecImage extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		Global.primaryStage = primaryStage;
 		primaryStage.setTitle(" Yuneec Image Tool");
-
 		BorderPane root = new BorderPane();
-
-		TopMenuBar.getInstance().init(root);
-
 		Global.hBox = new HBox();
 //		Global.hBox.setPadding(new Insets(Configs.Spacing, 0, Configs.Spacing, 0));
 //		Global.hBox.setSpacing(1);
-
-		LeftPane.getInstance().init();
-		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color,0,0);
-		Global.hBox.getChildren().add(leftLine);
-		CenterPane.getInstance().init();
-		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color,0,0);
-		Global.hBox.getChildren().add(rightLine);
-		RightPane.getInstance().init();
-
 		root.setCenter(Global.hBox);
 		Scene scene = new Scene(root, Configs.SceneWidth, Configs.SceneHeight);
 		root.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
@@ -51,6 +38,15 @@ public class YuneecImage extends Application {
 //		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("image/launcher.png"));
 		primaryStage.show();
+
+		TopMenuBar.getInstance().init(root);
+		LeftPane.getInstance().init();
+		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color,0,0);
+		Global.hBox.getChildren().add(leftLine);
+		CenterPane.getInstance().init();
+		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color,0,0);
+		Global.hBox.getChildren().add(rightLine);
+		RightPane.getInstance().init();
 
 		primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override

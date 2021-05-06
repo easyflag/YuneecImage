@@ -30,32 +30,55 @@ public class TemperatureAlgorithm {
     static int GainMode;
     static float AmbientTemperature;
 
-
-    public float getTemperature(int x, int y) {
-        short pixel_value = getTemperaByteForXY(x,y);  // 0x5478 5478  --  21624
-        float fpa_compensated = (pixel_value + PixelToFpaTempB) / (1 - PixelToFpaTempM);
+    public float getTemperatureTest(int pixel_value) {
+        float fpa_compensated = (0x9851 + PixelToFpaTempB) / (1 - PixelToFpaTempM);
         double temp = ((B1 / Math.log(R1 * 1.0f / (fpa_compensated - O1) + F1)) - CELSIUS_DEGREE_TO_KELVIN_DEGREE);
         return compensate_temp_with_env_temp((float) temp, AmbientTemperature);
     }
 
+    public float getTemperature(int x, int y) {
+        float pointTemperature;
+        int pixel_value = getTemperaByteForXY(x,y);  // 0x5478 5478  --  21624
+        float fpa_compensated = (pixel_value + PixelToFpaTempB) / (1 - PixelToFpaTempM);
+        double temp = ((B1 / Math.log(R1 * 1.0f / (fpa_compensated - O1) + F1)) - CELSIUS_DEGREE_TO_KELVIN_DEGREE);
+        pointTemperature = compensate_temp_with_env_temp((float) temp, AmbientTemperature);
+//        System.out.println(" ---- > pointTemperature :" + pointTemperature);
+//        System.out.println(" -----------------------------------------------------------------------");
+        return pointTemperature;
+    }
+
     int tifWidth = 320;
     int tifHeight = 256;
-    private short getTemperaByteForXY(int x, int y) {
-        short pixel_value = 0;
+    private int getTemperaByteForXY(int x, int y) {
+        int pixel_value = 0;
+        int index = 0;
+        double ratio = Global.currentOpenImageWidth / tifWidth; //2
         byte[] TemperatureBytes = ParseTemperatureBytes.getInstance().TemperatureBytes;
-        int index = (int) ((x / (Global.currentOpenImageWidth / tifWidth)) *
-                (y / (Global.currentOpenImageHeight / tifHeight)));
-        if (index % 2 != 0){
-            index += 1;
+
+//        index = x/ratio * y/ratio;
+        if (y <= 1) {
+            index = x;
+        }else if (x == 0) {
+            index = y / 2 * 640;
+        }else {
+            index = (((y / 2) * 640) + x);
         }
-        byte[] spotTempByte = new byte[2];
+        if (index % 2 != 0) {
+            index++;
+        }
+
+        byte[] spotTempByte = new byte[4];
 //        System.arraycopy(TemperatureBytes,index,spotTempByte,2,2);
+//        spotTempByte[3] = TemperatureBytes[index];
+//        spotTempByte[2] = TemperatureBytes[index + 1];
+//        pixel_value = ByteUtils.byteArrayToInt(spotTempByte,false);
+
         spotTempByte[0] = TemperatureBytes[index];
         spotTempByte[1] = TemperatureBytes[index + 1];
-        pixel_value = ByteUtils.byteArrayToShort(spotTempByte,false);
-        System.out.print(" spotTempByte:" + ByteUtils.byteArrayToHexString(spotTempByte, 0,2));
-        System.out.println("x:" + x + " ,y:" + y + " ,index:" + index + " ,pixel_value:" + pixel_value);
-        System.out.println("********************************************");
+        pixel_value = ByteUtils.getInt(spotTempByte);
+
+//        System.out.print(" spotTempByte:" + ByteUtils.byteArrayToHexString(spotTempByte, 0,spotTempByte.length-2));
+//        System.out.println(" x:" + x + " ,y:" + y + " ,index:" + index + " ,pixel_value:" + pixel_value);
         return pixel_value;
     }
 
