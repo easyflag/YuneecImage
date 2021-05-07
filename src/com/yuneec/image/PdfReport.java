@@ -37,7 +37,7 @@ public class PdfReport {
  
             document.open();
 
-            new PdfReport().generatePDF(document);
+            generatePDF(document);
  
             document.close();
 

@@ -1,7 +1,9 @@
 package com.yuneec.image;
 
 public class Configs {
-	
+
+	public static String version = "   ( Version: 0.0.1 Beta )";
+
 	public static int SceneWidth = 1320;
 	public static int SceneHeight = 700;
 	
