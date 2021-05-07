@@ -76,14 +76,14 @@ public class RightPane {
         for(int i=0;i<Configs.RightPaneImageInfo.row;i++){
             Line line = CenterPane.getInstance().drawLine(Configs.RightPaneImageInfo.startX, Configs.RightPaneImageInfo.startY +
                             Configs.RightPaneImageInfo.offsetY*i, Configs.RightPaneImageInfo.endX,
-                    Configs.RightPaneImageInfo.startY + Configs.RightPaneImageInfo.offsetY*i, Configs.grey_color, 0, 0);
+                    Configs.RightPaneImageInfo.startY + Configs.RightPaneImageInfo.offsetY*i, Configs.grey_color);
             rightImageInfoPane.getChildren().add(line);
         }
 
         for(int i=0;i<3;i++){
             Line line = CenterPane.getInstance().drawLine(Configs.RightPaneImageInfo.startX + Configs.RightPaneImageInfo.offsetX*i,
                     Configs.RightPaneImageInfo.startY, Configs.RightPaneImageInfo.startX +
-                            Configs.RightPaneImageInfo.offsetX*i, Configs.RightPaneImageInfo.endY, Configs.grey_color, 0, 0);
+                            Configs.RightPaneImageInfo.offsetX*i, Configs.RightPaneImageInfo.endY, Configs.grey_color);
             rightImageInfoPane.getChildren().add(line);
         }
     }

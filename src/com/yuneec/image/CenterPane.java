@@ -1,6 +1,5 @@
 package com.yuneec.image;
 
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -13,18 +12,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class CenterPane {
 
     public FlowPane centerPane;
     public Pane centerSettingPane;
     public Pane centerImagePane;
+    public Pane showImagePane; //640*512
 
-    private int imageX, imageY;
+    private int showImagePaneX, showImagePaneY;
     private float pointTemperature;
     private ImageView imageView;
 
@@ -61,13 +59,11 @@ public class CenterPane {
     }
 
     public void getImageOffsetXY(){
-        imageX = (int) (Configs.CenterPanelWidth / 2 - Global.currentOpenImageWidth / 2);
-        imageY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight) / 2
+        showImagePaneX = (int) (Configs.CenterPanelWidth / 2 - Global.currentOpenImageWidth / 2);
+        showImagePaneY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight) / 2
                 - Global.currentOpenImageHeight / 2);
-        if (imageView != null){
-            imageView.setTranslateX(imageX);
-            imageView.setTranslateY(imageY);
-        }
+        showImagePane.setTranslateX(showImagePaneX);
+        showImagePane.setTranslateY(showImagePaneY);
     }
 
     public void showImage() {
@@ -75,7 +71,7 @@ public class CenterPane {
         RightPane.getInstance().showImageInfoToRightPane();
         resetCenterSetting();
         centerSettingColorPalettePaneAdded = false;
-        centerImagePane.getChildren().clear();
+        showImagePane.getChildren().clear();
         pointTemperatureDataList.clear();
         boxTemperatureData = null;
 
@@ -84,7 +80,7 @@ public class CenterPane {
         Global.currentOpenImageWidth = image.getWidth();
         Global.currentOpenImageHeight = image.getHeight();
         getImageOffsetXY();
-        centerImagePane.getChildren().add(imageView);
+        showImagePane.getChildren().add(imageView);
 
 //        ScaleImage.getInstance().init(Global.currentOpenImagePath);
 
@@ -117,8 +113,8 @@ public class CenterPane {
 //			System.out.println("setOnMouseDragged:" + s);
             if(centerSettingFlag == 2){
                 addRectangleForImage((int) event.getX(),(int) event.getY());
-                centerImagePane.getChildren().removeAll(oneTemperatureDrawMax);
-                centerImagePane.getChildren().removeAll(oneTemperatureDrawMin);
+                showImagePane.getChildren().removeAll(oneTemperatureDrawMax);
+                showImagePane.getChildren().removeAll(oneTemperatureDrawMin);
             }
         });
 
@@ -165,16 +161,15 @@ public class CenterPane {
         }
         endLineX = x;
         endLineY = y;
-        centerImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
-        topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.white_color,imageX,imageY);
-        bottomLine = drawLine(startLineX, y, x, y,Configs.white_color,imageX,imageY);
-        leftLine = drawLine(startLineX, startLineY, startLineX, y,Configs.white_color,imageX,imageY);
-        rightLine = drawLine(x, startLineY, x, y,Configs.white_color,imageX,imageY);
-        centerImagePane.getChildren().addAll(topLine, bottomLine, leftLine, rightLine);
+        showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
+        topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.white_color);
+        bottomLine = drawLine(startLineX, y, x, y,Configs.white_color);
+        leftLine = drawLine(startLineX, startLineY, startLineX, y,Configs.white_color);
+        rightLine = drawLine(x, startLineY, x, y,Configs.white_color);
+        showImagePane.getChildren().addAll(topLine, bottomLine, leftLine, rightLine);
     }
 
-    public Line drawLine(int StartX, int StartY, int EndX, int EndY,
-                          String color, double translateX, double translateY) {
+    public Line drawLine(int StartX, int StartY, int EndX, int EndY, String color) {
         Line line = new Line();
         line.setStrokeWidth(1);
         line.setStroke(Paint.valueOf(color));
@@ -182,8 +177,6 @@ public class CenterPane {
         line.setStartY(StartY);
         line.setEndX(EndX);
         line.setEndY(EndY);
-        line.setTranslateX(translateX);
-        line.setTranslateY(translateY);
         return line;
     }
 
@@ -193,20 +186,20 @@ public class CenterPane {
 //        int num = new Random().nextInt(100) - 50;
         label.setText(getFormatTemperature(temperature));
         label.setTextFill(Color.web(Configs.white_color));
-        label.setTranslateX(x + imageX + 7);
-        label.setTranslateY(y + imageY - 8);
-        centerImagePane.getChildren().add(label);
+        label.setTranslateX(x + 7);
+        label.setTranslateY(y - 8);
+        showImagePane.getChildren().add(label);
         Circle circle = new Circle();
         circle.setStroke(Color.web(color));
         circle.setFill(Color.TRANSPARENT);
-        circle.setCenterX(x + imageX);
-        circle.setCenterY(y + imageY);
+        circle.setCenterX(x);
+        circle.setCenterY(y);
         circle.setRadius(3.5f);
-        centerImagePane.getChildren().add(circle);
+        showImagePane.getChildren().add(circle);
         int lineLEN = 7;
-        Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,color,imageX,imageY);
-        Line yLine = drawLine(x,y-lineLEN,x,y+lineLEN,color,imageX,imageY);
-        centerImagePane.getChildren().addAll(xLine,yLine);
+        Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,color);
+        Line yLine = drawLine(x,y-lineLEN,x,y+lineLEN,color);
+        showImagePane.getChildren().addAll(xLine,yLine);
         oneTemperatureDraw.add(label);
         oneTemperatureDraw.add(circle);
         oneTemperatureDraw.add(xLine);
@@ -237,6 +230,11 @@ public class CenterPane {
         centerImagePane.setPrefHeight(Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight - 1);
         centerImagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         centerPane.getChildren().add(centerImagePane);
+
+        showImagePane = new Pane();
+        showImagePane.setPrefWidth(Configs.DefaultImageWidth);
+        showImagePane.setPrefHeight(Configs.DefaultImageHeight);
+        centerImagePane.getChildren().add(showImagePane);
 
         Global.hBox.getChildren().add(centerPane);
     }

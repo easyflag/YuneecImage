@@ -4,12 +4,18 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
- 
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
 
+
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
- 
+
 public class PdfReport {
 
 	private static PdfReport pdfReport;
@@ -33,6 +39,9 @@ public class PdfReport {
             new PdfReport().generatePDF(document);
  
             document.close();
+
+			new File("C:\\temp.png").delete();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,6 +84,12 @@ public class PdfReport {
 		// 直线
 		Paragraph p1 = new Paragraph();
 		p1.add(new Chunk(new LineSeparator()));
+		//time
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = formatter.format(date);
+		Paragraph paragraphTime = new Paragraph(time, textfont);
+		paragraphTime.setAlignment(2);
 		// 点线
 		Paragraph p2 = new Paragraph();
 		p2.add(new Chunk(new DottedLineSeparator()));
@@ -85,9 +100,11 @@ public class PdfReport {
 //		Anchor gotoP = new Anchor("goto");
 //		gotoP.setReference("#top");
 		// 添加图片
-		Image image = Image.getInstance(Global.currentOpenImagePath);
+		WritableImage showImagePane = CenterPane.getInstance().showImagePane.snapshot(new SnapshotParameters(), null);
+		ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File("C:\\temp.png"));
+		Image image = Image.getInstance("C:\\temp.png");
 		image.setAlignment(Image.ALIGN_CENTER);
-		image.scalePercent(40); //依照比例缩放
+		image.scalePercent(60); //依照比例缩放
 		// 表格
 		PdfPTable table = getPointTemperature();
 
@@ -96,9 +113,10 @@ public class PdfReport {
 
 		document.add(paragraph);
 		document.add(p2);
+		document.add(paragraphTime);
 		document.add(p1);
 		document.add(table);
-		document.add(paragraphEnd);
+//		document.add(paragraphEnd);
 		document.add(image);
 	}
 

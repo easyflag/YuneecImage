@@ -41,10 +41,10 @@ public class YuneecImage extends Application {
 
 		TopMenuBar.getInstance().init(root);
 		LeftPane.getInstance().init();
-		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color,0,0);
+		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color);
 		Global.hBox.getChildren().add(leftLine);
 		CenterPane.getInstance().init();
-		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color,0,0);
+		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color);
 		Global.hBox.getChildren().add(rightLine);
 		RightPane.getInstance().init();
 

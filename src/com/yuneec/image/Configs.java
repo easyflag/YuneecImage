@@ -12,6 +12,9 @@ public class Configs {
 	public static int LeftPanelWidth = 200;
 	public static int CenterPanelWidth = 800;
 	public static int RightPanelWidth = 320;
+
+	public static int DefaultImageWidth = 640;
+	public static int DefaultImageHeight = 512;
 	
 //	public static int Spacing = 1;
 	
