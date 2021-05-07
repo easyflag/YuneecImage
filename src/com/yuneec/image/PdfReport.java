@@ -1,13 +1,15 @@
 package com.yuneec.image;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
-
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -42,6 +44,8 @@ public class PdfReport {
             document.close();
 
 			new File(tempImagePath).delete();
+
+			ToastUtil.toast("PDF report generated successfully !");
 
         } catch (Exception e) {
             e.printStackTrace();
