@@ -18,6 +18,7 @@ import java.util.Date;
 
 public class PdfReport {
 
+	private String tempImagePath = "C:\\tempYImage.png";
 	private static PdfReport pdfReport;
 	public static PdfReport getInstance() {
 		if (pdfReport == null) {
@@ -40,7 +41,7 @@ public class PdfReport {
  
             document.close();
 
-			new File("C:\\temp.png").delete();
+			new File(tempImagePath).delete();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,8 +102,8 @@ public class PdfReport {
 //		gotoP.setReference("#top");
 		// 添加图片
 		WritableImage showImagePane = CenterPane.getInstance().showImagePane.snapshot(new SnapshotParameters(), null);
-		ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File("C:\\temp.png"));
-		Image image = Image.getInstance("C:\\temp.png");
+		ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File(tempImagePath));
+		Image image = Image.getInstance(tempImagePath);
 		image.setAlignment(Image.ALIGN_CENTER);
 		image.scalePercent(60); //依照比例缩放
 		// 表格

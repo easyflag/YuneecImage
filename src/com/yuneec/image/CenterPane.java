@@ -58,7 +58,7 @@ public class CenterPane {
         initCenterPane();
     }
 
-    public void getImageOffsetXY(){
+    public void getImagePaneOffsetXY(){
         showImagePaneX = (int) (Configs.CenterPanelWidth / 2 - Global.currentOpenImageWidth / 2);
         showImagePaneY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight) / 2
                 - Global.currentOpenImageHeight / 2);
@@ -79,7 +79,7 @@ public class CenterPane {
         imageView = new ImageView(image);
         Global.currentOpenImageWidth = image.getWidth();
         Global.currentOpenImageHeight = image.getHeight();
-        getImageOffsetXY();
+        getImagePaneOffsetXY();
         showImagePane.getChildren().add(imageView);
 
 //        ScaleImage.getInstance().init(Global.currentOpenImagePath);

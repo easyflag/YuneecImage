@@ -38,6 +38,8 @@ public class YuneecImage extends Application {
 //		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("image/launcher.png"));
 		primaryStage.show();
+		primaryStage.setMinWidth(1320);
+		primaryStage.setMinHeight(700);
 
 		TopMenuBar.getInstance().init(root);
 		LeftPane.getInstance().init();
@@ -59,8 +61,8 @@ public class YuneecImage extends Application {
 						Configs.CenterPanelWidth = (int) (width - Configs.LeftPanelWidth - Configs.RightPanelWidth);
 						CenterPane.getInstance().centerPane.setPrefWidth(Configs.CenterPanelWidth);
 						CenterPane.getInstance().centerSettingPane.setPrefWidth(Configs.CenterPanelWidth);
-//						CenterPane.getInstance().centerImagePane.setPrefWidth(Configs.CenterPanelWidth);
-//						CenterPane.getInstance().getImageOffsetXY();
+						CenterPane.getInstance().centerImagePane.setPrefWidth(Configs.CenterPanelWidth);
+						CenterPane.getInstance().getImagePaneOffsetXY();
 					}
 				});
 			}
@@ -71,7 +73,6 @@ public class YuneecImage extends Application {
 				double height = primaryStage.getHeight();
 //				System.out.println("heightProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,height:" + height);
 				Configs.SceneHeight = (int) height;
-//				CenterPane.getInstance().getImageOffsetXY();
 			}
 		});
 
