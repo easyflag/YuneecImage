@@ -20,6 +20,34 @@ import java.util.Random;
 
 public class CenterPane {
 
+    public FlowPane centerPane;
+    public Pane centerSettingPane;
+    public Pane centerImagePane;
+
+    private int imageX, imageY;
+    private float pointTemperature;
+    private ImageView imageView;
+
+    private int startLineX = 0;
+    private int startLineY = 0;
+    private int endLineX = 0;
+    private int endLineY = 0;
+    private Line topLine, bottomLine, leftLine, rightLine;
+
+    private int centerSettingFlag ;
+    private Pane centerSettingColorPalettePane;
+    private boolean centerSettingColorPalettePaneAdded = false;
+    private Background centerSettingButtonUnclickBackground;
+    private Background centerSettingButtonClickBackground;
+    private Button SingleClickButton,BoxChooseButton,ColorPaletteButton;
+
+    private ArrayList oneTemperatureDrawMax = new ArrayList();
+    private ArrayList oneTemperatureDrawMin = new ArrayList();
+    private ArrayList oneTemperatureDraw;
+
+    public ArrayList<String[]> pointTemperatureDataList = new ArrayList<>();
+    public String[] boxTemperatureData = null;
+
     private static CenterPane instance;
     public static CenterPane getInstance() {
         if (instance == null) {
@@ -32,8 +60,6 @@ public class CenterPane {
         initCenterPane();
     }
 
-    private int imageX, imageY;
-
     public void getImageOffsetXY(){
         imageX = (int) (Configs.CenterPanelWidth / 2 - Global.currentOpenImageWidth / 2);
         imageY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight) / 2
@@ -44,14 +70,15 @@ public class CenterPane {
         }
     }
 
-    float pointTemperature;
-    public ImageView imageView;
     public void showImage() {
         ImageUtil.readImage(Global.currentOpenImagePath);
         RightPane.getInstance().showImageInfoToRightPane();
         resetCenterSetting();
         centerSettingColorPalettePaneAdded = false;
         centerImagePane.getChildren().clear();
+        pointTemperatureDataList.clear();
+        boxTemperatureData = null;
+
         Image image = new Image("file:" + Global.currentOpenImagePath);
         imageView = new ImageView(image);
         Global.currentOpenImageWidth = image.getWidth();
@@ -68,7 +95,7 @@ public class CenterPane {
                 int y = (int) e.getY();
                 // System.out.println("MouseEvent:" + s);
                 pointTemperature = XMPUtil.getInstance().getTempera(x,y);
-                String s = "x = " + x + " y = " + y + " ,Temperature = " + String.format("%1.2f", pointTemperature) + "℃";
+                String s = "x = " + x + " y = " + y + " ,Temperature = " + getFormatTemperature(pointTemperature);
                 RightPane.getInstance().showXYlabel.setText(s);
             }
         });
@@ -79,6 +106,8 @@ public class CenterPane {
 //				System.out.println("MouseClicked:" + s);
                 if(centerSettingFlag == 1 && Utils.mouseLeftClick(e)){
                     addLabelInImage((int) e.getX(), (int) e.getY(),pointTemperature,Configs.white_color);
+                    String[] pointTemperatureData = new String[]{String.valueOf((int) e.getX()), String.valueOf((int) e.getY()), getFormatTemperature(pointTemperature)};
+                    pointTemperatureDataList.add(pointTemperatureData);
                 }
             }
         });
@@ -112,17 +141,14 @@ public class CenterPane {
                     public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY) {
                         oneTemperatureDrawMax = addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
                         oneTemperatureDrawMin = addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
+                        boxTemperatureData = new String[]{String.valueOf(startLineX), String.valueOf(startLineY),
+                                String.valueOf(endLineX), String.valueOf(endLineY),
+                                getFormatTemperature(maxTemperature), getFormatTemperature(minTemperature)};
                     }
                 });
             }
         });
     }
-
-    private int startLineX = 0;
-    private int startLineY = 0;
-    private int endLineX = 0;
-    private int endLineY = 0;
-    private Line topLine, bottomLine, leftLine, rightLine;
 
     private void addRectangleForImage(int x, int y) {
         if (x > Global.currentOpenImageWidth){
@@ -161,14 +187,11 @@ public class CenterPane {
         return line;
     }
 
-    ArrayList oneTemperatureDrawMax = new ArrayList();
-    ArrayList oneTemperatureDrawMin = new ArrayList();
-    ArrayList oneTemperatureDraw;
     private ArrayList addLabelInImage(int x, int y ,float temperature,String color) {
         oneTemperatureDraw = new ArrayList();
         Label label = new Label();
 //        int num = new Random().nextInt(100) - 50;
-        label.setText(String.format("%1.2f", temperature) + "℃");
+        label.setText(getFormatTemperature(temperature));
         label.setTextFill(Color.web(Configs.white_color));
         label.setTranslateX(x + imageX + 7);
         label.setTranslateY(y + imageY - 8);
@@ -191,9 +214,10 @@ public class CenterPane {
         return oneTemperatureDraw;
     }
 
-    public Pane centerImagePane;
-    public FlowPane centerPane;
-    public Pane centerSettingPane;
+    public String getFormatTemperature(float temperature){
+        return String.format("%1.2f", temperature) + "℃";
+    }
+
     private void initCenterPane() {
         centerPane = new FlowPane();
         centerPane.setPrefWidth(Configs.CenterPanelWidth);
@@ -217,10 +241,6 @@ public class CenterPane {
         Global.hBox.getChildren().add(centerPane);
     }
 
-    private int centerSettingFlag ;
-    private Background centerSettingButtonUnclickBackground;
-    private Background centerSettingButtonClickBackground;
-    private Button SingleClickButton,BoxChooseButton,ColorPaletteButton;
     private void initCenterSettingPane(Pane centerSettingPane) {
         centerSettingButtonUnclickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.lightGray_color), new CornerRadii(5), new Insets(1)));
         centerSettingButtonClickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.backgroundColor), new CornerRadii(5), new Insets(1)));
@@ -286,8 +306,6 @@ public class CenterPane {
         centerSettingPane.getChildren().add(ColorPaletteButton);
     }
 
-    private Pane centerSettingColorPalettePane;
-    private boolean centerSettingColorPalettePaneAdded = false;
     private void showColorPalettePane() {
         if(centerSettingColorPalettePaneAdded){
             return;

@@ -82,7 +82,7 @@ public class TopMenuBar {
             return;
         }
         try {
-            PdfReport.getInstance().creat(file.toString().replace("\\", "\\\\"),Global.currentOpenImagePath);
+            PdfReport.getInstance().creat(file.toString().replace("\\", "\\\\"));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

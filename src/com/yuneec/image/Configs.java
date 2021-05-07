@@ -22,6 +22,7 @@ public class Configs {
 	public static String red_color = "#FF0000";
 	public static String grey_color = "#d9d6c3";
 	public static String white_color = "#FFFFFF";
+	public static String snow_white_color = "#FFFAFA";
 	public static String blue2_color = "#0000FF";
 
 	
