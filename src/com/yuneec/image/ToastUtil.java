@@ -46,14 +46,14 @@ public class ToastUtil {
         label.setPrefHeight(50);
         label.setPadding(new Insets(15));
         label.setAlignment(Pos.CENTER);
-        label.setFont(new Font(20));
+        label.setFont(new Font(14));
         Scene scene=new Scene(label);
         scene.setFill(null);
         Screen screen = Screen.getPrimary();
         Rectangle2D r2 = screen.getVisualBounds();
 //        stage.setWidth(r2.getWidth());
 //        stage.setHeight(r2.getHeight());
-        stage.setX(r2.getWidth()/2 - 240);
+        stage.setX(r2.getWidth()/2 - 200);
         stage.setY(r2.getHeight()/2 + 100);
         stage.setScene(scene);
     }
