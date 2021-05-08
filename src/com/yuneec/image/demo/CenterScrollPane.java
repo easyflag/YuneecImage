@@ -27,8 +27,8 @@ public class CenterScrollPane extends Application{
 	}
 
 	GridPane gridpane;
-	String fileName = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec05.jpg";
-	String fileName2 = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec03.jpg";
+	String fileName = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec07.jpg";
+	String fileName2 = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec08.jpg";
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -129,7 +129,7 @@ public class CenterScrollPane extends Application{
 			button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 				setAllBackground(button);
 				if (event.getClickCount() == 2) {
-					Global.currentOpenImagePath = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec05.jpg";
+					Global.currentOpenImagePath = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec07.jpg";
 					new ScaleImage().start(new Stage());
 				}
 			});
