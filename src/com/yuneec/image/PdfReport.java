@@ -57,6 +57,7 @@ public class PdfReport {
 	private static Font keyfont;
 	private static Font textfont;
 	private static Font textfontCh;
+	private static Font boxTemperaturefont,boxTemperaturefontCh;
 	private static int maxWidth = 520;
     static {
         try {
@@ -69,6 +70,8 @@ public class PdfReport {
             keyfont = new Font(bfEnglish, 12, Font.BOLD);
             textfont = new Font(bfEnglish, 12, Font.NORMAL);
 			textfontCh = new Font(bfChinese, 12, Font.NORMAL);
+			boxTemperaturefont = new Font(bfEnglish, 14, Font.BOLD);
+			boxTemperaturefontCh = new Font(bfChinese, 14, Font.BOLD);
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,7 +81,7 @@ public class PdfReport {
 	public void generatePDF(Document document) throws Exception {
     	// 段落
 		Paragraph paragraph = new Paragraph("Yuneec Image", titlefont);
-		paragraph.add(new Phrase(" 红外相机报告！",titlefontChinese));
+		paragraph.add(new Phrase(" Infrared Camera Report ",titlefont));
 		paragraph.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右
 		paragraph.setIndentationLeft(12); //设置左缩进
 		paragraph.setIndentationRight(12); //设置右缩进
@@ -111,7 +114,8 @@ public class PdfReport {
 		image.setAlignment(Image.ALIGN_CENTER);
 		image.scalePercent(60); //依照比例缩放
 		// 表格
-		PdfPTable table = getPointTemperature();
+		PdfPTable pointTemperatureTable = getPointTemperature();
+		Paragraph boxParagraph = getBoxTemperature();
 
 		Paragraph paragraphEnd = new Paragraph("...", textfont);
 		paragraphEnd.setSpacingAfter(30f);
@@ -120,9 +124,28 @@ public class PdfReport {
 		document.add(p2);
 		document.add(paragraphTime);
 		document.add(p1);
-		document.add(table);
+		document.add(pointTemperatureTable);
+		if (boxParagraph != null){
+			document.add(boxParagraph);
+		}
 //		document.add(paragraphEnd);
 		document.add(image);
+	}
+
+	private Paragraph getBoxTemperature() {
+		if(CenterPane.getInstance().boxTemperatureData == null){
+			return null;
+		}
+		Paragraph paragraph = new Paragraph("Start Point: (" + CenterPane.getInstance().boxTemperatureData[0] + "," +  CenterPane.getInstance().boxTemperatureData[1] + ") , " +
+				" End Point: (" + CenterPane.getInstance().boxTemperatureData[2] + "," +  CenterPane.getInstance().boxTemperatureData[3] + ")\n", boxTemperaturefont);
+		paragraph.add(new Phrase("Max Temperature: " + CenterPane.getInstance().boxTemperatureData[4],boxTemperaturefont));
+		paragraph.add(new Phrase("℃",boxTemperaturefontCh));
+		paragraph.add(new Phrase(" , Min Temperature: " + CenterPane.getInstance().boxTemperatureData[5],boxTemperaturefont));
+		paragraph.add(new Phrase("℃",boxTemperaturefontCh));
+		paragraph.setAlignment(0);
+		paragraph.setIndentationLeft(20);
+		paragraph.setSpacingAfter(10f);
+		return paragraph;
 	}
 
 	private PdfPTable getPointTemperature() {
@@ -158,14 +181,8 @@ public class PdfReport {
 
 		if(CenterPane.getInstance().boxTemperatureData != null){
 			PdfPCell boxCellTitle = createCell("Box Temperature Data:", headfont, Element.ALIGN_LEFT, 4, false);
-			boxCellTitle.setPaddingBottom(-5.0f);
+			boxCellTitle.setPaddingBottom(5.0f);
 			table.addCell(boxCellTitle);
-			String boxTemperatureDataString = "起点坐标: (" + CenterPane.getInstance().boxTemperatureData[0] + "," +  CenterPane.getInstance().boxTemperatureData[1] + ") "
-					+ ", 终点坐标: (" + CenterPane.getInstance().boxTemperatureData[2] + "," +  CenterPane.getInstance().boxTemperatureData[3] + ") "
-					+ " , 最高温度: " + CenterPane.getInstance().boxTemperatureData[4] + " , 最低温度: " + CenterPane.getInstance().boxTemperatureData[5];
-			PdfPCell boxTemperature = createCell(boxTemperatureDataString, titlefontChinese, Element.ALIGN_LEFT, 4, false);
-			boxTemperature.setPaddingBottom(20.0f);
-			table.addCell(boxTemperature);
 		}
 
 		return table;
