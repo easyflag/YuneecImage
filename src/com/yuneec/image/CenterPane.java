@@ -349,7 +349,10 @@ public class CenterPane {
         whiteHotButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                setButtonClickBackground(colorPaletteButtonList,whiteHotButton);
+                boolean flag = YDialog.showConfirmDialog("Change To WhiteHot ...");
+                if (flag){
+                    setButtonClickBackground(colorPaletteButtonList,whiteHotButton);
+                }
             }
         });
         FulguriteButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
