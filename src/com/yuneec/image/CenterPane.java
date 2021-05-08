@@ -358,6 +358,7 @@ public class CenterPane {
         FulguriteButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+                YDialog.showInformationDialog("Change To Fulgurite ...");
                 setButtonClickBackground(colorPaletteButtonList,FulguriteButton);
             }
         });
