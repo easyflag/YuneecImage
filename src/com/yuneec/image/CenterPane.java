@@ -37,10 +37,10 @@ public class CenterPane {
     private float pointTemperature;
     private ImageView imageView;
 
-    private int startLineX = 0;
-    private int startLineY = 0;
-    private int endLineX = 0;
-    private int endLineY = 0;
+    public int startLineX = 0;
+    public int startLineY = 0;
+    public int endLineX = 0;
+    public int endLineY = 0;
     private Line topLine, bottomLine, leftLine, rightLine;
 
     private CenterSettingSelect centerSettingFlag = CenterSettingSelect.NONE;
@@ -51,13 +51,11 @@ public class CenterPane {
     private Button SingleClickButton,BoxChooseButton,ColorPaletteButton,ClearButton;
     private ArrayList centerSettingButtonNodeList = new ArrayList();
 
-    private ArrayList boxTemperatureNodeMax = new ArrayList();
-    private ArrayList boxTemperatureNodeMin = new ArrayList();
-    private ArrayList onePointTemperatureNode;
-    private ArrayList pointTemperatureNodeList = new ArrayList();
+    public ArrayList boxTemperatureNodeMax = new ArrayList();
+    public ArrayList boxTemperatureNodeMin = new ArrayList();
+    public ArrayList pointTemperatureNodeList = new ArrayList();
 
-    public ArrayList<String[]> pointTemperatureDataList = new ArrayList<>();
-    public String[] boxTemperatureData = null;
+    private String rightXYlabel;
 
     private static CenterPane instance;
     public static CenterPane getInstance() {
@@ -100,7 +98,8 @@ public class CenterPane {
                 int y = (int) e.getY();
                 // System.out.println("MouseEvent:" + s);
                 pointTemperature = XMPUtil.getInstance().getTempera(x,y);
-                String s = "x = " + x + " y = " + y + " ,Temperature = " + getFormatTemperature(pointTemperature);
+                rightXYlabel = "x = " + x + " y = " + y + " ,Temperature = ";
+                String s = rightXYlabel + Utils.getFormatTemperature(pointTemperature);
                 RightPane.getInstance().showXYlabel.setText(s);
             }
         });
@@ -112,8 +111,6 @@ public class CenterPane {
                 if(centerSettingFlag == CenterSettingSelect.POINT && Utils.mouseLeftClick(e)){
                     ArrayList pointNodeList = addLabelInImage((int) e.getX(), (int) e.getY(),pointTemperature,Configs.white_color);
                     pointTemperatureNodeList.add(pointNodeList);
-                    String[] pointTemperatureData = new String[]{String.valueOf((int) e.getX()), String.valueOf((int) e.getY()), getFormatTemperature(pointTemperature)};
-                    pointTemperatureDataList.add(pointTemperatureData);
                 }
             }
         });
@@ -147,9 +144,6 @@ public class CenterPane {
                     public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY) {
                         boxTemperatureNodeMax = addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
                         boxTemperatureNodeMin = addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
-                        boxTemperatureData = new String[]{String.valueOf(startLineX), String.valueOf(startLineY),
-                                String.valueOf(endLineX), String.valueOf(endLineY),
-                                getFormatTemperature(maxTemperature), getFormatTemperature(minTemperature)};
                     }
                 });
             }
@@ -191,10 +185,10 @@ public class CenterPane {
     }
 
     private ArrayList addLabelInImage(int x, int y ,float temperature,String color) {
-        onePointTemperatureNode = new ArrayList();
+        ArrayList onePointTemperatureNode = new ArrayList();
         Label label = new Label();
 //        int num = new Random().nextInt(100) - 50;
-        label.setText(getFormatTemperature(temperature));
+        label.setText(Utils.getFormatTemperature(temperature));
         label.setTextFill(Color.web(Configs.white_color));
         label.setTranslateX(x + 7);
         label.setTranslateY(y - 8);
@@ -214,11 +208,10 @@ public class CenterPane {
         onePointTemperatureNode.add(circle);
         onePointTemperatureNode.add(xLine);
         onePointTemperatureNode.add(yLine);
+        onePointTemperatureNode.add(temperature);//original temperature ℃
+        onePointTemperatureNode.add(x);
+        onePointTemperatureNode.add(y);
         return onePointTemperatureNode;
-    }
-
-    public String getFormatTemperature(float temperature){
-        return String.format("%1.2f", temperature) + "℃";
     }
 
     private void initCenterPane() {
@@ -460,8 +453,24 @@ public class CenterPane {
         showImagePane.getChildren().removeAll(boxTemperatureNodeMax);
         showImagePane.getChildren().removeAll(boxTemperatureNodeMin);
         pointTemperatureNodeList.clear();
-        pointTemperatureDataList.clear();
-        boxTemperatureData = null;
+        boxTemperatureNodeMax.clear();
+        boxTemperatureNodeMin.clear();
+    }
+
+    public void transitionTemperature(){
+        for (int i=0;i<pointTemperatureNodeList.size();i++){
+            ArrayList pointNodeList = (ArrayList) pointTemperatureNodeList.get(i);
+            Label label = (Label) pointNodeList.get(0);
+            float temperature = (float) pointNodeList.get(4);
+            label.setText(Utils.getFormatTemperature(temperature));
+        }
+        if (!boxTemperatureNodeMax.isEmpty()){
+            ((Label)boxTemperatureNodeMax.get(0)).setText(Utils.getFormatTemperature((float) boxTemperatureNodeMax.get(4)));
+        }
+        if (!boxTemperatureNodeMin.isEmpty()){
+            ((Label)boxTemperatureNodeMin.get(0)).setText(Utils.getFormatTemperature((float) boxTemperatureNodeMin.get(4)));
+        }
+        RightPane.getInstance().showXYlabel.setText(rightXYlabel + Utils.getFormatTemperature(pointTemperature));
     }
 
 }

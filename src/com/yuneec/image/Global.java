@@ -9,4 +9,11 @@ public class Global {
     public static String currentOpenImagePath;
     public static double currentOpenImageWidth;
     public static double currentOpenImageHeight;
+
+    public static TemperatureUnit NowTemperatureUnit = TemperatureUnit.Celsius;
+    public enum TemperatureUnit {
+        Celsius,
+        Fachrenheit,
+        Kelvin
+    }
 }

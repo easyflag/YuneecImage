@@ -15,6 +15,7 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -133,15 +134,15 @@ public class PdfReport {
 	}
 
 	private Paragraph getBoxTemperature() {
-		if(CenterPane.getInstance().boxTemperatureData == null){
+		if(CenterPane.getInstance().boxTemperatureNodeMax.isEmpty()){
 			return null;
 		}
-		Paragraph paragraph = new Paragraph("Start Point: (" + CenterPane.getInstance().boxTemperatureData[0] + "," +  CenterPane.getInstance().boxTemperatureData[1] + ") , " +
-				" End Point: (" + CenterPane.getInstance().boxTemperatureData[2] + "," +  CenterPane.getInstance().boxTemperatureData[3] + ")\n", boxTemperaturefont);
-		paragraph.add(new Phrase("Max Temperature: " + CenterPane.getInstance().boxTemperatureData[4],boxTemperaturefont));
-		paragraph.add(new Phrase("℃",boxTemperaturefontCh));
-		paragraph.add(new Phrase(" , Min Temperature: " + CenterPane.getInstance().boxTemperatureData[5],boxTemperaturefont));
-		paragraph.add(new Phrase("℃",boxTemperaturefontCh));
+		Paragraph paragraph = new Paragraph("Start Point: (" + CenterPane.getInstance().startLineX + "," +  CenterPane.getInstance().startLineY + ") , " +
+				" End Point: (" + CenterPane.getInstance().endLineX + "," +  CenterPane.getInstance().endLineY + ")\n", boxTemperaturefont);
+		paragraph.add(new Phrase("Max Temperature: ",boxTemperaturefont));
+		paragraph.add(new Phrase(Utils.getFormatTemperature((float) CenterPane.getInstance().boxTemperatureNodeMax.get(4)),boxTemperaturefontCh));
+		paragraph.add(new Phrase(" , Min Temperature: ",boxTemperaturefont));
+		paragraph.add(new Phrase(Utils.getFormatTemperature((float) CenterPane.getInstance().boxTemperatureNodeMin.get(4)),boxTemperaturefontCh));
 		paragraph.setAlignment(0);
 		paragraph.setIndentationLeft(20);
 		paragraph.setSpacingAfter(10f);
@@ -164,12 +165,13 @@ public class PdfReport {
 		table.addCell(createCell("Temperature ", keyfont, Element.ALIGN_CENTER));
 		Integer totalQuantity = 0;
 
-		for (int i = 0; i < CenterPane.getInstance().pointTemperatureDataList.size(); i++) {
-			String[] pointTemperature = CenterPane.getInstance().pointTemperatureDataList.get(i);
+		for (int i = 0; i < CenterPane.getInstance().pointTemperatureNodeList.size(); i++) {
+			ArrayList pointNodeList = (ArrayList) CenterPane.getInstance().pointTemperatureNodeList.get(i);
+			float temperature = (float) pointNodeList.get(4);
 			table.addCell(createCell(""+(i+1), textfont));
-			table.addCell(createCell(pointTemperature[0], textfont));
-			table.addCell(createCell(pointTemperature[1], textfont));
-			table.addCell(createCell(pointTemperature[2], textfontCh));
+			table.addCell(createCell(""+pointNodeList.get(5), textfont));
+			table.addCell(createCell(""+pointNodeList.get(6), textfont));
+			table.addCell(createCell(Utils.getFormatTemperature(temperature), textfontCh));
 			totalQuantity ++;
 		}
 //		table.addCell(createCell("total", keyfont));
@@ -179,7 +181,7 @@ public class PdfReport {
 //		table.addCell(createCell(String.valueOf(totalQuantity) + " image", textfont));
 //		table.addCell(createCell("end", textfont));
 
-		if(CenterPane.getInstance().boxTemperatureData != null){
+		if(!CenterPane.getInstance().boxTemperatureNodeMax.isEmpty()){
 			PdfPCell boxCellTitle = createCell("Box Temperature Data:", headfont, Element.ALIGN_LEFT, 4, false);
 			boxCellTitle.setPaddingBottom(5.0f);
 			table.addCell(boxCellTitle);

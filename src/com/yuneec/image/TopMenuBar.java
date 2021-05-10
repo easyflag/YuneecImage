@@ -39,11 +39,43 @@ public class TopMenuBar {
         Menu settingsMenu = new Menu("Settings");
         MenuItem reportMenuItem = new MenuItem("Create Report");
         reportMenuItem.setOnAction(actionEvent -> createReport());
-        settingsMenu.getItems().add(reportMenuItem);
+
+        Menu TemperatureManeu = new Menu("Temperature");
+        CelsiusMenuItem = new RadioMenuItem("Celsius(℃)");
+        CelsiusMenuItem.setOnAction(actionEvent -> TemperatureManeuClick(1));
+        FachrenheitMenuItem = new RadioMenuItem("Fachrenheit(℉)");
+        FachrenheitMenuItem.setOnAction(actionEvent -> TemperatureManeuClick(2));
+        KelvinMenuItem = new RadioMenuItem("Kelvin(K)");
+        KelvinMenuItem.setOnAction(actionEvent -> TemperatureManeuClick(3));
+        CelsiusMenuItem.setSelected(true);
+        TemperatureManeu.getItems().addAll(CelsiusMenuItem,FachrenheitMenuItem,KelvinMenuItem);
+
+        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu);
         Menu helpMenu = new Menu("Help");
         RadioMenuItem helpItem = new RadioMenuItem("Help");
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());
         menuBar.getMenus().addAll(fileMenu, settingsMenu);
+    }
+
+    RadioMenuItem CelsiusMenuItem, FachrenheitMenuItem, KelvinMenuItem;
+    private void TemperatureManeuClick(int flag) {
+        if (flag == 1) {
+            Global.NowTemperatureUnit = Global.TemperatureUnit.Celsius;
+            CelsiusMenuItem.setSelected(true);
+            FachrenheitMenuItem.setSelected(false);
+            KelvinMenuItem.setSelected(false);
+        } else if (flag == 2) {
+            Global.NowTemperatureUnit = Global.TemperatureUnit.Fachrenheit;
+            CelsiusMenuItem.setSelected(false);
+            FachrenheitMenuItem.setSelected(true);
+            KelvinMenuItem.setSelected(false);
+        } else if (flag == 3) {
+            Global.NowTemperatureUnit = Global.TemperatureUnit.Kelvin;
+            CelsiusMenuItem.setSelected(false);
+            FachrenheitMenuItem.setSelected(false);
+            KelvinMenuItem.setSelected(true);
+        }
+        CenterPane.getInstance().transitionTemperature();
     }
 
     private void openFile() {
