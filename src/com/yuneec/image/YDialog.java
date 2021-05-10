@@ -134,10 +134,10 @@ public class YDialog {
         }
     }
 
-    public static void showInformationDialog(String message) {
+    public static void showInformationDialog(String title,String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, null,
                 new ButtonType("OK", ButtonBar.ButtonData.YES));
-        alert.setTitle("Tips");
+        alert.setTitle(title);
         alert.setHeaderText(message);
         alert.initOwner(Global.primaryStage);
         alert.show();

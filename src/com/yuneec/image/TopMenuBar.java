@@ -50,7 +50,10 @@ public class TopMenuBar {
         CelsiusMenuItem.setSelected(true);
         TemperatureManeu.getItems().addAll(CelsiusMenuItem,FachrenheitMenuItem,KelvinMenuItem);
 
-        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu);
+        MenuItem aboutMenuItem = new MenuItem("About");
+        aboutMenuItem.setOnAction(actionEvent -> about());
+
+        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,aboutMenuItem);
         Menu helpMenu = new Menu("Help");
         RadioMenuItem helpItem = new RadioMenuItem("Help");
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());
@@ -119,5 +122,9 @@ public class TopMenuBar {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    private void about() {
+        YDialog.showInformationDialog("About", Configs.version + "\n\n" + Configs.copyright);
     }
 }

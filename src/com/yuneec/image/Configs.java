@@ -2,7 +2,8 @@ package com.yuneec.image;
 
 public class Configs {
 
-	public static String version = "   ( Version: 0.0.1 Beta )";
+	public static String version = "   Version : 0.0.1 Beta";
+	public static String copyright = "   Copyright (C) 2021-2022 Yuneec Inc.";
 
 	public static int SceneWidth = 1320;
 	public static int SceneHeight = 700;

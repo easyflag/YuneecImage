@@ -26,7 +26,7 @@ public class YuneecImage extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Global.primaryStage = primaryStage;
-		primaryStage.setTitle(" Yuneec Image Tool " + Configs.version);
+		primaryStage.setTitle(" Yuneec Image Tool ");
 		BorderPane root = new BorderPane();
 		Global.hBox = new HBox();
 //		Global.hBox.setPadding(new Insets(Configs.Spacing, 0, Configs.Spacing, 0));
