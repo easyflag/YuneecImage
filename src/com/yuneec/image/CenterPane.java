@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.module.ColorPalette;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -43,13 +44,11 @@ public class CenterPane {
     public int endLineY = 0;
     private Line topLine, bottomLine, leftLine, rightLine;
 
-    private CenterSettingSelect centerSettingFlag = CenterSettingSelect.NONE;
-    private Pane centerSettingColorPalettePane;
-    private boolean centerSettingColorPalettePaneAdded = false;
-    private Background centerSettingButtonUnclickBackground;
-    private Background centerSettingButtonClickBackground;
-    private Button SingleClickButton,BoxChooseButton,ColorPaletteButton,ClearButton;
-    private ArrayList centerSettingButtonNodeList = new ArrayList();
+    public CenterSettingSelect centerSettingFlag = CenterSettingSelect.NONE;
+    public Background centerSettingButtonUnclickBackground;
+    public Background centerSettingButtonClickBackground;
+    public Button SingleClickButton,BoxChooseButton,ColorPaletteButton,ClearButton;
+    public ArrayList centerSettingButtonNodeList = new ArrayList();
 
     public ArrayList boxTemperatureNodeMax = new ArrayList();
     public ArrayList boxTemperatureNodeMin = new ArrayList();
@@ -254,6 +253,7 @@ public class CenterPane {
 
         ColorPaletteButton = creatSettingButton("image/color_palette.png",null);
         ColorPaletteButton.setTranslateX(40);
+        ColorPalette.getInstance().init();
 
         ClearButton = creatSettingButton("image/clear.png",null);
         ClearButton.setTranslateX(50);
@@ -265,7 +265,7 @@ public class CenterPane {
 //                    System.out.println("initCenterSettingPane SingleClickButton MouseClicked ...");
                     setButtonClickBackground(centerSettingButtonNodeList,SingleClickButton);
                     centerSettingFlag = CenterSettingSelect.POINT;
-                    dmissColorPalettePane();
+                    ColorPalette.getInstance().dmissColorPalettePane();
                 }
             }
         });
@@ -277,25 +277,7 @@ public class CenterPane {
 //                    System.out.println("initCenterSettingPane BoxChooseButton MouseClicked ...");
                     setButtonClickBackground(centerSettingButtonNodeList,BoxChooseButton);
                     centerSettingFlag = CenterSettingSelect.BOX;
-                    dmissColorPalettePane();
-                }
-            }
-        });
-
-        ColorPaletteButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                if (Utils.mouseLeftClick(e)) {
-//                    System.out.println("initCenterSettingPane ColorPaletteButton MouseClicked ...");
-                    setButtonClickBackground(centerSettingButtonNodeList,ColorPaletteButton);
-                    centerSettingFlag = CenterSettingSelect.ColorPalette;
-                    if(centerSettingColorPalettePaneAdded){
-                        dmissColorPalettePane();
-                        ColorPaletteButton.setBackground(centerSettingButtonUnclickBackground);
-                    }else {
-                        showColorPalettePane();
-                        ColorPaletteButton.setBackground(centerSettingButtonClickBackground);
-                    }
+                    ColorPalette.getInstance().dmissColorPalettePane();
                 }
             }
         });
@@ -334,83 +316,7 @@ public class CenterPane {
         centerSettingPane.getChildren().add(ClearButton);
     }
 
-    private void showColorPalettePane() {
-        if(centerSettingColorPalettePaneAdded){
-            return;
-        }
-        centerSettingColorPalettePane = new FlowPane();
-        centerSettingColorPalettePane.setPrefHeight(300);
-        centerSettingColorPalettePane.setPrefWidth(100);
-        centerSettingColorPalettePane.setTranslateX(10);
-        centerSettingColorPalettePane.setTranslateY(10);
-        centerSettingColorPalettePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), new CornerRadii(5), null)));
-        centerImagePane.getChildren().add(centerSettingColorPalettePane);
-        centerSettingColorPalettePaneAdded = true;
-        addColorPaletteButton();
-    }
-
-    private void dmissColorPalettePane() {
-        centerImagePane.getChildren().remove(centerSettingColorPalettePane);
-        centerSettingColorPalettePaneAdded = false;
-    }
-
-    private ArrayList<Button> colorPaletteButtonList = new ArrayList<Button>();
-    private void addColorPaletteButton() {
-        Button whiteHotButton = creatSettingButton(null,"WhiteHot");
-        whiteHotButton.setTranslateY(10);
-        centerSettingColorPalettePane.getChildren().add(whiteHotButton);
-        colorPaletteButtonList.add(whiteHotButton);
-        Button FulguriteButton = creatSettingButton(null,"Fulgurite");
-        FulguriteButton.setTranslateY(20);
-        centerSettingColorPalettePane.getChildren().add(FulguriteButton);
-        colorPaletteButtonList.add(FulguriteButton);
-        Button IronRedButton = creatSettingButton(null,"IronRed");
-        IronRedButton.setTranslateY(30);
-        centerSettingColorPalettePane.getChildren().add(IronRedButton);
-        colorPaletteButtonList.add(IronRedButton);
-        Button HotIronButton = creatSettingButton(null,"HotIron");
-        HotIronButton.setTranslateY(40);
-        centerSettingColorPalettePane.getChildren().add(HotIronButton);
-        colorPaletteButtonList.add(HotIronButton);
-        Button MedicalButton = creatSettingButton(null,"Medical");
-        MedicalButton.setTranslateY(50);
-        centerSettingColorPalettePane.getChildren().add(MedicalButton);
-        colorPaletteButtonList.add(MedicalButton);
-        whiteHotButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-//                boolean flag = YDialog.showConfirmDialog("Change To WhiteHot ...");
-                setButtonClickBackground(colorPaletteButtonList,whiteHotButton);
-            }
-        });
-        FulguriteButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                setButtonClickBackground(colorPaletteButtonList,FulguriteButton);
-            }
-        });
-        IronRedButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                setButtonClickBackground(colorPaletteButtonList,IronRedButton);
-            }
-        });
-        HotIronButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                setButtonClickBackground(colorPaletteButtonList,HotIronButton);
-            }
-        });
-        MedicalButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                setButtonClickBackground(colorPaletteButtonList,MedicalButton);
-//                new ScaleImage().start(new Stage());
-            }
-        });
-    }
-
-    private void setButtonClickBackground(ArrayList<Button> buttonNodeList,Button clickButton) {
+    public void setButtonClickBackground(ArrayList<Button> buttonNodeList,Button clickButton) {
         for(Button button:buttonNodeList){
             if(button == clickButton){
                 button.setBackground(centerSettingButtonClickBackground);
@@ -420,7 +326,7 @@ public class CenterPane {
         }
     }
 
-    private Button creatSettingButton(String imagePath,String text) {
+    public Button creatSettingButton(String imagePath,String text) {
         Button button = new Button();
         button.setText(text);
         button.setTranslateX(10);
@@ -442,8 +348,8 @@ public class CenterPane {
     private void resetShowImageDefault(){
         setButtonClickBackground(centerSettingButtonNodeList,null);
         centerSettingFlag = CenterSettingSelect.NONE;
-        centerSettingColorPalettePaneAdded = false;
-        dmissColorPalettePane();
+        ColorPalette.getInstance().centerSettingColorPalettePaneAdded = false;
+        ColorPalette.getInstance().dmissColorPalettePane();
         for (int i =0;i < pointTemperatureNodeList.size();i++){
             ArrayList pointNodeList = (ArrayList)pointTemperatureNodeList.get(i);
             showImagePane.getChildren().removeAll(pointNodeList);
@@ -469,7 +375,9 @@ public class CenterPane {
         if (!boxTemperatureNodeMin.isEmpty()){
             ((Label)boxTemperatureNodeMin.get(0)).setText(Utils.getFormatTemperature((float) boxTemperatureNodeMin.get(4)));
         }
-        RightPane.getInstance().showXYlabel.setText(rightXYlabel + Utils.getFormatTemperature(pointTemperature));
+        if (Global.currentOpenImagePath != null){
+            RightPane.getInstance().showXYlabel.setText(rightXYlabel + Utils.getFormatTemperature(pointTemperature));
+        }
     }
 
 }
