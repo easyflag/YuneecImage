@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.module.Language;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 public class RightPane {
 
     private static RightPane instance;
+    public Label titlelabel;
     public static RightPane getInstance() {
         if (instance == null) {
             instance = new RightPane();
@@ -65,10 +67,10 @@ public class RightPane {
 //        rightImageInfoPane.setTranslateY(Configs.Spacing);
         rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
 
-        Label titlelabel = new Label();
+        titlelabel = new Label();
         titlelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
         titlelabel.setTranslateY(Configs.RightPaneImageInfo.marginTop - 30);
-        titlelabel.setText("Image Info");
+        titlelabel.setText(Language.getString(Language.Image_Info_en,Language.Image_Info_ch));
         titlelabel.setFont(Font.font(null, FontWeight.BOLD, 14));
         titlelabel.setTextFill(Color.WHITE);
         rightImageInfoPane.getChildren().add(titlelabel);
@@ -89,13 +91,15 @@ public class RightPane {
     }
 
     public void showImageInfoToRightPane() {
-        rightImageInfoPane.getChildren().removeAll(imageInfoLabelList);
-        imageInfoLabelList.clear();
-        int imageInfoListLength = ImageUtil.imageInfoList.size();
+        rightImageInfoPane.getChildren().removeAll(imageInfoTagNameLabelList);
+        imageInfoTagNameLabelList.clear();
+        rightImageInfoPane.getChildren().removeAll(imageInfoDescriptionLabelList);
+        imageInfoDescriptionLabelList.clear();
+        int imageInfoListLength = ImageUtil.imageInfoSortList.size();
 //		System.out.println("imageInfoListLength:" + imageInfoListLength);
         if (imageInfoListLength > 0) {
             for (int i = 0; i < imageInfoListLength; i++) {
-                ArrayList<String> arrayList = ImageUtil.imageInfoList.get(i);
+                ArrayList<String> arrayList = ImageUtil.imageInfoSortList.get(i);
                 String tagName = arrayList.get(0);
                 String description = arrayList.get(1);
                 addImageInfoLabelToRightPane(tagName,description,i);
@@ -103,7 +107,8 @@ public class RightPane {
         }
     }
 
-    private ArrayList<Label> imageInfoLabelList = new ArrayList<Label>();
+    public ArrayList<Label> imageInfoTagNameLabelList = new ArrayList<Label>();
+    public ArrayList<Label> imageInfoDescriptionLabelList = new ArrayList<Label>();
     private void addImageInfoLabelToRightPane(String tagName,String description, int i) {
         Label tagNamelabel = new Label();
         tagNamelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
@@ -117,8 +122,8 @@ public class RightPane {
         descriptionlabel.setText(description);
         descriptionlabel.setTextFill(Color.WHITE);
         rightImageInfoPane.getChildren().add(descriptionlabel);
-        imageInfoLabelList.add(tagNamelabel);
-        imageInfoLabelList.add(descriptionlabel);
+        imageInfoTagNameLabelList.add(tagNamelabel);
+        imageInfoDescriptionLabelList.add(descriptionlabel);
     }
 
 

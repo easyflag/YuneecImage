@@ -1,6 +1,7 @@
 package com.yuneec.image;
 
 import com.yuneec.image.module.ColorPalette;
+import com.yuneec.image.module.Language;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -97,7 +98,8 @@ public class CenterPane {
                 int y = (int) e.getY();
                 // System.out.println("MouseEvent:" + s);
                 pointTemperature = XMPUtil.getInstance().getTempera(x,y);
-                rightXYlabel = "x = " + x + " y = " + y + " ,Temperature = ";
+                String ts = Language.getString(" ,"+Language.Temperature_en+" = " , " ,"+Language.Temperature_ch+" = ");
+                rightXYlabel = "x = " + x + " y = " + y + ts;
                 String s = rightXYlabel + Utils.getFormatTemperature(pointTemperature);
                 RightPane.getInstance().showXYlabel.setText(s);
             }

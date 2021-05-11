@@ -20,6 +20,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifReader;
 import com.drew.metadata.iptc.IptcReader;
+import com.yuneec.image.module.Language;
 
 public class ImageUtil {
 
@@ -86,6 +87,7 @@ public class ImageUtil {
 	private static void print(Metadata metadata, String method){
 //        System.out.println("---------------- "+method+" ----------------");
         imageInfoList.clear();
+		imageInfoSortList.clear();
         // A Metadata object contains multiple Directory objects
         Metadata metadataImage = metadata;
         for (Directory directory : metadata.getDirectories()) {
@@ -101,6 +103,8 @@ public class ImageUtil {
             }
         }
 
+        sortImageInfoList();
+
 		try {
 			XMPUtil.getInstance().getXmp();
 		} catch (Exception e) {
@@ -108,9 +112,33 @@ public class ImageUtil {
 		}
     }
 
-	public static String[] whiteList = {"Make","Model","Date/Time","F-Number","ISO Speed","Brightness Value","Color Space"
-		,"Image Width","Image Height"};
-	public static ArrayList<ArrayList<String>> imageInfoList = new  ArrayList<ArrayList<String>>();
+	private static void sortImageInfoList() {
+		String[] list = Language.isEnglish()?whiteList:whiteList_ch;
+		for (int i=0;i<list.length;i++){
+			String name = list[i];
+			int index = getIndexForImageInfoList(name);
+			imageInfoSortList.add(imageInfoList.get(index));
+		}
+		imageInfoSortList.add(imageInfoList.get(imageInfoList.size()-1));
+	}
+
+	private static int getIndexForImageInfoList(String name) {
+		int index = 0;
+		for (int i=0;i<imageInfoList.size();i++){
+			ArrayList<String> list = imageInfoList.get(i);
+			String tagName = list.get(0);
+			if (name.equals(tagName)){
+				index = i;
+				break;
+			}
+		}
+		return index;
+	}
+
+	public static String[] whiteList = {"Make","Model","Date/Time","F-Number","ISO Speed","Brightness Value","Color Space","Image Width","Image Height"};
+	public static String[] whiteList_ch = {"制造","型号","时间","光圈","感光度","亮度","色彩度","宽度","高度"};
+	private static ArrayList<ArrayList<String>> imageInfoList = new  ArrayList<ArrayList<String>>();
+	public static ArrayList<ArrayList<String>> imageInfoSortList = new  ArrayList<ArrayList<String>>();
 	private static void storeImageInfo(Tag tag) {
 //		String s = tag.getDirectoryName() + " ; " + tag.getTagName()+ " ; " + tag.getDescription();
 //    	System.out.println("---> "+s);
@@ -120,14 +148,15 @@ public class ImageUtil {
     	if(directoryName.startsWith("Exif")){
 			if(Arrays.asList(whiteList).contains(tagName)){
 				ArrayList<String> arrayList = new ArrayList<String>();
-				arrayList.add(tagName);
+				int index = Arrays.asList(whiteList).indexOf(tagName);
+				arrayList.add(Language.getString(tagName,whiteList_ch[index]));
 				arrayList.add(description);
 				imageInfoList.add(arrayList);
 			}
 		}
     	if(tagName.equals("File Size")){
 			ArrayList<String> arrayList = new ArrayList<String>();
-			arrayList.add(tagName);
+			arrayList.add(Language.getString(tagName,Language.File_Size_ch));
 			arrayList.add(description);
 			imageInfoList.add(arrayList);
 		}

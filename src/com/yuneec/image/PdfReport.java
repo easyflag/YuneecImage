@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.yuneec.image.module.Language;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -46,16 +47,16 @@ public class PdfReport {
 
 			new File(tempImagePath).delete();
 
-			ToastUtil.toast("PDF report generated successfully !");
+			ToastUtil.toast(Language.getString("PDF report generated successfully !","PDF报告生成成功!"));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
  
-	private static Font titlefont,titlefontChinese;
-	private static Font headfont;
-	private static Font keyfont;
+	private static Font titlefont,titlefontCh;
+	private static Font headfont,headfontCh;
+	private static Font keyfont,keyfontCh;
 	private static Font textfont;
 	private static Font textfontCh;
 	private static Font boxTemperaturefont,boxTemperaturefontCh;
@@ -65,10 +66,12 @@ public class PdfReport {
             // 不同字体（这里定义为同一种字体：包含不同字号、不同style）
             BaseFont bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
 			BaseFont bfEnglish = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
-			titlefontChinese = new Font(bfChinese, 18, Font.BOLD);
+			titlefontCh = new Font(bfChinese, 18, Font.BOLD);
             titlefont = new Font(bfEnglish, 18, Font.BOLD);
             headfont = new Font(bfEnglish, 16, Font.BOLD);
+			headfontCh = new Font(bfChinese, 16, Font.BOLD);
             keyfont = new Font(bfEnglish, 12, Font.BOLD);
+			keyfontCh = new Font(bfChinese, 12, Font.BOLD);
             textfont = new Font(bfEnglish, 12, Font.NORMAL);
 			textfontCh = new Font(bfChinese, 12, Font.NORMAL);
 			boxTemperaturefont = new Font(bfEnglish, 14, Font.BOLD);
@@ -81,8 +84,8 @@ public class PdfReport {
  
 	public void generatePDF(Document document) throws Exception {
     	// 段落
-		Paragraph paragraph = new Paragraph("Yuneec Image", titlefont);
-		paragraph.add(new Phrase(" Infrared Camera Report ",titlefont));
+		Paragraph paragraph = new Paragraph(Language.getString("Yuneec Image","Yuneec 图片"), Language.isEnglish()?titlefont:titlefontCh);
+		paragraph.add(new Phrase(Language.getString(" Infrared Camera Report ","红外报告"),Language.isEnglish()?titlefont:titlefontCh));
 		paragraph.setAlignment(1); //设置文字居中 0靠左   1，居中     2，靠右
 		paragraph.setIndentationLeft(12); //设置左缩进
 		paragraph.setIndentationRight(12); //设置右缩进
@@ -137,11 +140,12 @@ public class PdfReport {
 		if(CenterPane.getInstance().boxTemperatureNodeMax.isEmpty()){
 			return null;
 		}
-		Paragraph paragraph = new Paragraph("Start Point: (" + CenterPane.getInstance().startLineX + "," +  CenterPane.getInstance().startLineY + ") , " +
-				" End Point: (" + CenterPane.getInstance().endLineX + "," +  CenterPane.getInstance().endLineY + ")\n", boxTemperaturefont);
-		paragraph.add(new Phrase("Max Temperature: ",boxTemperaturefont));
+		Paragraph paragraph = new Paragraph(Language.getString("Start Point: (","起点坐标: (") + CenterPane.getInstance().startLineX + "," +  CenterPane.getInstance().startLineY + ") , " +
+				Language.getString(" End Point: ("," 终点坐标: (") + CenterPane.getInstance().endLineX + "," +  CenterPane.getInstance().endLineY + ")\n",
+				Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh);
+		paragraph.add(new Phrase(Language.getString("Max Temperature: ","最高温度: "),Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh));
 		paragraph.add(new Phrase(Utils.getFormatTemperature((float) CenterPane.getInstance().boxTemperatureNodeMax.get(4)),boxTemperaturefontCh));
-		paragraph.add(new Phrase(" , Min Temperature: ",boxTemperaturefont));
+		paragraph.add(new Phrase(Language.getString(" , Min Temperature: "," , 最低温度: "),Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh));
 		paragraph.add(new Phrase(Utils.getFormatTemperature((float) CenterPane.getInstance().boxTemperatureNodeMin.get(4)),boxTemperaturefontCh));
 		paragraph.setAlignment(0);
 		paragraph.setIndentationLeft(20);
@@ -155,14 +159,15 @@ public class PdfReport {
 		imagePathName.setPaddingBottom(20.0f);
 		table.addCell(imagePathName);
 
-		PdfPCell cellTitle = createCell("Point Temperature Data:", headfont, Element.ALIGN_LEFT, 4, false);
+		PdfPCell cellTitle = createCell(Language.getString("Point Temperature Data:","点测温数据:"),
+				Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 4, false);
 		cellTitle.setPaddingBottom(20.0f);
 		table.addCell(cellTitle);
 
 		table.addCell(createCell("", keyfont, Element.ALIGN_CENTER));
 		table.addCell(createCell("X", keyfont, Element.ALIGN_CENTER));
 		table.addCell(createCell("Y", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("Temperature ", keyfont, Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Temperature","温度"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 		Integer totalQuantity = 0;
 
 		for (int i = 0; i < CenterPane.getInstance().pointTemperatureNodeList.size(); i++) {
@@ -182,7 +187,8 @@ public class PdfReport {
 //		table.addCell(createCell("end", textfont));
 
 		if(!CenterPane.getInstance().boxTemperatureNodeMax.isEmpty()){
-			PdfPCell boxCellTitle = createCell("Box Temperature Data:", headfont, Element.ALIGN_LEFT, 4, false);
+			PdfPCell boxCellTitle = createCell(Language.getString("Box Temperature Data:","区域温度数据:"),
+					Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 4, false);
 			boxCellTitle.setPaddingBottom(5.0f);
 			table.addCell(boxCellTitle);
 		}

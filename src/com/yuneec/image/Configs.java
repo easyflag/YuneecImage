@@ -4,6 +4,8 @@ public class Configs {
 
 	public static String version = "   Version : 0.0.1 Beta";
 	public static String copyright = "   Copyright (C) 2021-2022 Yuneec Inc.";
+	public static String version_ch = "   版本 : 0.0.1 测试版";
+	public static String copyright_ch = "   版权所有 (C) 2021-2022 Yuneec 国际.";
 
 	public static int SceneWidth = 1320;
 	public static int SceneHeight = 700;

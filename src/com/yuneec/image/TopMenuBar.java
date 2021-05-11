@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.module.Language;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -9,6 +10,15 @@ import javafx.stage.FileChooser;
 import java.io.File;
 
 public class TopMenuBar {
+
+    public Menu fileMenu,settingsMenu;
+    public MenuItem openFileMenuItem,exitMenuItem;
+    public MenuItem reportMenuItem;
+    public Menu TemperatureManeu,LanguageManeu;
+    public RadioMenuItem EnglishMenuItem,ChineseMenuItem;
+    public RadioMenuItem CelsiusMenuItem, FahrenheitMenuItem, KelvinMenuItem;
+    public MenuItem aboutMenuItem;
+
     private static TopMenuBar instance;
     public static TopMenuBar getInstance() {
         if (instance == null) {
@@ -27,58 +37,80 @@ public class TopMenuBar {
         menuBar.prefWidthProperty().bind(Global.primaryStage.widthProperty());
 //		menuBar.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color),null,null)));
         root.setTop(menuBar);
-        Menu fileMenu = new Menu("Add File");
+        fileMenu = new Menu("Add File");
 //		fileMenu.setStyle("-fx-font-size:13px;");
-        MenuItem openFileMenuItem = new MenuItem("Open File");
+        openFileMenuItem = new MenuItem("Open File");
         openFileMenuItem.setOnAction(actionEvent -> openFile());
         MenuItem openFolderMenuItem = new MenuItem("Open Folder");
         openFolderMenuItem.setOnAction(actionEvent -> openFolder());
-        MenuItem exitMenuItem = new MenuItem("Exit");
+        exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
         fileMenu.getItems().addAll(openFileMenuItem, new SeparatorMenuItem(),exitMenuItem);
-        Menu settingsMenu = new Menu("Settings");
-        MenuItem reportMenuItem = new MenuItem("Create Report");
+
+        settingsMenu = new Menu("Settings");
+        reportMenuItem = new MenuItem("Create Report");
         reportMenuItem.setOnAction(actionEvent -> createReport());
 
-        Menu TemperatureManeu = new Menu("Temperature");
+        TemperatureManeu = new Menu("Temperature Unit");
         CelsiusMenuItem = new RadioMenuItem("Celsius(℃)");
         CelsiusMenuItem.setOnAction(actionEvent -> TemperatureManeuClick(1));
-        FachrenheitMenuItem = new RadioMenuItem("Fachrenheit(℉)");
-        FachrenheitMenuItem.setOnAction(actionEvent -> TemperatureManeuClick(2));
+        FahrenheitMenuItem = new RadioMenuItem("Fahrenheit(℉)");
+        FahrenheitMenuItem.setOnAction(actionEvent -> TemperatureManeuClick(2));
         KelvinMenuItem = new RadioMenuItem("Kelvin(K)");
         KelvinMenuItem.setOnAction(actionEvent -> TemperatureManeuClick(3));
         CelsiusMenuItem.setSelected(true);
-        TemperatureManeu.getItems().addAll(CelsiusMenuItem,FachrenheitMenuItem,KelvinMenuItem);
+        TemperatureManeu.getItems().addAll(CelsiusMenuItem,FahrenheitMenuItem,KelvinMenuItem);
 
-        MenuItem aboutMenuItem = new MenuItem("About");
+        LanguageManeu = new Menu("Language");
+        EnglishMenuItem = new RadioMenuItem("English");
+        EnglishMenuItem.setOnAction(actionEvent -> LanguageClick(1));
+        ChineseMenuItem = new RadioMenuItem("Chinese");
+        ChineseMenuItem.setOnAction(actionEvent -> LanguageClick(2));
+        EnglishMenuItem.setSelected(true);
+        LanguageManeu.getItems().addAll(EnglishMenuItem,ChineseMenuItem);
+
+        aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setOnAction(actionEvent -> about());
 
-        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,aboutMenuItem);
+        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,LanguageManeu,aboutMenuItem);
         Menu helpMenu = new Menu("Help");
         RadioMenuItem helpItem = new RadioMenuItem("Help");
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());
         menuBar.getMenus().addAll(fileMenu, settingsMenu);
     }
 
-    RadioMenuItem CelsiusMenuItem, FachrenheitMenuItem, KelvinMenuItem;
     private void TemperatureManeuClick(int flag) {
         if (flag == 1) {
             Global.NowTemperatureUnit = Global.TemperatureUnit.Celsius;
             CelsiusMenuItem.setSelected(true);
-            FachrenheitMenuItem.setSelected(false);
+            FahrenheitMenuItem.setSelected(false);
             KelvinMenuItem.setSelected(false);
         } else if (flag == 2) {
             Global.NowTemperatureUnit = Global.TemperatureUnit.Fachrenheit;
             CelsiusMenuItem.setSelected(false);
-            FachrenheitMenuItem.setSelected(true);
+            FahrenheitMenuItem.setSelected(true);
             KelvinMenuItem.setSelected(false);
         } else if (flag == 3) {
             Global.NowTemperatureUnit = Global.TemperatureUnit.Kelvin;
             CelsiusMenuItem.setSelected(false);
-            FachrenheitMenuItem.setSelected(false);
+            FahrenheitMenuItem.setSelected(false);
             KelvinMenuItem.setSelected(true);
         }
         CenterPane.getInstance().transitionTemperature();
+    }
+
+    private void LanguageClick(int flag) {
+        if (flag == 1) {
+            Language.LanguageSelect = Language.Languages.English;
+            EnglishMenuItem.setSelected(true);
+            ChineseMenuItem.setSelected(false);
+            Language.getInstance().setEnglish();
+        }else if (flag == 2) {
+            Language.LanguageSelect = Language.Languages.Chinese;
+            ChineseMenuItem.setSelected(true);
+            EnglishMenuItem.setSelected(false);
+            Language.getInstance().setChinese();
+        }
     }
 
     private void openFile() {
@@ -125,6 +157,8 @@ public class TopMenuBar {
     }
 
     private void about() {
-        YDialog.showInformationDialog("About", Configs.version + "\n\n" + Configs.copyright);
+        YDialog.showInformationDialog(Language.getString(Language.About_en,Language.About_ch),
+                (Language.getString(Configs.version,Configs.version_ch)) + "\n\n" +
+                (Language.getString(Configs.copyright,Configs.copyright_ch)));
     }
 }
