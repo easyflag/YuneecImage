@@ -95,6 +95,7 @@ public class Language {
         RightPane.getInstance().titlelabel.setText(Image_Info_en);
         String XYlabelText = RightPane.getInstance().showXYlabel.getText();
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_ch,Language.Temperature_en));
+        ColorPalette.getInstance().changeColorPaletteNameLanguage();
     }
 
     public void setChinese() {
@@ -123,6 +124,7 @@ public class Language {
         RightPane.getInstance().titlelabel.setText(Image_Info_ch);
         String XYlabelText = RightPane.getInstance().showXYlabel.getText();
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_en,Language.Temperature_ch));
+        ColorPalette.getInstance().changeColorPaletteNameLanguage();
     }
 
 
