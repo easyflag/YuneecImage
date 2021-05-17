@@ -3,6 +3,9 @@ package com.yuneec.image;
 import com.yuneec.image.module.Language;
 import javafx.application.Platform;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -37,17 +40,18 @@ public class TopMenuBar {
         menuBar.prefWidthProperty().bind(Global.primaryStage.widthProperty());
 //		menuBar.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color),null,null)));
         root.setTop(menuBar);
-        fileMenu = new Menu("Add File");
+        fileMenu = new Menu("Add File",new ImageView("image/file.png"));
 //		fileMenu.setStyle("-fx-font-size:13px;");
-        openFileMenuItem = new MenuItem("Open File");
+        openFileMenuItem = new MenuItem("Open File\t\t");
         openFileMenuItem.setOnAction(actionEvent -> openFile());
+        openFileMenuItem.setAccelerator(KeyCombination.valueOf("ctrl+o"));
         MenuItem openFolderMenuItem = new MenuItem("Open Folder");
         openFolderMenuItem.setOnAction(actionEvent -> openFolder());
         exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
         fileMenu.getItems().addAll(openFileMenuItem, new SeparatorMenuItem(),exitMenuItem);
 
-        settingsMenu = new Menu("Settings");
+        settingsMenu = new Menu("Settings",new ImageView("image/setting.png"));
         reportMenuItem = new MenuItem("Create Report");
         reportMenuItem.setOnAction(actionEvent -> createReport());
 
@@ -77,6 +81,7 @@ public class TopMenuBar {
         RadioMenuItem helpItem = new RadioMenuItem("Help");
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());
         menuBar.getMenus().addAll(fileMenu, settingsMenu);
+
     }
 
     private void TemperatureManeuClick(int flag) {

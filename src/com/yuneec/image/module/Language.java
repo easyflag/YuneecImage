@@ -34,8 +34,8 @@ public class Language {
     public static String Add_File_ch = "添加文件";
     public static String Settings_en = "Settings";
     public static String Settings_ch = "设 置";
-    public static String Open_File_en = "Open File";
-    public static String Open_File_ch = "打开文件";
+    public static String Open_File_en = "Open File\t\t";
+    public static String Open_File_ch = "打开文件\t\t";
     public static String Create_Report_en = "Create Report";
     public static String Create_Report_ch = "生成报告";
     public static String Temperature_Unit_en = "Temperature Unit";
