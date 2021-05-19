@@ -1,11 +1,12 @@
 package com.yuneec.image;
 
+import com.yuneec.image.views.RightKeyMenu;
 import javafx.event.EventHandler;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
@@ -35,19 +36,19 @@ public class LeftPane {
         leftPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         Global.hBox.getChildren().add(leftPane);
 //		addDragFileToLeftPane();
-        Pane pane1 = new Pane();
-        pane1.setPrefHeight(Configs.LineHeight);
-        pane1.setPrefWidth(Configs.LeftPanelWidth);
+        Pane imageNamePane = new Pane();
+        imageNamePane.setPrefHeight(Configs.LineHeight);
+        imageNamePane.setPrefWidth(Configs.LeftPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
-        pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
+        imageNamePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
 
         fileNameLable = new Label();
         fileNameLable.setTranslateX(10);
         fileNameLable.setTranslateY(10);
         fileNameLable.setTextFill(Color.WHITE);
-        pane1.getChildren().add(fileNameLable);
+        imageNamePane.getChildren().add(fileNameLable);
 
-        pane1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        imageNamePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 String s = "x=" + (int) e.getX() + " y=" + (int) e.getY();
@@ -55,7 +56,15 @@ public class LeftPane {
             }
         });
 
-        leftPane.getChildren().add(pane1);
+        imageNamePane.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+            @Override
+            public void handle(ContextMenuEvent event) {
+                Node node = event.getPickResult().getIntersectedNode();
+//                RightKeyMenu.getInstance().show(node, Side.RIGHT, -70, 10);
+            }
+        });
+
+        leftPane.getChildren().add(imageNamePane);
 
     }
 

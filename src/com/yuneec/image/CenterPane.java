@@ -97,7 +97,7 @@ public class CenterPane {
                 int x = (int) e.getX();
                 int y = (int) e.getY();
                 // System.out.println("MouseEvent:" + s);
-                pointTemperature = XMPUtil.getInstance().getTempera(x,y);
+                pointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
                 String ts = Language.getString(" ,"+Language.Temperature_en+" = " , " ,"+Language.Temperature_ch+" = ");
                 rightXYlabel = "x = " + x + " y = " + y + ts;
                 String s = rightXYlabel + Utils.getFormatTemperature(pointTemperature);
@@ -231,7 +231,7 @@ public class CenterPane {
 
         centerImagePane = new Pane();
         centerImagePane.setPrefWidth(Configs.CenterPanelWidth);
-        centerImagePane.setPrefHeight(Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight - 1);
+        centerImagePane.setPrefHeight(Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight);
         centerImagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         centerPane.getChildren().add(centerImagePane);
 

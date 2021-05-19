@@ -135,10 +135,4 @@ public class XMPUtil {
         }
     }
 
-
-    public float getTempera(int x, int y) {
-        return TemperatureAlgorithm.getInstance().getTemperature(x,y);
-    }
-
-
 }

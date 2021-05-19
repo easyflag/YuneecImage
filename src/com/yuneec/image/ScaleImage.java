@@ -1,9 +1,5 @@
 package com.yuneec.image;
 
-
-import java.io.File;
-
-import com.yuneec.image.Configs;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,53 +9,60 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ScaleImage extends Application {
-    Point2D dragDistance = null;
+    double windowWidth = 640;
+    double windowHeight = 512;
+    ImageView imageView;
+    double imageW;
+    double imageH;
+    double offsetX,offsetY;
+    double newImageWidth,newImageHeight;
+
     public void start(Stage primaryStage) {
 
         String file = Global.currentOpenImagePath;
-        ImageView imageView = new ImageView();
+        imageView = new ImageView();
         System.out.println(file);
         Image image = new Image("file:" + file);
         imageView.setImage(image);
 
-        double windowWidth = 640;
-        double windowHeight = 512;
-        final double w = image.getWidth();
-        final double h = image.getHeight();
-        System.out.println("image w:" + w + ",h:"+h);
-        final double max = Math.max(w, h);
-        final int width = (int) (400 * w / max);
-        final int heigth = (int) (400 * h / max);
-        imageView.setFitHeight(h);
-        imageView.setFitWidth(w);
+        imageW = image.getWidth();
+        imageH = image.getHeight();
+        System.out.println("image w:" + imageW + ",h:"+imageH);
+        final double max = Math.max(imageW, imageH);
+        final int width = (int) (windowWidth * imageW / max);
+        final int heigth = (int) (windowHeight * imageH / max);
+        imageView.setFitHeight(imageH);
+        imageView.setFitWidth(imageW);
 
-        Pane imagePane = new Pane();
+        AnchorPane imagePane = new AnchorPane();
 
-//        init4Pane();
-
-//        imageView.setX((pane.getWidth() - imageView.getFitWidth()) / 2);
-//        imageView.setY((pane.getHeight() - imageView.getFitHeight()) / 2);
-
-//        pane.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
+        imagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
         StackPane stackPane = new StackPane(imagePane);
         stackPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         Scene scene = new Scene(stackPane, windowWidth, windowHeight);
         imagePane.getChildren().add(imageView);
-//        pane.getChildren().add(topPane);
+
+        double pointPaneX = 200;
+        double pointPaneY = 100;
+        AnchorPane pointPane = getPointPane();
+        pointPane.setLayoutX(pointPaneX);
+        pointPane.setLayoutY(pointPaneY);
+        imagePane.getChildren().add(pointPane);
+
         imagePane.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -78,13 +81,13 @@ public class ScaleImage extends Application {
         stackPane.addEventFilter(ScrollEvent.SCROLL, event -> {
             double rate = 0;
             if (event.getDeltaY() > 0) {
-                rate = 0.05;
+                rate = 0.05 ;
             } else {
                 rate = -0.05;
             }
-            newWidth = (int) (imageView.getFitWidth() + w * rate);
-            newHeight = (int) (imageView.getFitHeight() + h * rate);
-            if (newWidth <= width || newWidth > scale * width) {
+            newImageWidth = (imageView.getFitWidth() + imageW * rate);
+            newImageHeight = (imageView.getFitHeight() + imageH * rate);
+            if (newImageWidth <= width || newImageWidth > scale * width) {
                 return;
             }
 
@@ -93,7 +96,7 @@ public class ScaleImage extends Application {
             Rectangle2D imageRect = new Rectangle2D(imagePoint.getX(), imagePoint.getY(), imageView.getFitWidth(), imageView.getFitHeight());
             Point2D ratePoint;
             Point2D eventPointDistance;
-            if (newWidth > scale / 4 * width && imageRect.contains(eventPoint)) {
+            if (newImageWidth > scale / 4 * width && imageRect.contains(eventPoint)) {
                 ratePoint = eventPoint.subtract(imagePoint);
                 ratePoint = new Point2D(ratePoint.getX() / imageView.getFitWidth(), ratePoint.getY() / imageView.getFitHeight());
                 eventPointDistance = imagePane.sceneToLocal(eventPoint);
@@ -102,15 +105,23 @@ public class ScaleImage extends Application {
                 eventPointDistance = new Point2D(imagePane.getWidth() / 2, imagePane.getHeight() / 2);
             }
 
-            offsetX = eventPointDistance.getX() - newWidth * ratePoint.getX();
-            offsetY = eventPointDistance.getY() - newHeight * ratePoint.getY();
-            imageView.setX(offsetX);
-            imageView.setY(offsetY);
-            imageView.setFitWidth(newWidth);
-            imageView.setFitHeight(newHeight);
+            offsetX = eventPointDistance.getX() - newImageWidth * ratePoint.getX();
+            offsetY = eventPointDistance.getY() - newImageHeight * ratePoint.getY();
+//            imageView.setX(offsetX);
+//            imageView.setY(offsetY);
+            imageView.setFitWidth(newImageWidth);
+            imageView.setFitHeight(newImageHeight);
             String s = "eventPointDistance.getX():" + eventPointDistance.getX() + " eventPointDistance.getY():" + eventPointDistance.getY()
-                    + " offsetX:" + offsetX + " offsetY:" + offsetY;
-//            System.out.println("ScaleImage MouseEvent:" + s);
+                    + " offsetX:" + offsetX + " offsetY:" + offsetY
+                    + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight;
+            System.out.println("ScaleImage MouseEvent:" + s);
+
+            double newlabelx =  ((newImageWidth * pointPaneX)/ imageW);
+            double newlabely =  ((newImageHeight * pointPaneY)/ imageH);
+            pointPane.setLayoutX(newlabelx);
+            pointPane.setLayoutY(newlabely);
+//            scaleNode(pointPane);
+
         });
 
         draggable(stackPane);
@@ -121,25 +132,45 @@ public class ScaleImage extends Application {
                 int x = (int) (e.getX() - offsetX);
                 int y = (int) (e.getY() - offsetY);
                 String s = "x = " + x + " y = " + y + " offsetX:" + offsetX + " offsetY:" + offsetY
-                        + " newWidth:" + newWidth + " newHeight:" + newHeight;
-                System.out.println("ScaleImage MouseEvent:" + s);
+                        + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight;
+//                System.out.println("ScaleImage MouseEvent:" + s);
             }
         });
 
         scene.setFill(Paint.valueOf(Configs.backgroundColor));
         primaryStage.setScene(scene);
+        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.resizableProperty().setValue(false);
+        primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
     }
 
-    double offsetX,offsetY;
-    int newWidth,newHeight;
+    private AnchorPane getPointPane(){
+        AnchorPane anchorPane = new AnchorPane();
+        Label label = new Label();
+        label.setText("19.98℃");
+        label.setTextFill(Color.web(Configs.white_color));
+        label.setLayoutX(7);
+        label.setLayoutY(-8);
+        int lineLEN = 7;
+        Line xLine = CenterPane.getInstance().drawLine(-lineLEN,0,lineLEN,0,Configs.red_color);
+        Line yLine = CenterPane.getInstance().drawLine(0,-lineLEN,0,lineLEN,Configs.red_color);
+        Circle circle = new Circle();
+        circle.setStroke(Color.web(Configs.white_color));
+        circle.setFill(Color.TRANSPARENT);
+        circle.setCenterX(0);
+        circle.setCenterY(0);
+        circle.setRadius(3.5f);
+        anchorPane.getChildren().add(circle);
+        anchorPane.getChildren().add(label);
+        anchorPane.getChildren().add(xLine);
+        anchorPane.getChildren().add(yLine);
+        return anchorPane;
+    }
 
-    Pane topPane;
-    private void init4Pane() {
-        topPane = new Pane();
-        topPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
-        topPane.setPrefHeight(50);
-        topPane.setPrefWidth(640);
+    private void scaleNode(Node node) {
+        node.setScaleX(newImageWidth/imageW);
+        node.setScaleY(newImageHeight/imageH);
     }
 
     private static class Position {

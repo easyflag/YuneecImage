@@ -9,6 +9,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -79,12 +80,17 @@ public class CenterScrollPane extends Application{
 		gridpane.getChildren().clear();
 		for (int i=0;i<4;i++){
 			for (int j=0;j<3;j++){
-				Pane item = new Pane();
+				AnchorPane item = new AnchorPane();
 				Button button = creatSettingButton(fileName,"");
 				item.setPrefWidth(320/2);
 				item.setPrefHeight(256/2);
 //				item.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
-				item.getChildren().add(button);
+				Label labelName = new Label("Yuneec07.jpg");
+				labelName.setTextFill(Paint.valueOf(Configs.white_color));
+				labelName.setPrefWidth(160);
+				labelName.setAlignment(Pos.CENTER);
+				item.setBottomAnchor(labelName,10.0);
+				item.getChildren().addAll(button,labelName);
 				gridpane.add(item,i,j);
 			}
 		}
