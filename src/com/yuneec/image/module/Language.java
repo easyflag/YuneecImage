@@ -1,7 +1,7 @@
 package com.yuneec.image.module;
 
 import com.yuneec.image.Global;
-import com.yuneec.image.ImageUtil;
+import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.RightPane;
 import com.yuneec.image.TopMenuBar;
 import javafx.scene.control.Label;

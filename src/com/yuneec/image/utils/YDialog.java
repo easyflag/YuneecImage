@@ -1,5 +1,6 @@
-package com.yuneec.image;
+package com.yuneec.image.utils;
 
+import com.yuneec.image.Global;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

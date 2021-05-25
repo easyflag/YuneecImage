@@ -1,4 +1,4 @@
-package com.yuneec.image;
+package com.yuneec.image.utils;
 
 
 import com.adobe.internal.xmp.XMPMeta;
@@ -6,6 +6,7 @@ import com.adobe.internal.xmp.XMPMetaFactory;
 import com.adobe.internal.xmp.impl.XMPIteratorImpl;
 import com.adobe.internal.xmp.options.PropertyOptions;
 import com.adobe.internal.xmp.properties.XMPPropertyInfo;
+import com.yuneec.image.Global;
 
 import java.io.*;
 import java.util.Arrays;

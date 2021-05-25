@@ -2,6 +2,10 @@ package com.yuneec.image;
 
 import com.yuneec.image.module.ColorPalette;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.utils.BoxTemperatureUtil;
+import com.yuneec.image.utils.ImageUtil;
+import com.yuneec.image.utils.TemperatureAlgorithm;
+import com.yuneec.image.utils.Utils;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

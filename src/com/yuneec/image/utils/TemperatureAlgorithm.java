@@ -1,4 +1,6 @@
-package com.yuneec.image;
+package com.yuneec.image.utils;
+
+import com.yuneec.image.Global;
 
 public class TemperatureAlgorithm {
 

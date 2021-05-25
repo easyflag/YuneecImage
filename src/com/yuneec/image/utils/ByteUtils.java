@@ -1,4 +1,4 @@
-package com.yuneec.image;
+package com.yuneec.image.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;

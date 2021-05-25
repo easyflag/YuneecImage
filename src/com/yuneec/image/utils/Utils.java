@@ -1,5 +1,6 @@
-package com.yuneec.image;
+package com.yuneec.image.utils;
 
+import com.yuneec.image.Global;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 

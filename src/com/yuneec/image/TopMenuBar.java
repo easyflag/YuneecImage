@@ -1,9 +1,9 @@
 package com.yuneec.image;
 
 import com.yuneec.image.module.Language;
+import com.yuneec.image.utils.YDialog;
 import javafx.application.Platform;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;

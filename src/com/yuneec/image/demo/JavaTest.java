@@ -1,14 +1,24 @@
 package com.yuneec.image.demo;
 
-import com.yuneec.image.ByteUtils;
-import com.yuneec.image.ImageUtil;
-import com.yuneec.image.TemperatureAlgorithm;
+import com.yuneec.image.utils.ByteUtils;
+import com.yuneec.image.utils.ImageUtil;
 
 import java.io.*;
 
 public class JavaTest {
 
     public static void main(String[] args) {
+//        test1();
+        test2();
+
+
+    }
+
+    private static void test2() {
+
+    }
+
+    private static void test1() {
         int xy = 0x9651;
 //        System.out.println("JavaTest--->" + xy + " ---> " + TemperatureAlgorithm.getInstance().getTemperatureTest(xy));
         System.out.println("" + 3/2);
@@ -31,7 +41,5 @@ public class JavaTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 }

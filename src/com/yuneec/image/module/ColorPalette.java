@@ -2,8 +2,7 @@ package com.yuneec.image.module;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
-import com.yuneec.image.RightPane;
-import com.yuneec.image.Utils;
+import com.yuneec.image.utils.Utils;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;

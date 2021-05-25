@@ -1,4 +1,4 @@
-package com.yuneec.image;
+package com.yuneec.image.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

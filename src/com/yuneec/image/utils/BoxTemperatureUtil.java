@@ -1,13 +1,10 @@
-package com.yuneec.image;
+package com.yuneec.image.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 
 public class BoxTemperatureUtil {
 
-	private static BoxTemperatureUtil instance;
+	public static BoxTemperatureUtil instance;
 	public static BoxTemperatureUtil getInstance() {
 		if (instance == null) {
 			instance = new BoxTemperatureUtil();
@@ -97,8 +94,8 @@ public class BoxTemperatureUtil {
 		this.maxMinTemperature = maxMinTemperature;
 	}
 
-	MaxMinTemperature maxMinTemperature;
-	interface MaxMinTemperature{
+	public MaxMinTemperature maxMinTemperature;
+	public interface MaxMinTemperature{
 		void onResust(float maxTemperature,int[] maxTemperatureXY,float minTemperature,int[] minTemperatureXY);
 	}
 
