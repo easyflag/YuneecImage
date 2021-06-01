@@ -4,6 +4,7 @@ package com.yuneec.image.demo;
 import java.io.File;
 
 import com.yuneec.image.Configs;
+import com.yuneec.image.utils.YLog;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,7 +31,7 @@ public class ImageMaxMin extends Application {
 
         ImageView imageView = new ImageView();
         String file = "F:\\intellijSpace\\YuneecImage\\src\\image\\DJI_01.jpg";
-        System.out.println(file);
+        YLog.I(file);
         Image image = new Image("file:" + file);
         imageView.setImage(image);
 
@@ -38,7 +39,7 @@ public class ImageMaxMin extends Application {
         double windowHeight = 700;
         final double w = image.getWidth();
         final double h = image.getHeight();
-        System.out.println("image w:" + w + ",h:"+h);
+        YLog.I("image w:" + w + ",h:"+h);
         final double max = Math.max(w, h);
         final int width = (int) (400 * w / max);
         final int heigth = (int) (400 * h / max);

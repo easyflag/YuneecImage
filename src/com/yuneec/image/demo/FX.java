@@ -1,5 +1,6 @@
 package com.yuneec.image.demo;
 
+import com.yuneec.image.utils.YLog;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.Event;
@@ -68,14 +69,14 @@ public class FX extends Application{
 		b1.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent e) {
-				 System.out.println("initCenterSettingPane MouseClicked ..." + e.getButton().name());
+				YLog.I("initCenterSettingPane MouseClicked ..." + e.getButton().name());
 			}
 		});
 		b1.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<Event>() {
 			@Override
 			public void handle(Event e) {
 				// TODO Auto-generated method stub
-				System.out.println("MOUSE_CLICKED ..." + ((MouseEvent) e).getButton().name());
+				YLog.I("MOUSE_CLICKED ..." + ((MouseEvent) e).getButton().name());
 			}
 		});
 		
@@ -98,7 +99,7 @@ public class FX extends Application{
 	
 	
 	public void pf(String s){
-		System.out.println(s);
+		YLog.I(s);
 	}
 	
 	

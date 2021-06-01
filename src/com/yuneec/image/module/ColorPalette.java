@@ -29,7 +29,7 @@ public class ColorPalette {
             @Override
             public void handle(MouseEvent e) {
                 if (Utils.mouseLeftClick(e)) {
-//                    System.out.println("initCenterSettingPane ColorPaletteButton MouseClicked ...");
+//                    YLog.I("initCenterSettingPane ColorPaletteButton MouseClicked ...");
                     CenterPane.getInstance().setButtonClickBackground(CenterPane.getInstance().centerSettingButtonNodeList,CenterPane.getInstance().ColorPaletteButton);
                     CenterPane.getInstance().centerSettingFlag = CenterPane.CenterSettingSelect.ColorPalette;
                     if(centerSettingColorPalettePaneAdded){

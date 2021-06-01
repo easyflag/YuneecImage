@@ -18,24 +18,24 @@ public class ParseTemperatureBytes {
 
     public void init(byte[] bytes) {
             int length = bytes.length;
-			System.out.println("image bytes length: " + length);
+        YLog.I("image bytes length: " + length);
 //			String s = ByteUtils.byteArrayToHexString(bytes);
-//			System.out.println(s);
+//			YLog.I(s);
 //			String s1 = ByteUtils.byteArrayToHexString(bytes, 0, 50);
-//			System.out.println(s1);
+//			YLog.I(s1);
 //			String s2 = ByteUtils.byteArrayToHexString(bytes, length-50, length, length);
-//			System.out.println(s2);
+//			YLog.I(s2);
 
         ArrayList findIndexList = simpleFind(bytes, 0, length, HEADER); //{5911,71447,136983}
         bufLens = new int[findIndexList.size() + 1];
         bufLens[0] = 0;  // [0,65534,65534,32778]
         int TemperatureBytesLen = 0;  // 163846
         for (int i=0;i<findIndexList.size();i++){
-//            System.out.println("findIndexList ---> " + findIndexList.get(i));
+//            YLog.I("findIndexList ---> " + findIndexList.get(i));
             int bufLen = getBufLen(bytes, (Integer) findIndexList.get(i));
             bufLens[i+1] = bufLen;
             TemperatureBytesLen += bufLen;
-            System.out.println("findIndexList  bufLen---> " + bufLen + ",TemperatureBytesLen:" + TemperatureBytesLen);
+            YLog.I("findIndexList  bufLen---> " + bufLen + ",TemperatureBytesLen:" + TemperatureBytesLen);
         }
 
         TemperatureBytes = new byte[TemperatureBytesLen];
@@ -44,9 +44,9 @@ public class ParseTemperatureBytes {
             desPos += bufLens[i];
             System.arraycopy(bytes,(int)findIndexList.get(i)+2+2,TemperatureBytes,desPos,bufLens[i+1]-2);
         }
-        System.out.println("TemperatureBytes---> " + TemperatureBytes.length +  " , " + TemperatureBytesLen);
-        System.out.println(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,100));
-        System.out.println(ByteUtils.byteArrayToHexString(bytes, TemperatureBytesLen-100, TemperatureBytesLen, TemperatureBytesLen));
+        YLog.I("TemperatureBytes---> " + TemperatureBytes.length +  " , " + TemperatureBytesLen);
+        YLog.I(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,100));
+        YLog.I(ByteUtils.byteArrayToHexString(bytes, TemperatureBytesLen-100, TemperatureBytesLen, TemperatureBytesLen));
     }
 
     private int getBufLen(byte[] bytes, int offset) {

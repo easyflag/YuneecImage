@@ -1,6 +1,7 @@
 package com.yuneec.image.demo;
 
 import com.yuneec.image.Configs;
+import com.yuneec.image.utils.YLog;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -82,7 +83,7 @@ public class TreeViewExample extends Application {
 
                 if (node instanceof Text || (node instanceof TreeCell && ((TreeCell) node).getText() != null)) {
                     String name = (String) ((TreeItem)treeView.getSelectionModel().getSelectedItem()).getValue();
-                    System.out.println("Node click: " + name);
+                    YLog.I("Node click: " + name);
                     if (name.equals("Java")){
                         TreeItem root1 = new TreeItem("Programming Languages",new ImageView(
                                 new Image(getClass().getResourceAsStream("folder.png"))));

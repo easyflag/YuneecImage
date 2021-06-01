@@ -2,6 +2,7 @@ package com.yuneec.image;
 
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.YDialog;
+import com.yuneec.image.utils.YLog;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -125,7 +126,7 @@ public class TopMenuBar {
         File file = fileChooser.showOpenDialog(Global.primaryStage);
         if (file != null) {
             String path = file.getAbsolutePath();
-            System.out.println("openFile:"+path);
+            YLog.I("openFile:"+path);
             LeftPane.getInstance().fileNameLable.setText(file.getName());
             Global.currentOpenImagePath = path.replace("\\", "\\\\");
             CenterPane.getInstance().showImage();
@@ -137,7 +138,7 @@ public class TopMenuBar {
         File file = directoryChooser.showDialog(Global.primaryStage);
         if (file != null) {
             String path = file.getPath();
-            System.out.println(path);
+            YLog.I(path);
         }
     }
 
@@ -149,7 +150,7 @@ public class TopMenuBar {
                 new FileChooser.ExtensionFilter("All", "*.*"),
                 new FileChooser.ExtensionFilter("txt", "*.txt"));
         File file = fileChooser.showSaveDialog(Global.primaryStage);
-        System.out.println("createReport:"+file);
+        YLog.I("createReport:"+file);
         if (file == null) {
             return;
         }

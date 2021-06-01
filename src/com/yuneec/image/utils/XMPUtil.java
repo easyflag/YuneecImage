@@ -77,12 +77,12 @@ public class XMPUtil {
         while (xmpIterator.hasNext()) {
             XMPPropertyInfo obj = (XMPPropertyInfo) xmpIterator.next();
             PropertyOptions propertyOptions = obj.getOptions();
-//            System.out.println("XMP---> " + obj.getNamespace() + "--" + obj.getPath() + "--" + obj.getValue());
+//            YLog.I("XMP---> " + obj.getNamespace() + "--" + obj.getPath() + "--" + obj.getValue());
             if (obj.getNamespace().equals("http://pix4d.com/Camera/1.0/")){
                 setXMPvalue(obj.getPath(),obj.getValue());
             }
         }
-        System.out.println("XMP-->" + "AtmosphereTemperature:" + TemperatureAlgorithm.AtmosphereTemperature
+        YLog.I("XMP-->" + "AtmosphereTemperature:" + TemperatureAlgorithm.AtmosphereTemperature
                 + " ,SceneEmissivity:" + TemperatureAlgorithm.SceneEmissivity
                 + " ,TransmissionCoefficient:" + TemperatureAlgorithm.TransmissionCoefficient
                 + " ,R1:" + TemperatureAlgorithm.R1

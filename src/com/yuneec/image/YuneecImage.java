@@ -54,7 +54,7 @@ public class YuneecImage extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				double width = primaryStage.getWidth();
-//				System.out.println("widthProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,width:" + width);
+//				YLog.I("widthProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,width:" + width);
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -71,7 +71,7 @@ public class YuneecImage extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				double height = primaryStage.getHeight();
-//				System.out.println("heightProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,height:" + height);
+//				YLog.I("heightProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,height:" + height);
 				Configs.SceneHeight = (int) height;
 			}
 		});

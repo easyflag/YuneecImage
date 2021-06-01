@@ -95,7 +95,7 @@ public class RightPane {
         rightImageInfoPane.getChildren().removeAll(imageInfoDescriptionLabelList);
         imageInfoDescriptionLabelList.clear();
         int imageInfoListLength = ImageUtil.imageInfoSortList.size();
-//		System.out.println("imageInfoListLength:" + imageInfoListLength);
+//		YLog.I("imageInfoListLength:" + imageInfoListLength);
         if (imageInfoListLength > 0) {
             for (int i = 0; i < imageInfoListLength; i++) {
                 ArrayList<String> arrayList = ImageUtil.imageInfoSortList.get(i);

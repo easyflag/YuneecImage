@@ -23,7 +23,7 @@ public class BoxTemperatureUtil {
 		maxMinTemperature = callback;
 		String s1 = "startLineX=" + startLineX + " startLineY=" + startLineY;
 		String s2 = "endLineX=" + endLineX + " endLineY=" + endLineY;
-//		System.out.println("BoxTemperatureUtil :" + s1 + " ; " + s2);
+//		YLog.I("BoxTemperatureUtil :" + s1 + " ; " + s2);
 		startX = startLineX;
 		startY = startLineY;
 		endX = endLineX;
@@ -79,7 +79,7 @@ public class BoxTemperatureUtil {
 				minTemperatureIndex = i;
 			}
 		}
-//		System.out.println("BoxTemperatureUtil..." + " maxTemperature:" + maxTemperature  + " maxTemperatureIndex:" + maxTemperatureIndex
+//		YLog.I("BoxTemperatureUtil..." + " maxTemperature:" + maxTemperature  + " maxTemperatureIndex:" + maxTemperatureIndex
 //				+ " minTemperature:" + minTemperature + " minTemperatureIndex:" + minTemperatureIndex);
 
 		int[] maxTemperatureXY = xyList.get(maxTemperatureIndex);

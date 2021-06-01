@@ -12,9 +12,9 @@ public class ImageTIF {
         try {
             BufferedImage bufferedImage = ImageIO.read(new File(filename));
             if (bufferedImage == null) {
-                System.out.println("image read null");
+                YLog.I("image read null");
             } else {
-                System.out.println("read success");
+                YLog.I("read success");
             }
         } catch (IOException e) {
             e.printStackTrace();

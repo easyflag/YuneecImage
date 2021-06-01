@@ -44,8 +44,8 @@ public class TemperatureAlgorithm {
         float fpa_compensated = (pixel_value + PixelToFpaTempB) / (1 - PixelToFpaTempM);
         double temp = ((B1 / Math.log(R1 * 1.0f / (fpa_compensated - O1) + F1)) - CELSIUS_DEGREE_TO_KELVIN_DEGREE);
         pointTemperature = compensate_temp_with_env_temp((float) temp, AmbientTemperature);
-//        System.out.println(" ---- > pointTemperature :" + pointTemperature);
-//        System.out.println(" -----------------------------------------------------------------------");
+//        YLog.I(" ---- > pointTemperature :" + pointTemperature);
+//        YLog.I(" -----------------------------------------------------------------------");
         return pointTemperature;
     }
 
@@ -64,8 +64,8 @@ public class TemperatureAlgorithm {
         spotTempByte[1] = ParseTemperatureBytes.getInstance().TemperatureBytes[index + 1];
         pixel_value = ByteUtils.getInt(spotTempByte);
 
-//        System.out.print(" spotTempByte:" + ByteUtils.byteArrayToHexString(spotTempByte, 0,spotTempByte.length-2));
-//        System.out.println(" x:" + x + " ,y:" + y + " ,index:" + index + " ,pixel_value:" + pixel_value);
+//        YLog.I(" spotTempByte:" + ByteUtils.byteArrayToHexString(spotTempByte, 0,spotTempByte.length-2));
+//        YLog.I(" x:" + x + " ,y:" + y + " ,index:" + index + " ,pixel_value:" + pixel_value);
         return pixel_value;
     }
 

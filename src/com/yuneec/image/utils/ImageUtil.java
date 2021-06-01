@@ -77,16 +77,16 @@ public class ImageUtil {
 	}
 	
 	private static void print(Metadata metadata, String method){
-//        System.out.println("---------------- "+method+" ----------------");
+//        YLog.I("---------------- "+method+" ----------------");
         imageInfoList.clear();
 		imageInfoSortList.clear();
         // A Metadata object contains multiple Directory objects
         Metadata metadataImage = metadata;
         for (Directory directory : metadata.getDirectories()) {
             // Each Directory stores values in Tag objects
-//        	System.out.println("************ >"+directory.toString());
+//        	YLog.I("************ >"+directory.toString());
             for (Tag tag : directory.getTags()) {
-//                System.out.println("***>"+tag);
+//                YLog.I("***>"+tag);
             	storeImageInfo(tag);
             }
             // Each Directory may also contain error messages
@@ -133,7 +133,7 @@ public class ImageUtil {
 	public static ArrayList<ArrayList<String>> imageInfoSortList = new  ArrayList<ArrayList<String>>();
 	private static void storeImageInfo(Tag tag) {
 //		String s = tag.getDirectoryName() + " ; " + tag.getTagName()+ " ; " + tag.getDescription();
-//    	System.out.println("---> "+s);
+//    	YLog.I("---> "+s);
 		String directoryName = tag.getDirectoryName();
     	String tagName = tag.getTagName();
     	String description = tag.getDescription();

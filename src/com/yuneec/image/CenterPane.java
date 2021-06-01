@@ -100,7 +100,7 @@ public class CenterPane {
             public void handle(MouseEvent e) {
                 int x = (int) e.getX();
                 int y = (int) e.getY();
-                // System.out.println("MouseEvent:" + s);
+                // YLog.I("MouseEvent:" + s);
                 pointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
                 String ts = Language.getString(" ,"+Language.Temperature_en+" = " , " ,"+Language.Temperature_ch+" = ");
                 rightXYlabel = "x = " + x + " y = " + y + ts;
@@ -112,7 +112,7 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
 //				String s = "x=" + (int) e.getX() + " y=" + (int) e.getY();
-//				System.out.println("MouseClicked:" + s);
+//				YLog.I("MouseClicked:" + s);
                 if(centerSettingFlag == CenterSettingSelect.POINT && Utils.mouseLeftClick(e)){
                     ArrayList pointNodeList = addLabelInImage((int) e.getX(), (int) e.getY(),pointTemperature,Configs.white_color);
                     pointTemperatureNodeList.add(pointNodeList);
@@ -122,7 +122,7 @@ public class CenterPane {
 
         imageView.setOnMouseDragged(event->{
 //			String s = "x=" + (int) event.getX() + " y=" + (int) event.getY();
-//			System.out.println("setOnMouseDragged:" + s);
+//			YLog.I("setOnMouseDragged:" + s);
             if(centerSettingFlag == CenterSettingSelect.BOX){
                 addRectangleForImage((int) event.getX(),(int) event.getY());
                 showImagePane.getChildren().removeAll(boxTemperatureNodeMax);
@@ -132,14 +132,14 @@ public class CenterPane {
 
         imageView.setOnMousePressed(event->{
 //			String s = "x=" + (int) event.getX() + " y=" + (int) event.getY();
-//			System.out.println("setOnMousePressed:" + s);
+//			YLog.I("setOnMousePressed:" + s);
             startLineX = (int) event.getX();
             startLineY = (int) event.getY();
         });
 
         imageView.setOnMouseReleased(event->{
 //            String s = "x=" + (int) event.getX() + " y=" + (int) event.getY();
-//            System.out.println("setOnMouseReleased:" + s);
+//            YLog.I("setOnMouseReleased:" + s);
             if (startLineX == (int) event.getX() && startLineY == (int) event.getY()){
                 return;
             }
@@ -268,7 +268,7 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
                 if (Utils.mouseLeftClick(e)) {
-//                    System.out.println("initCenterSettingPane SingleClickButton MouseClicked ...");
+//                    YLog.I("initCenterSettingPane SingleClickButton MouseClicked ...");
                     setButtonClickBackground(centerSettingButtonNodeList,SingleClickButton);
                     centerSettingFlag = CenterSettingSelect.POINT;
                     ColorPalette.getInstance().dmissColorPalettePane();
@@ -280,7 +280,7 @@ public class CenterPane {
             @Override
             public void handle(MouseEvent e) {
                 if (Utils.mouseLeftClick(e)) {
-//                    System.out.println("initCenterSettingPane BoxChooseButton MouseClicked ...");
+//                    YLog.I("initCenterSettingPane BoxChooseButton MouseClicked ...");
                     setButtonClickBackground(centerSettingButtonNodeList,BoxChooseButton);
                     centerSettingFlag = CenterSettingSelect.BOX;
                     ColorPalette.getInstance().dmissColorPalettePane();

@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.utils.YLog;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,13 +36,13 @@ public class ScaleImage extends Application {
 
         String file = Global.currentOpenImagePath;
         imageView = new ImageView();
-        System.out.println(file);
+        YLog.I(file);
         Image image = new Image("file:" + file);
         imageView.setImage(image);
 
         imageW = image.getWidth();
         imageH = image.getHeight();
-        System.out.println("image w:" + imageW + ",h:"+imageH);
+        YLog.I("image w:" + imageW + ",h:"+imageH);
         final double max = Math.max(imageW, imageH);
         final int width = (int) (windowWidth * imageW / max);
         final int heigth = (int) (windowHeight * imageH / max);
@@ -114,7 +115,7 @@ public class ScaleImage extends Application {
             String s = "eventPointDistance.getX():" + eventPointDistance.getX() + " eventPointDistance.getY():" + eventPointDistance.getY()
                     + " offsetX:" + offsetX + " offsetY:" + offsetY
                     + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight;
-            System.out.println("ScaleImage MouseEvent:" + s);
+            YLog.I("ScaleImage MouseEvent:" + s);
 
             double newlabelx =  ((newImageWidth * pointPaneX)/ imageW);
             double newlabely =  ((newImageHeight * pointPaneY)/ imageH);
@@ -133,7 +134,7 @@ public class ScaleImage extends Application {
                 int y = (int) (e.getY() - offsetY);
                 String s = "x = " + x + " y = " + y + " offsetX:" + offsetX + " offsetY:" + offsetY
                         + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight;
-//                System.out.println("ScaleImage MouseEvent:" + s);
+//                YLog.I("ScaleImage MouseEvent:" + s);
             }
         });
 

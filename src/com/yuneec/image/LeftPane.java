@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.utils.YLog;
 import com.yuneec.image.views.RightKeyMenu;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
@@ -52,7 +53,7 @@ public class LeftPane {
             @Override
             public void handle(MouseEvent e) {
                 String s = "x=" + (int) e.getX() + " y=" + (int) e.getY();
-                System.out.println("fileNameLable MouseClicked:" + s);
+                YLog.I("fileNameLable MouseClicked:" + s);
             }
         });
 
@@ -86,7 +87,7 @@ public class LeftPane {
                 boolean success = false;
                 if (db.hasFiles()) {
                     success = true;
-                    System.out.println("addDragFileToLeftPane:"+db.getFiles());
+                    YLog.I("addDragFileToLeftPane:"+db.getFiles());
                     File file = db.getFiles().get(0);
                     String path = file.getAbsolutePath();
                     fileNameLable.setText(file.getName());

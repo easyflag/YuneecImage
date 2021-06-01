@@ -1,5 +1,6 @@
 package com.yuneec.image.views;
 
+import com.yuneec.image.utils.YLog;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
@@ -25,13 +26,13 @@ public class RightKeyMenu extends ContextMenu {
         getItems().add(aboutMenuItem);
 
         deleteMenuItem.setOnAction(event -> {
-            System.out.println("deleteMenuItem...");
+            YLog.I("deleteMenuItem...");
         });
         helpMenuItem.setOnAction(event -> {
-            System.out.println("helpMenuItem...");
+            YLog.I("helpMenuItem...");
         });
         aboutMenuItem.setOnAction(event -> {
-            System.out.println("aboutMenuItem...");
+            YLog.I("aboutMenuItem...");
         });
     }
 
