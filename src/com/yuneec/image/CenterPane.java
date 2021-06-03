@@ -11,6 +11,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -263,7 +265,7 @@ public class CenterPane {
 
         ClearButton = creatSettingButton("image/clear.png",null);
         ClearButton.setTranslateX(50);
-
+        setTooltip();
         SingleClickButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -320,6 +322,21 @@ public class CenterPane {
         centerSettingPane.getChildren().add(BoxChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
+    }
+
+    private Tooltip getTooltip(String info) {
+        Tooltip tooltip = new Tooltip(info);
+        tooltip.setFont(new Font(12));
+        tooltip.setWrapText(true);
+        tooltip.setOpacity(0.8);
+        return tooltip;
+    }
+
+    public void setTooltip(){
+        SingleClickButton.setTooltip(getTooltip(Language.getString(Language.SinglePointTemperature_en,Language.SinglePointTemperature_ch)));
+        BoxChooseButton.setTooltip(getTooltip(Language.getString(Language.BoxTemperature_en,Language.BoxTemperature_ch)));
+        ColorPaletteButton.setTooltip(getTooltip(Language.getString(Language.ColorPaletteTip_en,Language.ColorPaletteTip_ch)));
+        ClearButton.setTooltip(getTooltip(Language.getString(Language.ClearTip_en,Language.ClearTip_ch)));
     }
 
     public void setButtonClickBackground(ArrayList<Button> buttonNodeList,Button clickButton) {

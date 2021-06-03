@@ -1,5 +1,6 @@
 package com.yuneec.image.module;
 
+import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.RightPane;
@@ -60,6 +61,14 @@ public class Language {
     public static String File_Size_ch = "文件大小";
     public static String Image_Info_en = "Image Info";
     public static String Image_Info_ch = "图片信息";
+    public static String SinglePointTemperature_en = "Click the picture to get the temperature information at this location.";
+    public static String SinglePointTemperature_ch = "点击图片可获取此位置的温度信息.";
+    public static String BoxTemperature_en = "Select a rectangle on the picture box to get the maximum and minimum temperature information for this area.";
+    public static String BoxTemperature_ch = "在图片上框选一个矩形可获取此区域的最大最小温度信息.";
+    public static String ColorPaletteTip_en = "Color Palette.";
+    public static String ColorPaletteTip_ch = "调色板.";
+    public static String ClearTip_en = "One key to clear all temperature information.";
+    public static String ClearTip_ch = "一键清除所有温度信息.";
 
     public static boolean isEnglish() {
         return LanguageSelect == Languages.English;
@@ -96,6 +105,7 @@ public class Language {
         String XYlabelText = RightPane.getInstance().showXYlabel.getText();
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_ch,Language.Temperature_en));
         ColorPalette.getInstance().changeColorPaletteNameLanguage();
+        CenterPane.getInstance().setTooltip();
     }
 
     public void setChinese() {
@@ -125,6 +135,7 @@ public class Language {
         String XYlabelText = RightPane.getInstance().showXYlabel.getText();
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_en,Language.Temperature_ch));
         ColorPalette.getInstance().changeColorPaletteNameLanguage();
+        CenterPane.getInstance().setTooltip();
     }
 
 
