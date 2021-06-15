@@ -35,7 +35,7 @@ public class ParseTemperatureBytes {
             int bufLen = getBufLen(bytes, (Integer) findIndexList.get(i));
             bufLens[i+1] = bufLen;
             TemperatureBytesLen += bufLen;
-            YLog.I("findIndexList  bufLen---> " + bufLen + ",TemperatureBytesLen:" + TemperatureBytesLen);
+//            YLog.I("findIndexList  bufLen---> " + bufLen + ",TemperatureBytesLen:" + TemperatureBytesLen);
         }
 
         TemperatureBytes = new byte[TemperatureBytesLen];
@@ -45,8 +45,8 @@ public class ParseTemperatureBytes {
             System.arraycopy(bytes,(int)findIndexList.get(i)+2+2,TemperatureBytes,desPos,bufLens[i+1]-2);
         }
         YLog.I("TemperatureBytes---> " + TemperatureBytes.length +  " , " + TemperatureBytesLen);
-        YLog.I(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,100));
-        YLog.I(ByteUtils.byteArrayToHexString(bytes, TemperatureBytesLen-100, TemperatureBytesLen, TemperatureBytesLen));
+//        YLog.I(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,100));
+//        YLog.I(ByteUtils.byteArrayToHexString(bytes, TemperatureBytesLen-100, TemperatureBytesLen, TemperatureBytesLen));
     }
 
     private int getBufLen(byte[] bytes, int offset) {

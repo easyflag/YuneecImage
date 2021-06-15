@@ -38,7 +38,8 @@ public class CenterPane {
         CLEAR,
         POINT,
         BOX,
-        ColorPalette
+        ColorPalette,
+        Undo
     }
 
     private int showImagePaneX, showImagePaneY;
@@ -54,7 +55,7 @@ public class CenterPane {
     public CenterSettingSelect centerSettingFlag = CenterSettingSelect.NONE;
     public Background centerSettingButtonUnclickBackground;
     public Background centerSettingButtonClickBackground;
-    public Button SingleClickButton,BoxChooseButton,ColorPaletteButton,ClearButton;
+    public Button SingleClickButton,BoxChooseButton,ColorPaletteButton,ClearButton,UndoButton;
     public ArrayList centerSettingButtonNodeList = new ArrayList();
 
     public ArrayList boxTemperatureNodeMax = new ArrayList();
@@ -265,6 +266,10 @@ public class CenterPane {
 
         ClearButton = creatSettingButton("image/clear.png",null);
         ClearButton.setTranslateX(50);
+
+        UndoButton = creatSettingButton("image/undo.png",null);
+        UndoButton.setTranslateX(60);
+
         setTooltip();
         SingleClickButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -313,15 +318,40 @@ public class CenterPane {
             }
         });
 
+        UndoButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (Utils.mouseLeftClick(e)) {
+                    centerSettingFlag = CenterSettingSelect.Undo;
+                    setButtonClickBackground(centerSettingButtonNodeList,UndoButton);
+                    TimerTask task= new TimerTask() {
+                        @Override
+                        public void run() {
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    UndoButton.setBackground(centerSettingButtonUnclickBackground);
+                                }
+                            });
+                        }
+                    };
+                    Timer timer=new Timer();
+                    timer.schedule(task,120);
+                }
+            }
+        });
+
         centerSettingButtonNodeList.clear();
         centerSettingButtonNodeList.add(SingleClickButton);
         centerSettingButtonNodeList.add(BoxChooseButton);
         centerSettingButtonNodeList.add(ColorPaletteButton);
         centerSettingButtonNodeList.add(ClearButton);
+        centerSettingButtonNodeList.add(UndoButton);
         centerSettingPane.getChildren().add(SingleClickButton);
         centerSettingPane.getChildren().add(BoxChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
+        centerSettingPane.getChildren().add(UndoButton);
     }
 
     private Tooltip getTooltip(String info) {

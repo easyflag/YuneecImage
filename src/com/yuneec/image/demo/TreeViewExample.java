@@ -60,7 +60,7 @@ public class TreeViewExample extends Application {
 
         //创建一个TreeView项目
         TreeView treeView = new TreeView(base);
-        treeView.setPrefHeight(300);
+        treeView.setPrefHeight(700);
         VBox pane = new VBox(10);
 //        treeView.setStyle("-fx-background-color: #234F91;");
 //        treeView.setBackground(new Background(new BackgroundFill(Paint.valueOf(Configs.backgroundColor), null, null)));

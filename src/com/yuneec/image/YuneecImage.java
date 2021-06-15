@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.demo.LeftImagePathPane;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -42,7 +43,8 @@ public class YuneecImage extends Application {
 		primaryStage.setMinHeight(700);
 
 		TopMenuBar.getInstance().init(root);
-		LeftPane.getInstance().init();
+//		LeftPane.getInstance().init();
+		LeftImagePathPane.getInstance().init();
 		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color);
 		Global.hBox.getChildren().add(leftLine);
 		CenterPane.getInstance().init();

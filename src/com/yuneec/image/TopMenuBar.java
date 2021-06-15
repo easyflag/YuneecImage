@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.demo.LeftImagePathPane;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.YDialog;
 import com.yuneec.image.utils.YLog;
@@ -16,7 +17,7 @@ import java.io.File;
 public class TopMenuBar {
 
     public Menu fileMenu,settingsMenu;
-    public MenuItem openFileMenuItem,exitMenuItem;
+    public MenuItem openFileMenuItem,openFolderMenuItem,exitMenuItem;
     public MenuItem reportMenuItem;
     public Menu TemperatureManeu,LanguageManeu;
     public RadioMenuItem EnglishMenuItem,ChineseMenuItem;
@@ -46,11 +47,12 @@ public class TopMenuBar {
         openFileMenuItem = new MenuItem("Open File\t\t");
         openFileMenuItem.setOnAction(actionEvent -> openFile());
         openFileMenuItem.setAccelerator(KeyCombination.valueOf("ctrl+o"));
-        MenuItem openFolderMenuItem = new MenuItem("Open Folder");
+        openFolderMenuItem = new MenuItem("Open Folder\t\t");
         openFolderMenuItem.setOnAction(actionEvent -> openFolder());
+        openFolderMenuItem.setAccelerator(KeyCombination.valueOf("ctrl+f"));
         exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        fileMenu.getItems().addAll(openFileMenuItem, new SeparatorMenuItem(),exitMenuItem);
+        fileMenu.getItems().addAll(openFileMenuItem,openFolderMenuItem, new SeparatorMenuItem(),exitMenuItem);
 
         settingsMenu = new Menu("Settings",new ImageView("image/setting.png"));
         reportMenuItem = new MenuItem("Create Report");
@@ -127,9 +129,8 @@ public class TopMenuBar {
         if (file != null) {
             String path = file.getAbsolutePath();
             YLog.I("openFile:"+path);
-            LeftPane.getInstance().fileNameLable.setText(file.getName());
-            Global.currentOpenImagePath = path.replace("\\", "\\\\");
-            CenterPane.getInstance().showImage();
+//            LeftPane.getInstance().fileNameLable.setText(file.getName());
+            LeftImagePathPane.getInstance().addImageItem(file.getName(),path);
         }
     }
 
@@ -138,7 +139,8 @@ public class TopMenuBar {
         File file = directoryChooser.showDialog(Global.primaryStage);
         if (file != null) {
             String path = file.getPath();
-            YLog.I(path);
+            LeftImagePathPane.getInstance().addImagePath(path);
+            YLog.I("openFolder:"+path);
         }
     }
 
