@@ -1,0 +1,43 @@
+.tree-view {
+    -fx-skin: "com.sun.javafx.scene.control.skin.TreeViewSkin";
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+
+    /* There is some oddness if padding is in em values rather than pixels,
+       in particular, the left border of the control doesn't show. */
+    -fx-padding: 1; /* 0.083333em; */
+}
+
+.tree-cell.tree-disclosure-node.arrow {
+    -fx-background-color: -fx-mark-color;
+    /*-fx-padding: 0.333333em; !* 4 *!*/
+    -fx-shape: "M 0 -4 L 8 0 L 0 4 z";
+}
+
+.tree-cell:expanded.tree-disclosure-node.arrow {
+    -fx-rotate: 90;
+}
+
+.tree-cell:filled:hover .tree-disclosure-node .arrow {
+    -fx-background-color: -fx-mark-color;
+}
+
+.tree-cell:filled:selected .tree-disclosure-node .arrow {
+    -fx-background-color: -fx-selection-bar-text;
+}
+
+.tree-cell:filled:selected:hover .tree-disclosure-node .arrow {
+    -fx-background-color: -fx-selection-bar-text;
+}
+
+.tree-cell:selected{
+    -fx-background-color:#234F91;
+}
+
+.tree-cell {
+    /*-fx-min-height: 40px;*/
+    -fx-padding: 10px;
+    -fx-background-color: #252526;
+    /*-fx-border-color: burlywood;*/
+    -fx-text-fill:"#FFFFFF"
+}

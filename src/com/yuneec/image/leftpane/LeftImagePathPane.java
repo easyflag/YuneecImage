@@ -1,19 +1,13 @@
-package com.yuneec.image.demo;
+package com.yuneec.image.leftpane;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -21,10 +15,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,7 +49,7 @@ public class LeftImagePathPane{
 
         treeView = new TreeView(treeImageFile);
         treeView.setPrefHeight(700);
-        treeView.getStylesheets().add(getClass().getResource("folder-tree-view.css").toExternalForm());
+        treeView.getStylesheets().add(getClass().getResource("folder-tree.css").toExternalForm());
         leftImagePathPane.setPadding(new Insets(5, 5, 5, 50));
         leftImagePathPane.getChildren().addAll(treeView);
         addDragFileToLeftPane();

@@ -1,11 +1,10 @@
 package com.yuneec.image;
 
-import com.yuneec.image.demo.LeftImagePathPane;
+import com.yuneec.image.leftpane.LeftImagePathPane;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -13,10 +12,8 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class YuneecImage extends Application {
 
