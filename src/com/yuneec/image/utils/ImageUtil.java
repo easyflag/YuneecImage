@@ -30,13 +30,11 @@ public class ImageUtil {
 	public static byte[] read(String bFile) throws IOException {
 		return read(new File(bFile).getAbsoluteFile());
 	}
-	
+
+	public static byte[] imageBytes;
 	public static void readImage(String name){
 		try {
-			byte[] bytes = read(name);
-
-			ParseTemperatureBytes.getInstance().init(bytes);
-
+			imageBytes = read(name);
 			readPic(name);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -94,14 +92,7 @@ public class ImageUtil {
                 System.err.println("ERROR: " + error);
             }
         }
-
         sortImageInfoList();
-
-		try {
-			XMPUtil.getInstance().getXmp();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
     }
 
 	private static void sortImageInfoList() {

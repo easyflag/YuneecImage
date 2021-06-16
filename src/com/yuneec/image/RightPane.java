@@ -2,10 +2,11 @@ package com.yuneec.image;
 
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.ImageUtil;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
@@ -31,7 +32,7 @@ public class RightPane {
     public Label showXYlabel;
 
     private void initRightPane() {
-        Pane rightPane = new Pane();
+        Pane rightPane = new FlowPane();
         rightPane.setPrefWidth(Configs.RightPanelWidth);
         rightPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
 
@@ -53,16 +54,37 @@ public class RightPane {
         initRightPaneImageInfo();
         rightPane.getChildren().add(rightImageInfoPane);
 
+        initRightPaneImagePreview();
+        rightPane.getChildren().add(rightImagePreviewPane);
+
         Global.hBox.getChildren().add(rightPane);
 
+    }
+
+    private StackPane rightImagePreviewPane;
+    private void initRightPaneImagePreview() {
+        rightImagePreviewPane = new StackPane();
+        rightImagePreviewPane.setPrefHeight(210);
+        rightImagePreviewPane.setPrefWidth(Configs.RightPanelWidth);
+        rightImagePreviewPane.setTranslateY(10);
+        rightImagePreviewPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
+    }
+
+    public void showRightImagePreview(){
+        Image image = new Image("file:" + Global.currentOpenImagePath);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(310);
+        imageView.setFitHeight(200);
+        rightImagePreviewPane.setAlignment(Pos.CENTER);
+        rightImagePreviewPane.getChildren().add(imageView);
     }
 
     private Pane rightImageInfoPane;
     private void initRightPaneImageInfo() {
         rightImageInfoPane = new Pane();
-        rightImageInfoPane.setPrefHeight(500);
+        rightImageInfoPane.setPrefHeight(405);
         rightImageInfoPane.setPrefWidth(Configs.RightPanelWidth);
-        rightImageInfoPane.setTranslateY(Configs.LineHeight+5);
+        rightImageInfoPane.setTranslateY(5);
 //        rightImageInfoPane.setTranslateY(Configs.Spacing);
         rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
 

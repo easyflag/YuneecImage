@@ -17,7 +17,12 @@ public class ParseTemperatureBytes {
     private int[] bufLens;
 
     public void init(byte[] bytes) {
-            int length = bytes.length;
+        try {
+            XMPUtil.getInstance().getXmp();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int length = bytes.length;
         YLog.I("image bytes length: " + length);
 //			String s = ByteUtils.byteArrayToHexString(bytes);
 //			YLog.I(s);

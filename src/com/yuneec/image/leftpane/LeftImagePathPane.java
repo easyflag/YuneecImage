@@ -3,6 +3,8 @@ package com.yuneec.image.leftpane;
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
+import com.yuneec.image.RightPane;
+import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
 import javafx.event.EventHandler;
@@ -48,7 +50,7 @@ public class LeftImagePathPane{
         treeImageFile.setExpanded(true);
 
         treeView = new TreeView(treeImageFile);
-        treeView.setPrefHeight(700);
+        treeView.setPrefHeight(672);
         treeView.getStylesheets().add(getClass().getResource("folder-tree.css").toExternalForm());
         leftImagePathPane.setPadding(new Insets(5, 5, 5, 50));
         leftImagePathPane.getChildren().addAll(treeView);
@@ -70,11 +72,11 @@ public class LeftImagePathPane{
             {
                 if (Utils.mouseLeftClick(mouseEvent)){
                     TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+                    String iamgeName = item.getValue();
+                    String filePath = getImagePath(iamgeName);
                     if(mouseEvent.getClickCount() == 2) {
-                        String iamgeName = item.getValue();
 //                        YLog.I("Double Click : " + iamgeName);
-                        if (iamgeName.endsWith("jpg")){
-                            String filePath = getImagePath(iamgeName);
+                        if (iamgeName.endsWith(".jpg")){
                             Global.currentOpenImagePath = filePath.replace("\\", "\\\\");
                             YLog.I("Double Click ,Global.currentOpenImagePath :" + Global.currentOpenImagePath);
                             CenterPane.getInstance().showImage();
@@ -82,6 +84,12 @@ public class LeftImagePathPane{
                     }
                     if(mouseEvent.getClickCount() == 1){
 //                        YLog.I("Node click: " + item.getValue());
+                        if (iamgeName.endsWith(".jpg")) {
+                            Global.currentOpenImagePath = filePath.replace("\\", "\\\\");
+                            RightPane.getInstance().showRightImagePreview();
+                            ImageUtil.readImage(Global.currentOpenImagePath);
+                            RightPane.getInstance().showImageInfoToRightPane();
+                        }
                     }
                 }
             }
@@ -103,7 +111,7 @@ public class LeftImagePathPane{
     ArrayList iamgeItemList = new ArrayList();
 
     public void addImageItem(String fileName,String filePath){
-        if (fileName.endsWith("jpg")){
+        if (fileName.endsWith(".jpg")){
             TreeItem itemImage = new TreeItem(fileName);
             treeImageFile.getChildren().add(itemImage);
             iamgeItemList.add(new ImageItem(itemImage,fileName,filePath));
@@ -123,7 +131,7 @@ public class LeftImagePathPane{
 //            YLog.I("--- " + namePath);
             String[] nameArr = namePath.split("\\\\");
             String fileName = nameArr[nameArr.length-1];
-            if (fileName.endsWith("jpg")){
+            if (fileName.endsWith(".jpg")){
                 TreeItem item = new TreeItem(fileName);
                 itemImage.getChildren().add(item);
                 iamgeItemList.add(new ImageItem(item,fileName,namePath));

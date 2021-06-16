@@ -2,10 +2,7 @@ package com.yuneec.image;
 
 import com.yuneec.image.module.ColorPalette;
 import com.yuneec.image.module.Language;
-import com.yuneec.image.utils.BoxTemperatureUtil;
-import com.yuneec.image.utils.ImageUtil;
-import com.yuneec.image.utils.TemperatureAlgorithm;
-import com.yuneec.image.utils.Utils;
+import com.yuneec.image.utils.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -86,8 +83,7 @@ public class CenterPane {
 
     public void showImage() {
         resetShowImageDefault();
-        ImageUtil.readImage(Global.currentOpenImagePath);
-        RightPane.getInstance().showImageInfoToRightPane();
+        ParseTemperatureBytes.getInstance().init(ImageUtil.imageBytes);
 
         Image image = new Image("file:" + Global.currentOpenImagePath);
         imageView = new ImageView(image);
