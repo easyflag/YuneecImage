@@ -1,6 +1,7 @@
 package com.yuneec.image;
 
 import com.yuneec.image.leftpane.LeftImagePathPane;
+import com.yuneec.image.utils.YLog;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -72,6 +73,7 @@ public class YuneecImage extends Application {
 				double height = primaryStage.getHeight();
 //				YLog.I("heightProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,height:" + height);
 				Configs.SceneHeight = (int) height;
+				LeftImagePathPane.getInstance().treeView.setPrefHeight(height-66);
 			}
 		});
 

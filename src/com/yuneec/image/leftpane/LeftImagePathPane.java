@@ -39,7 +39,7 @@ public class LeftImagePathPane{
 
     private Pane leftImagePathPane;
     public TreeItem<String> treeImageFile;
-    private TreeView treeView;
+    public TreeView treeView;
     private void initLeftImagePathPane() {
         leftImagePathPane = new Pane();
         leftImagePathPane.setPrefWidth(Configs.LeftPanelWidth);
