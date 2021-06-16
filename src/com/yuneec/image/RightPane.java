@@ -73,8 +73,8 @@ public class RightPane {
     public void showRightImagePreview(){
         Image image = new Image("file:" + Global.currentLeftSelectImagePath);
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(310);
-        imageView.setFitHeight(200);
+        imageView.setFitWidth(280);
+        imageView.setFitHeight(180);
         rightImagePreviewPane.setAlignment(Pos.CENTER);
         rightImagePreviewPane.getChildren().add(imageView);
     }
