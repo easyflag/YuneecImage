@@ -85,9 +85,9 @@ public class LeftImagePathPane{
                     if(mouseEvent.getClickCount() == 1){
 //                        YLog.I("Node click: " + item.getValue());
                         if (iamgeName.endsWith(".jpg")) {
-                            Global.currentOpenImagePath = filePath.replace("\\", "\\\\");
+                            Global.currentLeftSelectImagePath = filePath.replace("\\", "\\\\");
                             RightPane.getInstance().showRightImagePreview();
-                            ImageUtil.readImage(Global.currentOpenImagePath);
+                            ImageUtil.readImage(Global.currentLeftSelectImagePath);
                             RightPane.getInstance().showImageInfoToRightPane();
                         }
                     }

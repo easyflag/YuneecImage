@@ -19,6 +19,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -83,7 +84,11 @@ public class CenterPane {
 
     public void showImage() {
         resetShowImageDefault();
-        ParseTemperatureBytes.getInstance().init(ImageUtil.imageBytes);
+        try {
+            ParseTemperatureBytes.getInstance().init(ImageUtil.read(Global.currentOpenImagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         Image image = new Image("file:" + Global.currentOpenImagePath);
         imageView = new ImageView(image);
