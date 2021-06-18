@@ -7,9 +7,11 @@ import com.yuneec.image.RightPane;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -61,6 +63,8 @@ public class LeftImagePathPane{
         deleteItem.setOnAction(e ->{
             TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
             YLog.I("deleteItem Click : " + item.getValue());
+//            treeImageFile.getChildren().remove(item);
+
         });
         menu.getItems().add(deleteItem);
 //        treeView.setContextMenu(menu);
@@ -70,12 +74,15 @@ public class LeftImagePathPane{
             @Override
             public void handle(MouseEvent mouseEvent)
             {
+                TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+                String iamgeName = item.getValue();
+                String filePath = getImagePath(iamgeName);
+//                YLog.I("Double Click : " + iamgeName + " ,filePath:" + filePath);
+                if (iamgeName.endsWith("Yuneec Image Files:")){
+                    return;
+                }
                 if (Utils.mouseLeftClick(mouseEvent)){
-                    TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
-                    String iamgeName = item.getValue();
-                    String filePath = getImagePath(iamgeName);
                     if(mouseEvent.getClickCount() == 2) {
-//                        YLog.I("Double Click : " + iamgeName);
                         if (iamgeName.endsWith(".jpg")){
                             Global.currentOpenImagePath = filePath.replace("\\", "\\\\");
                             YLog.I("Double Click ,Global.currentOpenImagePath :" + Global.currentOpenImagePath);
@@ -91,30 +98,86 @@ public class LeftImagePathPane{
                             RightPane.getInstance().showImageInfoToRightPane();
                         }
                     }
+                    if (delButton != null){
+                        leftImagePathPane.getChildren().remove(delButton);
+                    }
+                }else if (Utils.mouseRightClick(mouseEvent)){
+                    if(mouseEvent.getClickCount() == 1){
+                        ImageItem imageItem = getItemType(filePath);
+                        if (imageItem != null || iamgeItemList.size() > 0){
+//                            YLog.I("Node click type: " + imageItem.type + "  , " + imageItem.filePath);
+                            if (imageItem.type == 1 || imageItem.type == 2){
+                                leftImagePathPane.getChildren().remove(delButton);
+                                delButton = CenterPane.getInstance().creatSettingButton(null,"Delete");
+                                delButton.setLayoutX(mouseEvent.getX());
+                                delButton.setLayoutY(mouseEvent.getY());
+                                leftImagePathPane.getChildren().add(delButton);
+                                delButton.setOnAction(new EventHandler<ActionEvent>() {
+                                    @Override
+                                    public void handle(ActionEvent event) {
+                                        if (imageItem.type == 2){
+                                            iamgeItemList.removeAll(getFolderItemList(filePath));
+                                        }
+                                        iamgeItemList.remove(imageItem);
+                                        treeImageFile.getChildren().remove(item);
+                                        leftImagePathPane.getChildren().remove(delButton);
+                                    }
+                                });
+                            }
+                        }
+                    }
                 }
             }
         });
 
     }
+    Button delButton;
 
     class ImageItem{
         TreeItem item;
         String fileName;
         String filePath;
-        ImageItem(TreeItem item, String fileName, String filePath){
+        String folderPath;
+        int type; // 1:jpg 2:Folder 3:jpg in folder
+        ImageItem(TreeItem item, String fileName, String filePath, String folderPath, int type){
             this.item = item;
             this.fileName = fileName;
             this.filePath = filePath;
+            this.folderPath = folderPath;
+            this.type = type;
         }
     }
 
     ArrayList iamgeItemList = new ArrayList();
 
+    private ImageItem getItemType(String filePath){
+        ImageItem imageItem = null;
+        for (int i=0;i<iamgeItemList.size();i++){
+            imageItem = (ImageItem) iamgeItemList.get(i);
+            if (imageItem.filePath.equals(filePath)){
+                break;
+            }
+        }
+        return imageItem;
+    }
+
+    private ArrayList getFolderItemList(String filePath){
+        ArrayList list = new ArrayList();
+        for (int i=0;i<iamgeItemList.size();i++){
+            ImageItem imageItem = (ImageItem) iamgeItemList.get(i);
+            if (imageItem.folderPath != null && imageItem.folderPath.equals(filePath)){
+                list.add(imageItem);
+            }
+        }
+        return list;
+    }
+
     public void addImageItem(String fileName,String filePath){
         if (fileName.endsWith(".jpg")){
             TreeItem itemImage = new TreeItem(fileName);
+            itemImage.setGraphic(new ImageView("image/picture.png"));
             treeImageFile.getChildren().add(itemImage);
-            iamgeItemList.add(new ImageItem(itemImage,fileName,filePath));
+            iamgeItemList.add(new ImageItem(itemImage,fileName,filePath,null,1));
             select(iamgeItemList.size());
         }
     }
@@ -123,8 +186,9 @@ public class LeftImagePathPane{
         String[] fileArr = filePath.split("\\\\");
         String filePathName = fileArr[fileArr.length-1];
         TreeItem itemImage = new TreeItem(filePathName);
+        itemImage.setGraphic(new ImageView("image/folder.png"));
         treeImageFile.getChildren().add(itemImage);
-        iamgeItemList.add(new ImageItem(itemImage,filePathName,filePath));
+        iamgeItemList.add(new ImageItem(itemImage,filePathName,filePath,null,2));
         select(iamgeItemList.size());
         List<String> imageList = getAllFile(filePath,false,false);
         for (String namePath:imageList){
@@ -134,7 +198,7 @@ public class LeftImagePathPane{
             if (fileName.endsWith(".jpg")){
                 TreeItem item = new TreeItem(fileName);
                 itemImage.getChildren().add(item);
-                iamgeItemList.add(new ImageItem(item,fileName,namePath));
+                iamgeItemList.add(new ImageItem(item,fileName,namePath,filePath,3));
             }
         }
         itemImage.setExpanded(true);
