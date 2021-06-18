@@ -76,6 +76,9 @@ public class LeftImagePathPane{
             @Override
             public void handle(MouseEvent mouseEvent)
             {
+                if (delButton != null){
+                    leftImagePathPane.getChildren().remove(delButton);
+                }
                 TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
                 String iamgeName = item.getValue();
                 String filePath = getImagePath(iamgeName);
@@ -100,31 +103,34 @@ public class LeftImagePathPane{
                             RightPane.getInstance().showImageInfoToRightPane();
                         }
                     }
-                    if (delButton != null){
-                        leftImagePathPane.getChildren().remove(delButton);
-                    }
                 }else if (Utils.mouseRightClick(mouseEvent)){
                     if(mouseEvent.getClickCount() == 1){
-                        ImageItem imageItem = getItemType(filePath);
-                        if (imageItem != null || iamgeItemList.size() > 0){
+                        if (((ImageView)item.getGraphic()).getFitWidth() == 12){
+//                            YLog.I("JPG_IN_Folder");
+                        }else {
+                            if (filePath.endsWith(".jpg")) {
+                                imageItemSelect = getImageItem(filePath, ImageItemType.JPG);
+                            } else {
+                                imageItemSelect = getImageItem(filePath, ImageItemType.Folder);
+                            }
+                            if (imageItemSelect != null || iamgeItemList.size() > 0) {
 //                            YLog.I("Node click type: " + imageItem.type + "  , " + imageItem.filePath);
-                            if (imageItem.type == 1 || imageItem.type == 2){
                                 leftImagePathPane.getChildren().remove(delButton);
                                 delButton = CenterPane.getInstance().creatSettingButton(null,
-                                        Language.isEnglish()?Language.Delete_en:Language.Delete_ch);
+                                        Language.isEnglish() ? Language.Delete_en : Language.Delete_ch);
                                 delButton.setLayoutX(mouseEvent.getX());
                                 delButton.setLayoutY(mouseEvent.getY());
                                 leftImagePathPane.getChildren().add(delButton);
                                 delButton.setOnAction(new EventHandler<ActionEvent>() {
                                     @Override
                                     public void handle(ActionEvent event) {
-                                        if (imageItem.type == 2){
+                                        if (imageItemSelect.type == ImageItemType.Folder) {
                                             iamgeItemList.removeAll(getFolderItemList(filePath));
                                         }
-                                        iamgeItemList.remove(imageItem);
+                                        iamgeItemList.remove(imageItemSelect);
                                         treeImageFile.getChildren().remove(item);
                                         leftImagePathPane.getChildren().remove(delButton);
-                                        if (iamgeItemList.isEmpty()){
+                                        if (iamgeItemList.isEmpty()) {
                                             CenterPane.getInstance().reset();
                                             RightPane.getInstance().reset();
                                         }
@@ -139,14 +145,21 @@ public class LeftImagePathPane{
 
     }
     Button delButton;
+    ImageItem imageItemSelect = null;
+
+    public enum ImageItemType {
+        JPG,
+        Folder,
+        JPG_IN_Folder
+    }
 
     class ImageItem{
         TreeItem item;
         String fileName;
         String filePath;
         String folderPath;
-        int type; // 1:jpg 2:Folder 3:jpg in folder
-        ImageItem(TreeItem item, String fileName, String filePath, String folderPath, int type){
+        ImageItemType type;
+        ImageItem(TreeItem item, String fileName, String filePath, String folderPath, ImageItemType type){
             this.item = item;
             this.fileName = fileName;
             this.filePath = filePath;
@@ -157,12 +170,14 @@ public class LeftImagePathPane{
 
     ArrayList iamgeItemList = new ArrayList();
 
-    private ImageItem getItemType(String filePath){
+    private ImageItem getImageItem(String filePath,ImageItemType tpye){
         ImageItem imageItem = null;
         for (int i=0;i<iamgeItemList.size();i++){
             imageItem = (ImageItem) iamgeItemList.get(i);
             if (imageItem.filePath.equals(filePath)){
-                break;
+                if (tpye == imageItem.type){
+                    break;
+                }
             }
         }
         return imageItem;
@@ -184,7 +199,7 @@ public class LeftImagePathPane{
             TreeItem itemImage = new TreeItem(fileName);
             itemImage.setGraphic(new ImageView("image/picture.png"));
             treeImageFile.getChildren().add(itemImage);
-            iamgeItemList.add(new ImageItem(itemImage,fileName,filePath,null,1));
+            iamgeItemList.add(new ImageItem(itemImage,fileName,filePath,null,ImageItemType.JPG));
             select(iamgeItemList.size());
         }
     }
@@ -195,7 +210,7 @@ public class LeftImagePathPane{
         TreeItem itemImage = new TreeItem(filePathName);
         itemImage.setGraphic(new ImageView("image/folder.png"));
         treeImageFile.getChildren().add(itemImage);
-        iamgeItemList.add(new ImageItem(itemImage,filePathName,filePath,null,2));
+        iamgeItemList.add(new ImageItem(itemImage,filePathName,filePath,null,ImageItemType.Folder));
         select(iamgeItemList.size());
         List<String> imageList = getAllFile(filePath,false,false);
         for (String namePath:imageList){
@@ -209,7 +224,7 @@ public class LeftImagePathPane{
                 imageView.setFitHeight(12);
                 item.setGraphic(imageView);
                 itemImage.getChildren().add(item);
-                iamgeItemList.add(new ImageItem(item,fileName,namePath,filePath,3));
+                iamgeItemList.add(new ImageItem(item,fileName,namePath,filePath,ImageItemType.JPG_IN_Folder));
             }
         }
         itemImage.setExpanded(true);
