@@ -2,6 +2,7 @@ package com.yuneec.image.module;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
+import com.yuneec.image.leftpane.LeftImagePathPane;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.RightPane;
 import com.yuneec.image.TopMenuBar;
@@ -71,6 +72,10 @@ public class Language {
     public static String ColorPaletteTip_ch = "调色板.";
     public static String ClearTip_en = "One key to clear all temperature information.";
     public static String ClearTip_ch = "一键清除所有温度信息.";
+    public static String Delete_en = "Delete";
+    public static String Delete_ch = "删除";
+    public static String Left_All_Image_Title_en = "Yuneec Image Files:";
+    public static String Left_All_Image_Title_ch = "所有图片文件:";
 
     public static boolean isEnglish() {
         return LanguageSelect == Languages.English;
@@ -109,6 +114,7 @@ public class Language {
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_ch,Language.Temperature_en));
         ColorPalette.getInstance().changeColorPaletteNameLanguage();
         CenterPane.getInstance().setTooltip();
+        LeftImagePathPane.getInstance().treeImageFile.setValue(Left_All_Image_Title_en);
     }
 
     public void setChinese() {
@@ -140,6 +146,7 @@ public class Language {
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_en,Language.Temperature_ch));
         ColorPalette.getInstance().changeColorPaletteNameLanguage();
         CenterPane.getInstance().setTooltip();
+        LeftImagePathPane.getInstance().treeImageFile.setValue(Left_All_Image_Title_ch);
     }
 
 

@@ -4,6 +4,7 @@ import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.RightPane;
+import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
@@ -53,6 +54,7 @@ public class LeftImagePathPane{
 
         treeView = new TreeView(treeImageFile);
         treeView.setPrefHeight(672);
+        treeView.setPrefWidth(Configs.LeftPanelWidth);
         treeView.getStylesheets().add(getClass().getResource("folder-tree.css").toExternalForm());
         leftImagePathPane.setPadding(new Insets(5, 5, 5, 50));
         leftImagePathPane.getChildren().addAll(treeView);
@@ -78,7 +80,7 @@ public class LeftImagePathPane{
                 String iamgeName = item.getValue();
                 String filePath = getImagePath(iamgeName);
 //                YLog.I("Double Click : " + iamgeName + " ,filePath:" + filePath);
-                if (iamgeName.endsWith("Yuneec Image Files:")){
+                if (iamgeName.startsWith(Language.isEnglish()?Language.Left_All_Image_Title_en:Language.Left_All_Image_Title_ch)){
                     return;
                 }
                 if (Utils.mouseLeftClick(mouseEvent)){
@@ -108,7 +110,8 @@ public class LeftImagePathPane{
 //                            YLog.I("Node click type: " + imageItem.type + "  , " + imageItem.filePath);
                             if (imageItem.type == 1 || imageItem.type == 2){
                                 leftImagePathPane.getChildren().remove(delButton);
-                                delButton = CenterPane.getInstance().creatSettingButton(null,"Delete");
+                                delButton = CenterPane.getInstance().creatSettingButton(null,
+                                        Language.isEnglish()?Language.Delete_en:Language.Delete_ch);
                                 delButton.setLayoutX(mouseEvent.getX());
                                 delButton.setLayoutY(mouseEvent.getY());
                                 leftImagePathPane.getChildren().add(delButton);
@@ -201,6 +204,10 @@ public class LeftImagePathPane{
             String fileName = nameArr[nameArr.length-1];
             if (fileName.endsWith(".jpg")){
                 TreeItem item = new TreeItem(fileName);
+                ImageView imageView = new ImageView("image/picture.png");
+                imageView.setFitWidth(12);
+                imageView.setFitHeight(12);
+                item.setGraphic(imageView);
                 itemImage.getChildren().add(item);
                 iamgeItemList.add(new ImageItem(item,fileName,namePath,filePath,3));
             }
