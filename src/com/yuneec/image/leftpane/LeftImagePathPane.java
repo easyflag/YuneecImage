@@ -121,6 +121,10 @@ public class LeftImagePathPane{
                                         iamgeItemList.remove(imageItem);
                                         treeImageFile.getChildren().remove(item);
                                         leftImagePathPane.getChildren().remove(delButton);
+                                        if (iamgeItemList.isEmpty()){
+                                            CenterPane.getInstance().reset();
+                                            RightPane.getInstance().reset();
+                                        }
                                     }
                                 });
                             }

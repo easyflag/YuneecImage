@@ -31,8 +31,9 @@ public class RightPane {
 
     public Label showXYlabel;
 
+    private Pane rightPane;
     private void initRightPane() {
-        Pane rightPane = new FlowPane();
+        rightPane = new FlowPane();
         rightPane.setPrefWidth(Configs.RightPanelWidth);
         rightPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
 
@@ -61,6 +62,13 @@ public class RightPane {
 
     }
 
+    public void reset(){
+        rightImagePreviewPane.getChildren().remove(imagePreview);
+        imagePreview = null;
+        clearImageInfo();
+        showXYlabel.setText("");
+    }
+
     private StackPane rightImagePreviewPane;
     private void initRightPaneImagePreview() {
         rightImagePreviewPane = new StackPane();
@@ -70,13 +78,18 @@ public class RightPane {
         rightImagePreviewPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
     }
 
+    private ImageView imagePreview;
     public void showRightImagePreview(){
         Image image = new Image("file:" + Global.currentLeftSelectImagePath);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(280);
-        imageView.setFitHeight(180);
-        rightImagePreviewPane.setAlignment(Pos.CENTER);
-        rightImagePreviewPane.getChildren().add(imageView);
+        if (imagePreview == null){
+            imagePreview = new ImageView(image);
+            imagePreview.setFitWidth(280);
+            imagePreview.setFitHeight(180);
+            rightImagePreviewPane.setAlignment(Pos.CENTER);
+            rightImagePreviewPane.getChildren().add(imagePreview);
+        }else {
+            imagePreview.setImage(image);
+        }
     }
 
     private Pane rightImageInfoPane;
@@ -145,6 +158,15 @@ public class RightPane {
         rightImageInfoPane.getChildren().add(descriptionlabel);
         imageInfoTagNameLabelList.add(tagNamelabel);
         imageInfoDescriptionLabelList.add(descriptionlabel);
+    }
+
+    private void clearImageInfo(){
+        for (int i=0;i<imageInfoTagNameLabelList.size();i++){
+            rightImageInfoPane.getChildren().remove(imageInfoTagNameLabelList.get(i));
+        }
+        for (int i=0;i<imageInfoDescriptionLabelList.size();i++){
+            rightImageInfoPane.getChildren().remove(imageInfoDescriptionLabelList.get(i));
+        }
     }
 
 

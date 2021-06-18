@@ -82,6 +82,12 @@ public class CenterPane {
         showImagePane.setTranslateY(showImagePaneY);
     }
 
+    public void reset(){
+        showImagePane.getChildren().remove(imageView);
+        imageView = null;
+        resetShowImageDefault();
+    }
+
     public void showImage() {
         resetShowImageDefault();
         try {
@@ -91,11 +97,15 @@ public class CenterPane {
         }
 
         Image image = new Image("file:" + Global.currentOpenImagePath);
-        imageView = new ImageView(image);
-        Global.currentOpenImageWidth = image.getWidth();
-        Global.currentOpenImageHeight = image.getHeight();
-        getImagePaneOffsetXY();
-        showImagePane.getChildren().add(imageView);
+        if (imageView == null){
+            imageView = new ImageView(image);
+            Global.currentOpenImageWidth = image.getWidth();
+            Global.currentOpenImageHeight = image.getHeight();
+            getImagePaneOffsetXY();
+            showImagePane.getChildren().add(imageView);
+        }else {
+            imageView.setImage(image);
+        }
 
 //        ScaleImage.getInstance().init(Global.currentOpenImagePath);
 
