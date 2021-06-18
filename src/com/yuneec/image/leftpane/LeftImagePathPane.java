@@ -28,6 +28,7 @@ import java.util.List;
 
 public class LeftImagePathPane{
 
+    private String imageSuffix = ".jpg";
     private static LeftImagePathPane instance;
     public static LeftImagePathPane getInstance() {
         if (instance == null) {
@@ -88,7 +89,7 @@ public class LeftImagePathPane{
                 }
                 if (Utils.mouseLeftClick(mouseEvent)){
                     if(mouseEvent.getClickCount() == 2) {
-                        if (iamgeName.endsWith(".jpg")){
+                        if (iamgeName.endsWith(imageSuffix)){
                             Global.currentOpenImagePath = filePath.replace("\\", "\\\\");
                             YLog.I("Double Click ,Global.currentOpenImagePath :" + Global.currentOpenImagePath);
                             CenterPane.getInstance().showImage();
@@ -96,7 +97,7 @@ public class LeftImagePathPane{
                     }
                     if(mouseEvent.getClickCount() == 1){
 //                        YLog.I("Node click: " + item.getValue());
-                        if (iamgeName.endsWith(".jpg")) {
+                        if (iamgeName.endsWith(imageSuffix)) {
                             Global.currentLeftSelectImagePath = filePath.replace("\\", "\\\\");
                             RightPane.getInstance().showRightImagePreview();
                             ImageUtil.readImage(Global.currentLeftSelectImagePath);
@@ -108,7 +109,7 @@ public class LeftImagePathPane{
                         if (((ImageView)item.getGraphic()).getFitWidth() == 12){
 //                            YLog.I("JPG_IN_Folder");
                         }else {
-                            if (filePath.endsWith(".jpg")) {
+                            if (filePath.endsWith(imageSuffix)) {
                                 imageItemSelect = getImageItem(filePath, ImageItemType.JPG);
                             } else {
                                 imageItemSelect = getImageItem(filePath, ImageItemType.Folder);
@@ -195,7 +196,7 @@ public class LeftImagePathPane{
     }
 
     public void addImageItem(String fileName,String filePath){
-        if (fileName.endsWith(".jpg")){
+        if (fileName.endsWith(imageSuffix)){
             TreeItem itemImage = new TreeItem(fileName);
             itemImage.setGraphic(new ImageView("image/picture.png"));
             treeImageFile.getChildren().add(itemImage);
@@ -217,7 +218,7 @@ public class LeftImagePathPane{
 //            YLog.I("--- " + namePath);
             String[] nameArr = namePath.split("\\\\");
             String fileName = nameArr[nameArr.length-1];
-            if (fileName.endsWith(".jpg")){
+            if (fileName.endsWith(imageSuffix)){
                 TreeItem item = new TreeItem(fileName);
                 ImageView imageView = new ImageView("image/picture.png");
                 imageView.setFitWidth(12);
