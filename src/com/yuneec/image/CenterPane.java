@@ -139,8 +139,10 @@ public class CenterPane {
 //			YLog.I("setOnMouseDragged:" + s);
             if(centerSettingFlag == CenterSettingSelect.BOX){
                 addRectangleForImage((int) event.getX(),(int) event.getY());
+                //not remove to draw more rectangle
                 showImagePane.getChildren().removeAll(boxTemperatureNodeMax);
                 showImagePane.getChildren().removeAll(boxTemperatureNodeMin);
+                MouseReleased = false;
             }
         });
 
@@ -158,6 +160,7 @@ public class CenterPane {
                 return;
             }
             if(centerSettingFlag == CenterSettingSelect.BOX){
+                MouseReleased = true;
                 BoxTemperatureUtil.getInstance().init(startLineX, startLineY, endLineX, endLineY, new BoxTemperatureUtil.MaxMinTemperature() {
                     @Override
                     public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY) {
@@ -168,6 +171,8 @@ public class CenterPane {
             }
         });
     }
+
+    private boolean MouseReleased;
 
     private void addRectangleForImage(int x, int y) {
         if (x > Global.currentOpenImageWidth){
@@ -184,7 +189,9 @@ public class CenterPane {
         }
         endLineX = x;
         endLineY = y;
-        showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
+//        if (!MouseReleased){
+            showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
+//        }
         topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.white_color);
         bottomLine = drawLine(startLineX, y, x, y,Configs.white_color);
         leftLine = drawLine(startLineX, startLineY, startLineX, y,Configs.white_color);
@@ -357,12 +364,12 @@ public class CenterPane {
         centerSettingButtonNodeList.add(BoxChooseButton);
         centerSettingButtonNodeList.add(ColorPaletteButton);
         centerSettingButtonNodeList.add(ClearButton);
-        centerSettingButtonNodeList.add(UndoButton);
+//        centerSettingButtonNodeList.add(UndoButton);
         centerSettingPane.getChildren().add(SingleClickButton);
         centerSettingPane.getChildren().add(BoxChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
-        centerSettingPane.getChildren().add(UndoButton);
+//        centerSettingPane.getChildren().add(UndoButton);
     }
 
     private Tooltip getTooltip(String info) {
