@@ -1,5 +1,7 @@
 package com.yuneec.image;
 
+import com.yuneec.image.box.BoxTemperature;
+import com.yuneec.image.box.BoxTemperatureManager;
 import com.yuneec.image.module.ColorPalette;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.*;
@@ -56,8 +58,6 @@ public class CenterPane {
     public Button SingleClickButton,BoxChooseButton,ColorPaletteButton,ClearButton,UndoButton;
     public ArrayList centerSettingButtonNodeList = new ArrayList();
 
-    public ArrayList boxTemperatureNodeMax = new ArrayList();
-    public ArrayList boxTemperatureNodeMin = new ArrayList();
     public ArrayList pointTemperatureNodeList = new ArrayList();
 
     private String rightXYlabel;
@@ -140,8 +140,8 @@ public class CenterPane {
             if(centerSettingFlag == CenterSettingSelect.BOX){
                 addRectangleForImage((int) event.getX(),(int) event.getY());
                 //not remove to draw more rectangle
-                showImagePane.getChildren().removeAll(boxTemperatureNodeMax);
-                showImagePane.getChildren().removeAll(boxTemperatureNodeMin);
+//                showImagePane.getChildren().removeAll(boxTemperatureNodeMax);
+//                showImagePane.getChildren().removeAll(boxTemperatureNodeMin);
                 MouseReleased = false;
             }
         });
@@ -164,8 +164,11 @@ public class CenterPane {
                 BoxTemperatureUtil.getInstance().init(startLineX, startLineY, endLineX, endLineY, new BoxTemperatureUtil.MaxMinTemperature() {
                     @Override
                     public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY) {
-                        boxTemperatureNodeMax = addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
-                        boxTemperatureNodeMin = addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
+                        ArrayList boxTemperatureNodeMax = addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
+                        ArrayList boxTemperatureNodeMin = addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
+                        BoxTemperature boxTemperature = new BoxTemperature(startLineX, startLineY, endLineX, endLineY,
+                                topLine,bottomLine,leftLine,rightLine, boxTemperatureNodeMax,boxTemperatureNodeMin);
+                        BoxTemperatureManager.getInstance().addBoxTemperature(boxTemperature);
                     }
                 });
             }
@@ -189,9 +192,9 @@ public class CenterPane {
         }
         endLineX = x;
         endLineY = y;
-//        if (!MouseReleased){
+        if (!MouseReleased){
             showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
-//        }
+        }
         topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.white_color);
         bottomLine = drawLine(startLineX, y, x, y,Configs.white_color);
         leftLine = drawLine(startLineX, startLineY, startLineX, y,Configs.white_color);
@@ -425,12 +428,16 @@ public class CenterPane {
             ArrayList pointNodeList = (ArrayList)pointTemperatureNodeList.get(i);
             showImagePane.getChildren().removeAll(pointNodeList);
         }
-        showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
-        showImagePane.getChildren().removeAll(boxTemperatureNodeMax);
-        showImagePane.getChildren().removeAll(boxTemperatureNodeMin);
         pointTemperatureNodeList.clear();
-        boxTemperatureNodeMax.clear();
-        boxTemperatureNodeMin.clear();
+
+        for (int i =0;i < BoxTemperatureManager.getInstance().boxTemperatureList.size();i++){
+            BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
+            showImagePane.getChildren().removeAll(boxTemperature.getTopLine(), boxTemperature.getBottomLine(),
+                    boxTemperature.getLeftLine(), boxTemperature.getRightLine());
+            showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMax());
+            showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMin());
+        }
+        BoxTemperatureManager.getInstance().boxTemperatureList.clear();
     }
 
     public void transitionTemperature(){
@@ -440,11 +447,16 @@ public class CenterPane {
             float temperature = (float) pointNodeList.get(4);
             label.setText(Utils.getFormatTemperature(temperature));
         }
-        if (!boxTemperatureNodeMax.isEmpty()){
-            ((Label)boxTemperatureNodeMax.get(0)).setText(Utils.getFormatTemperature((float) boxTemperatureNodeMax.get(4)));
-        }
-        if (!boxTemperatureNodeMin.isEmpty()){
-            ((Label)boxTemperatureNodeMin.get(0)).setText(Utils.getFormatTemperature((float) boxTemperatureNodeMin.get(4)));
+        for (int i =0;i < BoxTemperatureManager.getInstance().boxTemperatureList.size();i++) {
+            BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
+            if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()){
+                ((Label)boxTemperature.getBoxTemperatureNodeMax().get(0)).setText(
+                        Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMax().get(4)));
+            }
+            if (!boxTemperature.getBoxTemperatureNodeMin().isEmpty()){
+                ((Label)boxTemperature.getBoxTemperatureNodeMin().get(0)).setText(
+                        Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMin().get(4)));
+            }
         }
         if (Global.currentOpenImagePath != null){
             RightPane.getInstance().showXYlabel.setText(rightXYlabel + Utils.getFormatTemperature(pointTemperature));

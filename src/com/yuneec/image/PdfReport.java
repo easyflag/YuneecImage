@@ -7,6 +7,8 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.yuneec.image.box.BoxTemperature;
+import com.yuneec.image.box.BoxTemperatureManager;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
@@ -121,7 +123,6 @@ public class PdfReport {
 		image.scalePercent(60); //依照比例缩放
 		// 表格
 		PdfPTable pointTemperatureTable = getPointTemperature();
-		Paragraph boxParagraph = getBoxTemperature();
 
 		Paragraph paragraphEnd = new Paragraph("...", textfont);
 		paragraphEnd.setSpacingAfter(30f);
@@ -131,24 +132,29 @@ public class PdfReport {
 		document.add(paragraphTime);
 		document.add(p1);
 		document.add(pointTemperatureTable);
-		if (boxParagraph != null){
-			document.add(boxParagraph);
+
+		if(!BoxTemperatureManager.getInstance().boxTemperatureList.isEmpty()){
+			for (int i =0;i < BoxTemperatureManager.getInstance().boxTemperatureList.size();i++) {
+				BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
+				Paragraph boxParagraph = getBoxTemperature(boxTemperature);
+				if (boxParagraph != null){
+					document.add(boxParagraph);
+				}
+			}
 		}
+
 //		document.add(paragraphEnd);
 		document.add(image);
 	}
 
-	private Paragraph getBoxTemperature() {
-		if(CenterPane.getInstance().boxTemperatureNodeMax.isEmpty()){
-			return null;
-		}
-		Paragraph paragraph = new Paragraph(Language.getString("Start Point: (","起点坐标: (") + CenterPane.getInstance().startLineX + "," +  CenterPane.getInstance().startLineY + ") , " +
-				Language.getString(" End Point: ("," 终点坐标: (") + CenterPane.getInstance().endLineX + "," +  CenterPane.getInstance().endLineY + ")\n",
+	private Paragraph getBoxTemperature(BoxTemperature boxTemperature) {
+		Paragraph paragraph = new Paragraph(Language.getString("Start Point: (","起点坐标: (") + boxTemperature.getStartLineX() + "," +  boxTemperature.getStartLineY() + ") , " +
+				Language.getString(" End Point: ("," 终点坐标: (") + boxTemperature.getEndLineX() + "," +  boxTemperature.getEndLineY() + ")\n",
 				Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh);
 		paragraph.add(new Phrase(Language.getString("Max Temperature: ","最高温度: "),Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh));
-		paragraph.add(new Phrase(Utils.getFormatTemperature((float) CenterPane.getInstance().boxTemperatureNodeMax.get(4)),boxTemperaturefontCh));
+		paragraph.add(new Phrase(Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMax().get(4)),boxTemperaturefontCh));
 		paragraph.add(new Phrase(Language.getString(" , Min Temperature: "," , 最低温度: "),Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh));
-		paragraph.add(new Phrase(Utils.getFormatTemperature((float) CenterPane.getInstance().boxTemperatureNodeMin.get(4)),boxTemperaturefontCh));
+		paragraph.add(new Phrase(Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMin().get(4)),boxTemperaturefontCh));
 		paragraph.setAlignment(0);
 		paragraph.setIndentationLeft(20);
 		paragraph.setSpacingAfter(10f);
@@ -188,7 +194,7 @@ public class PdfReport {
 //		table.addCell(createCell(String.valueOf(totalQuantity) + " image", textfont));
 //		table.addCell(createCell("end", textfont));
 
-		if(!CenterPane.getInstance().boxTemperatureNodeMax.isEmpty()){
+		if(!BoxTemperatureManager.getInstance().boxTemperatureList.isEmpty()){
 			PdfPCell boxCellTitle = createCell(Language.getString("Box Temperature Data:","区域温度数据:"),
 					Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 4, false);
 			boxCellTitle.setPaddingBottom(5.0f);
