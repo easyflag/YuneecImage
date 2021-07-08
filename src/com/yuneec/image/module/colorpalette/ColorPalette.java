@@ -1,7 +1,8 @@
-package com.yuneec.image.module;
+package com.yuneec.image.module.colorpalette;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
+import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.Utils;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -127,6 +128,7 @@ public class ColorPalette {
             public void handle(MouseEvent e) {
 //                boolean flag = YDialog.showConfirmDialog("Change To WhiteHot ...");
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,whiteHotButton);
+//                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(1));
             }
         });
         FulguriteButton.setOnMouseClicked(new EventHandler<MouseEvent>() {

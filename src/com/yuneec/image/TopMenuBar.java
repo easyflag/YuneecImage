@@ -1,6 +1,6 @@
 package com.yuneec.image;
 
-import com.yuneec.image.leftpane.LeftImagePathPane;
+import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.YDialog;
 import com.yuneec.image.utils.YLog;

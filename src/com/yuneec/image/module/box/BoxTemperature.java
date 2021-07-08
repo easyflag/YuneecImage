@@ -1,4 +1,4 @@
-package com.yuneec.image.box;
+package com.yuneec.image.module.box;
 
 import javafx.scene.shape.Line;
 
@@ -15,6 +15,8 @@ public class BoxTemperature {
     private Line rightLine;
     private ArrayList boxTemperatureNodeMax;
     private ArrayList boxTemperatureNodeMin;
+
+    public BoxTemperature(){}
 
     public BoxTemperature(int startLineX,int startLineY,int endLineX,int endLineY,
                           Line topLine,Line bottomLine,Line leftLine,Line rightLine,

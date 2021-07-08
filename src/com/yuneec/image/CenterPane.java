@@ -1,8 +1,8 @@
 package com.yuneec.image;
 
-import com.yuneec.image.box.BoxTemperature;
-import com.yuneec.image.box.BoxTemperatureManager;
-import com.yuneec.image.module.ColorPalette;
+import com.yuneec.image.module.box.BoxTemperature;
+import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.*;
 import javafx.application.Platform;
@@ -44,12 +44,12 @@ public class CenterPane {
 
     private int showImagePaneX, showImagePaneY;
     private float pointTemperature;
-    private ImageView imageView;
+    public ImageView imageView;
 
-    public int startLineX = 0;
-    public int startLineY = 0;
-    public int endLineX = 0;
-    public int endLineY = 0;
+    private int startLineX = 0;
+    private int startLineY = 0;
+    private int endLineX = 0;
+    private int endLineY = 0;
     private Line topLine, bottomLine, leftLine, rightLine;
 
     public CenterSettingSelect centerSettingFlag = CenterSettingSelect.NONE;
@@ -344,6 +344,7 @@ public class CenterPane {
             public void handle(MouseEvent e) {
                 if (Utils.mouseLeftClick(e)) {
                     centerSettingFlag = CenterSettingSelect.Undo;
+                    ColorPalette.getInstance().dmissColorPalettePane();
                     setButtonClickBackground(centerSettingButtonNodeList,UndoButton);
                     TimerTask task= new TimerTask() {
                         @Override
@@ -352,6 +353,7 @@ public class CenterPane {
                                 @Override
                                 public void run() {
                                     UndoButton.setBackground(centerSettingButtonUnclickBackground);
+                                    BoxTemperatureManager.getInstance().backStep();
                                 }
                             });
                         }
@@ -367,12 +369,12 @@ public class CenterPane {
         centerSettingButtonNodeList.add(BoxChooseButton);
         centerSettingButtonNodeList.add(ColorPaletteButton);
         centerSettingButtonNodeList.add(ClearButton);
-//        centerSettingButtonNodeList.add(UndoButton);
+        centerSettingButtonNodeList.add(UndoButton);
         centerSettingPane.getChildren().add(SingleClickButton);
         centerSettingPane.getChildren().add(BoxChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
-//        centerSettingPane.getChildren().add(UndoButton);
+        centerSettingPane.getChildren().add(UndoButton);
     }
 
     private Tooltip getTooltip(String info) {
@@ -388,6 +390,7 @@ public class CenterPane {
         BoxChooseButton.setTooltip(getTooltip(Language.getString(Language.BoxTemperature_en,Language.BoxTemperature_ch)));
         ColorPaletteButton.setTooltip(getTooltip(Language.getString(Language.ColorPaletteTip_en,Language.ColorPaletteTip_ch)));
         ClearButton.setTooltip(getTooltip(Language.getString(Language.ClearTip_en,Language.ClearTip_ch)));
+        UndoButton.setTooltip(getTooltip(Language.getString(Language.UndoTip_en,Language.UndoTip_ch)));
     }
 
     public void setButtonClickBackground(ArrayList<Button> buttonNodeList,Button clickButton) {

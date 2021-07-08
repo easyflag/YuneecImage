@@ -2,15 +2,21 @@ package com.yuneec.image;
 
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.ImageUtil;
+import com.yuneec.image.utils.Utils;
+import com.yuneec.image.utils.YLog;
+import com.yuneec.image.views.DeveloperView;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -50,6 +56,8 @@ public class RightPane {
         showXYlabel.setTextFill(Color.WHITE);
         pane1.getChildren().add(showXYlabel);
 
+        enterDeveloperMode(pane1);
+
         rightPane.getChildren().add(pane1);
 
         initRightPaneImageInfo();
@@ -61,6 +69,21 @@ public class RightPane {
         Global.hBox.getChildren().add(rightPane);
 
     }
+
+    private void enterDeveloperMode(Pane pane) {
+        pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (Utils.mouseRightClick(event)){
+                    if (event.getClickCount() == 10){
+                        YLog.I("---> enterDeveloperMode");
+                        new DeveloperView().start(new Stage());
+                    }
+                }
+            }
+        });
+    }
+
 
     public void reset(){
         rightImagePreviewPane.getChildren().remove(imagePreview);

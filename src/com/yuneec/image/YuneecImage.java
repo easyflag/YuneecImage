@@ -1,7 +1,6 @@
 package com.yuneec.image;
 
-import com.yuneec.image.leftpane.LeftImagePathPane;
-import com.yuneec.image.utils.YLog;
+import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -46,6 +45,7 @@ public class YuneecImage extends Application {
 		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color);
 		Global.hBox.getChildren().add(leftLine);
 		CenterPane.getInstance().init();
+//		CenterImageThumbPane.getInstance().init();
 		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color);
 		Global.hBox.getChildren().add(rightLine);
 		RightPane.getInstance().init();

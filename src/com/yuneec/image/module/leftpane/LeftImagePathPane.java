@@ -1,4 +1,4 @@
-package com.yuneec.image.leftpane;
+package com.yuneec.image.module.leftpane;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;

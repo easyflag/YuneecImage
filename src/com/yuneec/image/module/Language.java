@@ -2,7 +2,8 @@ package com.yuneec.image.module;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
-import com.yuneec.image.leftpane.LeftImagePathPane;
+import com.yuneec.image.module.leftpane.LeftImagePathPane;
+import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.RightPane;
 import com.yuneec.image.TopMenuBar;
@@ -72,6 +73,8 @@ public class Language {
     public static String ColorPaletteTip_ch = "调色板.";
     public static String ClearTip_en = "One key to clear all temperature information.";
     public static String ClearTip_ch = "一键清除所有温度信息.";
+    public static String UndoTip_en = "Undo last one box temperature information.";
+    public static String UndoTip_ch = "撤销上一个区域温度信息.";
     public static String Delete_en = "Delete";
     public static String Delete_ch = "删除";
     public static String Left_All_Image_Title_en = "Yuneec Image Files:";

@@ -134,7 +134,7 @@ public class ScaleImage extends Application {
                 int y = (int) (e.getY() - offsetY);
                 String s = "x = " + x + " y = " + y + " offsetX:" + offsetX + " offsetY:" + offsetY
                         + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight;
-//                YLog.I("ScaleImage MouseEvent:" + s);
+                YLog.I("ScaleImage MouseEvent:" + s);
             }
         });
 

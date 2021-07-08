@@ -1,8 +1,11 @@
 package com.yuneec.image.demo;
 
+import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.ScaleImage;
+import com.yuneec.image.utils.Utils;
+import com.yuneec.image.views.YButton;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -30,6 +33,10 @@ public class CenterScrollPane extends Application{
 	GridPane gridpane;
 	String fileName = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec07.jpg";
 	String fileName2 = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec08.jpg";
+	int rowNum = 4;
+	int columnNum = 4;
+	double itemWidth = 640 / 5;
+	double itemHeight = 512 / 5;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -46,8 +53,8 @@ public class CenterScrollPane extends Application{
 //		gridpane.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
 		gridpane.setAlignment(Pos.CENTER);
 		gridpane.setPrefWidth(Configs.CenterPanelWidth);
-		gridpane.setPrefHeight(Configs.SceneHeight - Configs.LineHeight);
-		gridpane.setHgap(15);
+		gridpane.setPrefHeight(Configs.SceneHeight - Configs.LineHeight - 15);
+		gridpane.setHgap(20);
 		gridpane.setVgap(20);
 //		gridpane.setPadding(new Insets(25, 25, 25, 25));
 
@@ -59,11 +66,11 @@ public class CenterScrollPane extends Application{
 		linePane.setPrefHeight(1);
 		linePane.setPrefWidth(Configs.CenterPanelWidth);
 		// pane1.setStyle("-fx-background-color: gray;");
-		linePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.white_color), null, null)));
+		linePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
 		centerPane.getChildren().add(linePane);
 
 		FlowPane indicatorPane = new FlowPane();
-		indicatorPane.setPrefHeight(Configs.LineHeight);
+		indicatorPane.setPrefHeight(Configs.LineHeight + 15);
 		indicatorPane.setPrefWidth(Configs.CenterPanelWidth);
 		// pane1.setStyle("-fx-background-color: gray;");
 		indicatorPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
@@ -78,18 +85,19 @@ public class CenterScrollPane extends Application{
 
 	private void addImageToGridPane(String fileName) {
 		gridpane.getChildren().clear();
-		for (int i=0;i<4;i++){
-			for (int j=0;j<3;j++){
+		for (int i=0;i<columnNum;i++){
+			for (int j=0;j<rowNum;j++){
 				AnchorPane item = new AnchorPane();
-				Button button = creatSettingButton(fileName,"");
-				item.setPrefWidth(320/2);
-				item.setPrefHeight(256/2);
+				Button button = creatImageViewButton(fileName,"");
+				item.setPrefWidth(itemWidth);
+				item.setPrefHeight(itemHeight);
 //				item.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
 				Label labelName = new Label("Yuneec07.jpg");
 				labelName.setTextFill(Paint.valueOf(Configs.white_color));
-				labelName.setPrefWidth(160);
+				labelName.setPrefWidth(itemWidth + 30);
 				labelName.setAlignment(Pos.CENTER);
-				item.setBottomAnchor(labelName,10.0);
+				item.setBottomAnchor(labelName,0.0);
+				item.setBottomAnchor(button,20.0);
 				item.getChildren().addAll(button,labelName);
 				gridpane.add(item,i,j);
 			}
@@ -97,23 +105,27 @@ public class CenterScrollPane extends Application{
 	}
 
 	private void addTrunPagePane(FlowPane indicatorPane) {
-		Button lastButton = new Button("上一页");
-		lastButton.setTranslateX(300);
-		lastButton.setTranslateY(10);
-		Button nextButton = new Button("下一页");
-		nextButton.setTranslateX(400);
-		nextButton.setTranslateY(10);
+		Button lastButton = YButton.getInstance().initButton(null,"上一页");
+		lastButton.setTranslateX(270);
+		lastButton.setTranslateY(12);
+		Button nextButton = YButton.getInstance().initButton(null,"下一页");;
+		nextButton.setTranslateX(370);
+		nextButton.setTranslateY(12);
 		indicatorPane.getChildren().addAll(lastButton,nextButton);
 		lastButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
-			public void handle(MouseEvent e) {
-				addImageToGridPane(fileName);
+			public void handle(MouseEvent event) {
+				if (Utils.mouseLeftClick(event)) {
+					addImageToGridPane(fileName);
+				}
 			}
 		});
 		nextButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
-			public void handle(MouseEvent e) {
-				addImageToGridPane(fileName2);
+			public void handle(MouseEvent event) {
+				if (Utils.mouseLeftClick(event)) {
+					addImageToGridPane(fileName2);
+				}
 			}
 		});
 	}
@@ -123,14 +135,14 @@ public class CenterScrollPane extends Application{
 	Border ouClickborder = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
 	Border clickborder = new Border(new BorderStroke(Paint.valueOf(Configs.red_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
 	ArrayList allImageButton = new ArrayList();
-	public Button creatSettingButton(String imagePath,String text) {
+	public Button creatImageViewButton(String imagePath,String text) {
 		Button button = new Button();
 		button.setText(text);
 		button.setTextFill(Paint.valueOf(Configs.grey_color));
 		if(imagePath != null){
 			ImageView imageView = new ImageView(new Image("file:"+imagePath));
-			imageView.setFitWidth(320/2 - 20);
-			imageView.setFitHeight(256/2 - 10);
+			imageView.setFitWidth(itemWidth - 0);
+			imageView.setFitHeight(itemHeight - 0);
 			button.setGraphic(imageView);
 			button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
 				setAllBackground(button);
