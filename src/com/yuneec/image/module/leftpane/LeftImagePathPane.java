@@ -5,9 +5,14 @@ import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.RightPane;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.center.CenterImageManager;
+import com.yuneec.image.module.center.CenterImageThumbPane;
+import com.yuneec.image.module.center.ImageItem;
+import com.yuneec.image.module.center.ImageItem.ImageItemType;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
+import com.yuneec.image.views.YButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -82,6 +87,9 @@ public class LeftImagePathPane{
                     leftImagePathPane.getChildren().remove(delButton);
                 }
                 TreeItem<String> item = (TreeItem<String>) treeView.getSelectionModel().getSelectedItem();
+                if (item == null){
+                    return;
+                }
                 String iamgeName = item.getValue();
                 String filePath = getImagePath(iamgeName);
 //                YLog.I("Double Click : " + iamgeName + " ,filePath:" + filePath);
@@ -100,9 +108,8 @@ public class LeftImagePathPane{
 //                        YLog.I("Node click: " + item.getValue());
                         if (isTrueImagePathEnding(iamgeName)) {
                             Global.currentLeftSelectImagePath = filePath.replace("\\", "\\\\");
-                            RightPane.getInstance().showRightImagePreview();
                             ImageUtil.readImage(Global.currentLeftSelectImagePath);
-                            RightPane.getInstance().showImageInfoToRightPane();
+                            RightPane.getInstance().showRightImageInfo();
                         }
                     }
                 }else if (Utils.mouseRightClick(mouseEvent)){
@@ -115,10 +122,10 @@ public class LeftImagePathPane{
                             } else {
                                 imageItemSelect = getImageItem(filePath, ImageItemType.Folder);
                             }
-                            if (imageItemSelect != null || iamgeItemList.size() > 0) {
+                            if (imageItemSelect != null || CenterImageManager.getInstance().imageItemList.size() > 0) {
 //                            YLog.I("Node click type: " + imageItem.type + "  , " + imageItem.filePath);
                                 leftImagePathPane.getChildren().remove(delButton);
-                                delButton = CenterPane.getInstance().creatSettingButton(null,
+                                delButton = YButton.getInstance().creatSettingButton(null,
                                         Language.isEnglish() ? Language.Delete_en : Language.Delete_ch);
                                 delButton.setLayoutX(mouseEvent.getX());
                                 delButton.setLayoutY(mouseEvent.getY());
@@ -127,15 +134,17 @@ public class LeftImagePathPane{
                                     @Override
                                     public void handle(ActionEvent event) {
                                         if (imageItemSelect.type == ImageItemType.Folder) {
-                                            iamgeItemList.removeAll(getFolderItemList(filePath));
+                                            CenterImageManager.getInstance().removeCenterImageItem(filePath);
                                         }
-                                        iamgeItemList.remove(imageItemSelect);
+                                        CenterImageManager.getInstance().removeCenterImageItem(imageItemSelect);
                                         treeImageFile.getChildren().remove(item);
                                         leftImagePathPane.getChildren().remove(delButton);
-                                        if (iamgeItemList.isEmpty()) {
+                                        if (CenterImageManager.getInstance().imageItemList.isEmpty()) {
                                             CenterPane.getInstance().reset();
                                             RightPane.getInstance().reset();
+                                            CenterImageThumbPane.getInstance().reset();
                                         }
+                                        CenterImageThumbPane.getInstance().addImageToGridPane();
                                     }
                                 });
                             }
@@ -160,33 +169,10 @@ public class LeftImagePathPane{
         return isTrue;
     }
 
-    public enum ImageItemType {
-        JPG,
-        Folder,
-        JPG_IN_Folder
-    }
-
-    class ImageItem{
-        TreeItem item;
-        String fileName;
-        String filePath;
-        String folderPath;
-        ImageItemType type;
-        ImageItem(TreeItem item, String fileName, String filePath, String folderPath, ImageItemType type){
-            this.item = item;
-            this.fileName = fileName;
-            this.filePath = filePath;
-            this.folderPath = folderPath;
-            this.type = type;
-        }
-    }
-
-    ArrayList iamgeItemList = new ArrayList();
-
-    private ImageItem getImageItem(String filePath,ImageItemType tpye){
+    private ImageItem getImageItem(String filePath, ImageItemType tpye){
         ImageItem imageItem = null;
-        for (int i=0;i<iamgeItemList.size();i++){
-            imageItem = (ImageItem) iamgeItemList.get(i);
+        for (int i=0;i<CenterImageManager.getInstance().imageItemList.size();i++){
+            imageItem = (ImageItem) CenterImageManager.getInstance().imageItemList.get(i);
             if (imageItem.filePath.equals(filePath)){
                 if (tpye == imageItem.type){
                     break;
@@ -196,24 +182,14 @@ public class LeftImagePathPane{
         return imageItem;
     }
 
-    private ArrayList getFolderItemList(String filePath){
-        ArrayList list = new ArrayList();
-        for (int i=0;i<iamgeItemList.size();i++){
-            ImageItem imageItem = (ImageItem) iamgeItemList.get(i);
-            if (imageItem.folderPath != null && imageItem.folderPath.equals(filePath)){
-                list.add(imageItem);
-            }
-        }
-        return list;
-    }
-
     public void addImageItem(String fileName,String filePath){
         if (isTrueImagePathEnding(fileName)){
             TreeItem itemImage = new TreeItem(fileName);
             itemImage.setGraphic(new ImageView("image/picture.png"));
             treeImageFile.getChildren().add(itemImage);
-            iamgeItemList.add(new ImageItem(itemImage,fileName,filePath,null,ImageItemType.JPG));
-            select(iamgeItemList.size());
+            CenterImageManager.getInstance().addCenterImageItem(new ImageItem(itemImage,fileName,filePath,null,ImageItemType.JPG));
+            select(CenterImageManager.getInstance().imageItemList.size());
+            CenterImageThumbPane.getInstance().addImageToGridPane();
         }
     }
 
@@ -223,8 +199,8 @@ public class LeftImagePathPane{
         TreeItem itemImage = new TreeItem(filePathName);
         itemImage.setGraphic(new ImageView("image/folder.png"));
         treeImageFile.getChildren().add(itemImage);
-        iamgeItemList.add(new ImageItem(itemImage,filePathName,filePath,null,ImageItemType.Folder));
-        select(iamgeItemList.size());
+        CenterImageManager.getInstance().addCenterImageItem(new ImageItem(itemImage,filePathName,filePath,null,ImageItemType.Folder));
+        select(CenterImageManager.getInstance().imageItemList.size());
         List<String> imageList = getAllFile(filePath,false,false);
         for (String namePath:imageList){
 //            YLog.I("--- " + namePath);
@@ -237,10 +213,11 @@ public class LeftImagePathPane{
                 imageView.setFitHeight(12);
                 item.setGraphic(imageView);
                 itemImage.getChildren().add(item);
-                iamgeItemList.add(new ImageItem(item,fileName,namePath,filePath,ImageItemType.JPG_IN_Folder));
+                CenterImageManager.getInstance().addCenterImageItem(new ImageItem(item,fileName,namePath,filePath,ImageItemType.JPG_IN_Folder));
             }
         }
         itemImage.setExpanded(true);
+        CenterImageThumbPane.getInstance().addImageToGridPane();
     }
 
     public void select(int index){
@@ -249,9 +226,9 @@ public class LeftImagePathPane{
 
     private String getImagePath(String fileName){
         String filePath = null;
-        for (int i=0;i<iamgeItemList.size();i++){
-            String name = ((ImageItem) iamgeItemList.get(i)).fileName;
-            filePath = ((ImageItem) iamgeItemList.get(i)).filePath;
+        for (int i=0;i<CenterImageManager.getInstance().imageItemList.size();i++){
+            String name = ((ImageItem) CenterImageManager.getInstance().imageItemList.get(i)).fileName;
+            filePath = ((ImageItem) CenterImageManager.getInstance().imageItemList.get(i)).filePath;
             if (fileName.equals(name)){
                 break;
             }

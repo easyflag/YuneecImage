@@ -101,8 +101,13 @@ public class RightPane {
         rightImagePreviewPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
     }
 
+    public void showRightImageInfo(){
+        showRightImagePreview();
+        showImageInfoToRightPane();
+    }
+
     private ImageView imagePreview;
-    public void showRightImagePreview(){
+    private void showRightImagePreview(){
         Image image = new Image("file:" + Global.currentLeftSelectImagePath);
         if (imagePreview == null){
             imagePreview = new ImageView(image);
@@ -147,7 +152,7 @@ public class RightPane {
         }
     }
 
-    public void showImageInfoToRightPane() {
+    private void showImageInfoToRightPane() {
         rightImageInfoPane.getChildren().removeAll(imageInfoTagNameLabelList);
         imageInfoTagNameLabelList.clear();
         rightImageInfoPane.getChildren().removeAll(imageInfoDescriptionLabelList);

@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.module.center.CenterImageThumbPane;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import javafx.application.Application;
 import javafx.application.Platform;

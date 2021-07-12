@@ -2,7 +2,12 @@ package com.yuneec.image.module.center;
 
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
+import com.yuneec.image.RightPane;
 import com.yuneec.image.ScaleImage;
+import com.yuneec.image.module.Language;
+import com.yuneec.image.utils.ImageUtil;
+import com.yuneec.image.utils.ParseTemperatureBytes;
+import com.yuneec.image.utils.TemperatureAlgorithm;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.views.YButton;
 import javafx.event.EventHandler;
@@ -18,17 +23,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CenterImageThumbPane {
 
-    GridPane gridpane;
-    String fileName = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec07.jpg";
-    String fileName2 = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec08.jpg";
-    int rowNum = 4;
-    int columnNum = 4;
-    double itemWidth = 640 / 5;
-    double itemHeight = 512 / 5;
+    public GridPane gridpane;
+    private double itemWidth = 640 / 6;
+    private double itemHeight = 512 / 6;
+    public Label pageLabel;
 
     private static CenterImageThumbPane instance;
     public static CenterImageThumbPane getInstance() {
@@ -39,10 +42,9 @@ public class CenterImageThumbPane {
     }
 
     public void init() {
+        TemperatureAlgorithm.SupportScale = true;
         initCenterImageThumbPane();
     }
-
-
 
     private void initCenterImageThumbPane() {
         FlowPane centerPane = new FlowPane();
@@ -50,16 +52,16 @@ public class CenterImageThumbPane {
         centerPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
         Global.hBox.getChildren().add(centerPane);
 
+        centerPane.getChildren().add(CenterTopSettingPane.getInstance().init());
+
         gridpane = new GridPane();
 //		gridpane.setBackground(new Background(new BackgroundFill(Color.web(Configs.blue_color), null, null)));
         gridpane.setAlignment(Pos.CENTER);
         gridpane.setPrefWidth(Configs.CenterPanelWidth);
-        gridpane.setPrefHeight(Configs.SceneHeight - Configs.LineHeight - Configs.MenuHeight - 15);
-        gridpane.setHgap(20);
+        gridpane.setPrefHeight(Configs.SceneHeight - Configs.LineHeight - Configs.LineHeight - Configs.MenuHeight - 15);
+        gridpane.setHgap(10);
         gridpane.setVgap(15);
 //		gridpane.setPadding(new Insets(25, 25, 25, 25));
-
-        addImageToGridPane(fileName);
 
         centerPane.getChildren().add(gridpane);
 
@@ -81,40 +83,53 @@ public class CenterImageThumbPane {
 
     }
 
-    private void addImageToGridPane(String fileName) {
+    public void addImageToGridPane() {
+        if (gridpane == null){
+            return;
+        }
         gridpane.getChildren().clear();
-        for (int i=0;i<columnNum;i++){
-            for (int j=0;j<rowNum;j++){
-                AnchorPane item = new AnchorPane();
-                Button button = creatImageViewButton(fileName,"");
-                item.setPrefWidth(itemWidth);
-                item.setPrefHeight(itemHeight);
-//				item.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
-                Label labelName = new Label("Yuneec07.jpg");
-                labelName.setTextFill(Paint.valueOf(Configs.white_color));
-                labelName.setPrefWidth(itemWidth + 30);
-                labelName.setAlignment(Pos.CENTER);
-                item.setBottomAnchor(labelName,0.0);
-                item.setBottomAnchor(button,20.0);
-                item.getChildren().addAll(button,labelName);
-                gridpane.add(item,i,j);
+        for (int i=0;i<CenterImageManager.columnNum;i++){
+            for (int j=0;j<CenterImageManager.rowNum;j++){
+                ImageItem imageItem = CenterImageManager.getInstance().getImageItemForRowColumn(j,i,currentPage);
+                if (imageItem != null){
+                    AnchorPane item = new AnchorPane();
+                    Button button = creatImageViewButton(imageItem,"");
+                    item.setPrefWidth(itemWidth);
+                    item.setPrefHeight(itemHeight);
+//				    item.setBackground(new Background(new BackgroundFill(Color.web(Configs.grey_color), null, null)));
+                    Label labelName = new Label(imageItem.fileName);
+                    labelName.setTextFill(Paint.valueOf(Configs.white_color));
+                    labelName.setPrefWidth(itemWidth + 30);
+                    labelName.setAlignment(Pos.CENTER);
+                    item.setBottomAnchor(labelName,0.0);
+                    item.setBottomAnchor(button,20.0);
+                    item.getChildren().addAll(button,labelName);
+                    gridpane.add(item,i,j);
+                }
             }
         }
     }
 
-    private int countPage = 10;
+    public void switchLanguage(){
+        lastButton.setText(Language.getString(Language.Back_Page_en,Language.Back_Page_ch));
+        nextButton.setText(Language.getString(Language.Next_Page_en,Language.Next_Page_ch));
+        CenterImageManager.getInstance().updatePageLabel(currentPage);
+    }
+
     private int currentPage = 1;
-    private int countImage = 10*16;
+    private Button lastButton,nextButton;
     private void addTrunPagePane(FlowPane indicatorPane) {
-        Label pageLabel = new Label();
+        pageLabel = new Label();
         pageLabel.setTranslateX(10);
         pageLabel.setTranslateY(12);
         pageLabel.setTextFill(Color.WHITE);
-        pageLabel.setText("总共 " + countImage + " 张图片, 合计 " + countPage + " 页, 当前第 " + currentPage + " 页.");
-        Button lastButton = YButton.getInstance().initButton(null,"上一页");
+        CenterImageManager.getInstance().updatePageLabel(currentPage);
+        lastButton = YButton.getInstance().initButton(null,
+                Language.getString(Language.Back_Page_en,Language.Back_Page_ch));
         lastButton.setTranslateX(70);
         lastButton.setTranslateY(12);
-        Button nextButton = YButton.getInstance().initButton(null,"下一页");
+        nextButton = YButton.getInstance().initButton(null,
+                Language.getString(Language.Next_Page_en,Language.Next_Page_ch));
         nextButton.setTranslateX(120);
         nextButton.setTranslateY(12);
         indicatorPane.getChildren().addAll(pageLabel,lastButton,nextButton);
@@ -122,7 +137,11 @@ public class CenterImageThumbPane {
             @Override
             public void handle(MouseEvent event) {
                 if (Utils.mouseLeftClick(event)) {
-                    addImageToGridPane(fileName);
+                    if (currentPage > 1){
+                        currentPage--;
+                        CenterImageManager.getInstance().updatePageLabel(currentPage);
+                    }
+                    addImageToGridPane();
                 }
             }
         });
@@ -130,7 +149,11 @@ public class CenterImageThumbPane {
             @Override
             public void handle(MouseEvent event) {
                 if (Utils.mouseLeftClick(event)) {
-                    addImageToGridPane(fileName2);
+                    if (currentPage < CenterImageManager.getInstance().getCountPage()){
+                        currentPage++;
+                        CenterImageManager.getInstance().updatePageLabel(currentPage);
+                    }
+                    addImageToGridPane();
                 }
             }
         });
@@ -141,19 +164,27 @@ public class CenterImageThumbPane {
     Border ouClickborder = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
     Border clickborder = new Border(new BorderStroke(Paint.valueOf(Configs.red_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
     ArrayList allImageButton = new ArrayList();
-    public Button creatImageViewButton(String imagePath,String text) {
+    public Button creatImageViewButton(ImageItem imageItem,String text) {
         Button button = new Button();
         button.setText(text);
         button.setTextFill(Paint.valueOf(Configs.grey_color));
-        if(imagePath != null){
-            ImageView imageView = new ImageView(new Image("file:"+imagePath));
+        if(imageItem != null){
+            ImageView imageView = new ImageView(new Image("file:"+imageItem.filePath));
             imageView.setFitWidth(itemWidth - 0);
             imageView.setFitHeight(itemHeight - 0);
             button.setGraphic(imageView);
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 setAllBackground(button);
+                Global.currentLeftSelectImagePath = imageItem.filePath.replace("\\", "\\\\");
+                ImageUtil.readImage(Global.currentLeftSelectImagePath);
+                RightPane.getInstance().showRightImageInfo();
                 if (event.getClickCount() == 2) {
-                    Global.currentOpenImagePath = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec07.jpg";
+                    Global.currentOpenImagePath = imageItem.filePath;
+                    try {
+                        ParseTemperatureBytes.getInstance().init(ImageUtil.read(Global.currentOpenImagePath));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     new ScaleImage().start(new Stage());
                 }
             });
@@ -175,4 +206,9 @@ public class CenterImageThumbPane {
     }
 
 
+    public void reset() {
+        if (gridpane != null){
+            gridpane.getChildren().clear();
+        }
+    }
 }

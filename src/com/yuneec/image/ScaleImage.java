@@ -1,5 +1,8 @@
 package com.yuneec.image;
 
+import com.yuneec.image.module.Language;
+import com.yuneec.image.utils.TemperatureAlgorithm;
+import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -26,11 +29,13 @@ import javafx.stage.StageStyle;
 public class ScaleImage extends Application {
     double windowWidth = 640;
     double windowHeight = 512;
+    double rate = 0;
     ImageView imageView;
     double imageW;
     double imageH;
     double offsetX,offsetY;
-    double newImageWidth,newImageHeight;
+    double newImageWidth = windowWidth;
+    double newImageHeight = windowHeight;
 
     public void start(Stage primaryStage) {
 
@@ -80,7 +85,6 @@ public class ScaleImage extends Application {
 
         final double scale = 10;
         stackPane.addEventFilter(ScrollEvent.SCROLL, event -> {
-            double rate = 0;
             if (event.getDeltaY() > 0) {
                 rate = 0.05 ;
             } else {
@@ -114,29 +118,19 @@ public class ScaleImage extends Application {
             imageView.setFitHeight(newImageHeight);
             String s = "eventPointDistance.getX():" + eventPointDistance.getX() + " eventPointDistance.getY():" + eventPointDistance.getY()
                     + " offsetX:" + offsetX + " offsetY:" + offsetY
-                    + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight;
-            YLog.I("ScaleImage MouseEvent:" + s);
+                    + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight
+                    + " ,rate:" + rate + " ,w_rate:" + newImageWidth/imageW + " ,h_rate:" + newImageHeight/imageH;
+            YLog.I("ScaleImage ScrollEvent:" + s);
 
             double newlabelx =  ((newImageWidth * pointPaneX)/ imageW);
             double newlabely =  ((newImageHeight * pointPaneY)/ imageH);
             pointPane.setLayoutX(newlabelx);
             pointPane.setLayoutY(newlabely);
 //            scaleNode(pointPane);
-
         });
 
         draggable(stackPane);
-
-        imagePane.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                int x = (int) (e.getX() - offsetX);
-                int y = (int) (e.getY() - offsetY);
-                String s = "x = " + x + " y = " + y + " offsetX:" + offsetX + " offsetY:" + offsetY
-                        + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight;
-                YLog.I("ScaleImage MouseEvent:" + s);
-            }
-        });
+        imageViewDraw();
 
         scene.setFill(Paint.valueOf(Configs.backgroundColor));
         primaryStage.setScene(scene);
@@ -144,6 +138,27 @@ public class ScaleImage extends Application {
         primaryStage.resizableProperty().setValue(false);
         primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
+    }
+
+    private void imageViewDraw() {
+        imageView.setOnMouseMoved(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                int x = (int) (e.getX() - offsetX);
+                int y = (int) (e.getY() - offsetY);
+                String s = "x = " + x + " y = " + y + " offsetX:" + offsetX + " offsetY:" + offsetY
+                        + " newImageWidth:" + newImageWidth + " newImageHeight:" + newImageHeight +
+                        " ,rate:" + rate + " ,w_rate:" + newImageWidth/imageW + " ,h_rate:" + newImageHeight/imageH;
+                YLog.I("ScaleImage MouseEvent:" + s);
+                Global.currentOpenImageWidth = newImageWidth;
+                Global.currentOpenImageHeight = newImageHeight;
+                float pointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
+                String ts = Language.getString(" ,"+Language.Temperature_en+" = " , " ,"+Language.Temperature_ch+" = ");
+                String rightXYlabel = "x = " + x + " y = " + y + ts;
+                String sTemperature = rightXYlabel + Utils.getFormatTemperature(pointTemperature);
+                RightPane.getInstance().showXYlabel.setText(sTemperature);
+            }
+        });
     }
 
     private AnchorPane getPointPane(){

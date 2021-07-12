@@ -2,6 +2,7 @@ package com.yuneec.image.module;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
+import com.yuneec.image.module.center.CenterImageThumbPane;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.utils.ImageUtil;
@@ -79,6 +80,13 @@ public class Language {
     public static String Delete_ch = "删除";
     public static String Left_All_Image_Title_en = "Yuneec Image Files:";
     public static String Left_All_Image_Title_ch = "所有图片文件:";
+    public static String Back_Page_en = "Back Page";
+    public static String Back_Page_ch = "上一页";
+    public static String Next_Page_en = "Next Page";
+    public static String Next_Page_ch = "下一页";
+    public static String Center_Page_Info_en = "";
+    public static String Center_Page_Info_ch = "";
+
 
     public static boolean isEnglish() {
         return LanguageSelect == Languages.English;
@@ -118,6 +126,7 @@ public class Language {
         ColorPalette.getInstance().changeColorPaletteNameLanguage();
         CenterPane.getInstance().setTooltip();
         LeftImagePathPane.getInstance().treeImageFile.setValue(Left_All_Image_Title_en);
+        CenterImageThumbPane.getInstance().switchLanguage();
     }
 
     public void setChinese() {
@@ -150,6 +159,7 @@ public class Language {
         ColorPalette.getInstance().changeColorPaletteNameLanguage();
         CenterPane.getInstance().setTooltip();
         LeftImagePathPane.getInstance().treeImageFile.setValue(Left_All_Image_Title_ch);
+        CenterImageThumbPane.getInstance().switchLanguage();
     }
 
 

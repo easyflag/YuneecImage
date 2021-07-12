@@ -62,8 +62,10 @@ public class ColorPalette {
     }
 
     public void dmissColorPalettePane() {
-        CenterPane.getInstance().centerImagePane.getChildren().remove(centerSettingColorPalettePane);
-        centerSettingColorPalettePaneAdded = false;
+        if (CenterPane.getInstance().centerImagePane != null){
+            CenterPane.getInstance().centerImagePane.getChildren().remove(centerSettingColorPalettePane);
+            centerSettingColorPalettePaneAdded = false;
+        }
     }
 
     public static String[] colorPaletteNameList = {"White Hot","Fulgurite","Iron Red","Hot Iron","Medical","Arctic","Rainbow1","Rainbow2","Tint","Black Hot"};

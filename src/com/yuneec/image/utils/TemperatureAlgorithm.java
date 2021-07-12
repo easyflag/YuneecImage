@@ -52,7 +52,7 @@ public class TemperatureAlgorithm {
     private int getTemperaByteForXY(int x, int y) {
         int pixel_value = 0;
 
-        int index = getTemperaByteIndexForXY(x,y);
+        int index = getTemperaByteIndex(x,y);
 
         byte[] spotTempByte = new byte[4];
 //        System.arraycopy(TemperatureBytes,index,spotTempByte,2,2);
@@ -69,13 +69,70 @@ public class TemperatureAlgorithm {
         return pixel_value;
     }
 
+    public static boolean SupportScale = false;
+    private int getTemperaByteIndex(int x, int y){
+        if (SupportScale){
+            if (ParseTemperatureBytes.getInstance().TemperatureBytes.length == TemperatureLen){
+                return getTemperaByteIndexSupportScaleForXY(x,y);
+            }else {
+                return getTemperaByteIndexSupportScaleForXY2(x,y);
+            }
+        }else {
+            return getTemperaByteIndexForXY(x,y);
+        }
+    }
+
+    private int getTemperaByteIndexSupportScaleForXY(int x, int y) {
+        int index = 0;
+        int lineTemperaBytes = 0;
+        lineTemperaBytes = tifWidth * 2;
+        double yScale = Global.currentOpenImageHeight / tifHeight;
+        double xScale = Global.currentOpenImageWidth / (tifWidth * 2);
+        int s_y = (int) (y / yScale);
+        if (y <= 1) {
+            index = (int) (x / xScale);
+        } else if (x == 0) {
+            index = ((s_y * lineTemperaBytes));
+        } else {
+            index = (int) ((s_y * lineTemperaBytes) + (x/xScale));
+        }
+        if (index % 2 != 0) {
+            index++;
+        }
+        if (index > TemperatureLen){
+            index = TemperatureLen-1;
+        }
+        return index;
+    }
+
+    private int getTemperaByteIndexSupportScaleForXY2(int x, int y) {
+        int index = 0;
+        int lineTemperaBytes = 0;
+        tifWidth = 640;
+        tifHeight = 512;
+        lineTemperaBytes = tifWidth * 2;
+        double yScale = Global.currentOpenImageHeight / tifHeight;
+        double xScale = Global.currentOpenImageWidth / tifWidth;
+        int s_y = (int) (y / yScale);
+        int s_x = (int) (x / xScale);
+        if(y==0){
+            index = s_x * 2;
+        }else if(x==0){
+            index = s_y * lineTemperaBytes;
+        }else {
+            index = ((s_y * lineTemperaBytes) + s_x * 2);
+        }
+        return index;
+    }
+
     int tifWidth = 320;
     int tifHeight = 256;
+    static int TemperatureLen = 163846;
     private int getTemperaByteIndexForXY(int x, int y) {
         int index = 0;
         int lineTemperaBytes = 0;
 
-        if (ParseTemperatureBytes.getInstance().TemperatureBytes.length == 163846){
+        if (ParseTemperatureBytes.getInstance().TemperatureBytes.length == TemperatureLen){
             tifWidth = 320;
             tifHeight = 256;
             lineTemperaBytes = tifWidth * 2;

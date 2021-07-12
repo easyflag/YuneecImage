@@ -83,9 +83,11 @@ public class CenterPane {
     }
 
     public void reset(){
-        showImagePane.getChildren().remove(imageView);
-        imageView = null;
-        resetShowImageDefault();
+        if (showImagePane != null){
+            showImagePane.getChildren().remove(imageView);
+            imageView = null;
+            resetShowImageDefault();
+        }
     }
 
     public void showImage() {
@@ -386,6 +388,9 @@ public class CenterPane {
     }
 
     public void setTooltip(){
+        if (showImagePane == null){
+            return;
+        }
         SingleClickButton.setTooltip(getTooltip(Language.getString(Language.SinglePointTemperature_en,Language.SinglePointTemperature_ch)));
         BoxChooseButton.setTooltip(getTooltip(Language.getString(Language.BoxTemperature_en,Language.BoxTemperature_ch)));
         ColorPaletteButton.setTooltip(getTooltip(Language.getString(Language.ColorPaletteTip_en,Language.ColorPaletteTip_ch)));
