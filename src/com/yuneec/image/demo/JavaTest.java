@@ -26,7 +26,7 @@ public class JavaTest {
 
         String fileName = "F:\\intellijSpace\\YuneecImage\\src\\image\\wendu_06.txt";
         try {
-            byte[] bytes = ImageUtil.read(fileName);
+            byte[] bytes = ImageUtil.readJpgToByte(fileName);
 //            YLog.I(ByteUtils.byteArrayToHexString(bytes, 0,100));
             int len = bytes.length;
             for (int i=0;i<len/2;i++){

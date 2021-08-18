@@ -12,11 +12,16 @@ import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import com.yuneec.image.Global;
 import com.yuneec.image.module.Language;
 
 public class ImageUtil {
 
-	public static byte[] read(File bFile) throws IOException {
+	public static byte[] readJpgToByte(String bFile) throws IOException {
+		return read(new File(bFile).getAbsoluteFile());
+	}
+
+	private static byte[] read(File bFile) throws IOException {
 		BufferedInputStream bf = new BufferedInputStream(new FileInputStream(bFile));
 		try {
 			byte[] data = new byte[bf.available()];
@@ -27,16 +32,12 @@ public class ImageUtil {
 		}
 	}
 
-	public static byte[] read(String bFile) throws IOException {
-		return read(new File(bFile).getAbsoluteFile());
-	}
-
 	public static byte[] imageBytes;
-	public static void readImage(String name){
+	public static void readImageExif(String name){
 		try {
-			imageBytes = read(name);
+//			imageBytes = readJpgToByte(name);
 			readPic(name);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -142,6 +143,10 @@ public class ImageUtil {
 			arrayList.add(Language.getString(tagName,Language.File_Size_ch));
 			arrayList.add(description);
 			imageInfoList.add(arrayList);
+		}
+		if(tagName.equals("Model")){
+//			YLog.I(" Model ---> "+ description);
+			Global.cameraMode = description;
 		}
 	}
 

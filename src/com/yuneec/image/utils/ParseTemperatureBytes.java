@@ -1,5 +1,7 @@
 package com.yuneec.image.utils;
 
+import com.yuneec.image.guide.GuiDeUtil;
+
 import java.util.ArrayList;
 
 public class ParseTemperatureBytes {
@@ -16,6 +18,7 @@ public class ParseTemperatureBytes {
     private byte[] HEADER = new byte[]{(byte) 0xFF, (byte) 0xE3};
     private int[] bufLens;
 
+    //double click to get :  xmp , TemperatureBytes
     public void init(byte[] bytes) {
         try {
             XMPUtil.getInstance().getXmp();
@@ -24,34 +27,38 @@ public class ParseTemperatureBytes {
         }
         int length = bytes.length;
         YLog.I("image bytes length: " + length);
-//			String s = ByteUtils.byteArrayToHexString(bytes);
-//			YLog.I(s);
-//			String s1 = ByteUtils.byteArrayToHexString(bytes, 0, 50);
-//			YLog.I(s1);
-//			String s2 = ByteUtils.byteArrayToHexString(bytes, length-50, length, length);
-//			YLog.I(s2);
+//			YLog.I(ByteUtils.byteArrayToHexString(bytes));
+//			YLog.I(ByteUtils.byteArrayToHexString(bytes, 0, 50));
+//			YLog.I(ByteUtils.byteArrayToHexString(bytes, length-50, length, length));
 
+        /*
+        * Guide [65534,65534,65534,65534,65534,65534,65534,65534,65534,65534,42] size=655360
+        * */
+
+        GuiDeUtil.getInstance().init(bytes);
         ArrayList findIndexList = simpleFind(bytes, 0, length, HEADER); //{5911,71447,136983}
         bufLens = new int[findIndexList.size() + 1];
-        bufLens[0] = 0;  // [0,65534,65534,32778]
-        int TemperatureBytesLen = 0;  // 163846
+        bufLens[0] = 0;  // [0,65534-2,65534-2,32778-2]
+        int TemperatureBytesLen = 0;
         for (int i=0;i<findIndexList.size();i++){
-//            YLog.I("findIndexList ---> " + findIndexList.get(i));
             int bufLen = getBufLen(bytes, (Integer) findIndexList.get(i));
-            bufLens[i+1] = bufLen;
-            TemperatureBytesLen += bufLen;
-//            YLog.I("findIndexList  bufLen---> " + bufLen + ",TemperatureBytesLen:" + TemperatureBytesLen);
+            bufLens[i+1] = bufLen-2; //65534-2
+            TemperatureBytesLen += (bufLen-2);
+//            YLog.I("findIndexList ---> " + findIndexList.get(i) + " ,bufLen:" + bufLen + " TemperatureBytesLen:" + TemperatureBytesLen);
         }
 
         TemperatureBytes = new byte[TemperatureBytesLen];
         int desPos = 0;
         for (int i=0;i<findIndexList.size();i++){
             desPos += bufLens[i];
-            System.arraycopy(bytes,(int)findIndexList.get(i)+2+2,TemperatureBytes,desPos,bufLens[i+1]-2);
+            System.arraycopy(bytes,(int)findIndexList.get(i)+2+2,TemperatureBytes,desPos,bufLens[i+1]);
         }
         YLog.I("TemperatureBytes---> " + TemperatureBytes.length +  " , " + TemperatureBytesLen);
-//        YLog.I(ByteUtils.byteArrayToHexString(TemperatureBytes, 0,100));
-//        YLog.I(ByteUtils.byteArrayToHexString(bytes, TemperatureBytesLen-100, TemperatureBytesLen, TemperatureBytesLen));
+//        YLog.I("TemperatureBytes: " + ByteUtils.byteArrayToHexString(TemperatureBytes, 0,500));
+//        YLog.I("TemperatureBytes: " + ByteUtils.byteArrayToHexString(bytes, TemperatureBytesLen-500, TemperatureBytesLen, TemperatureBytesLen));
+//        YLog.I("TemperatureBytes: " + ByteUtils.byteArrayToHexString(TemperatureBytes, 0,TemperatureBytesLen));
+//        GuiDeUtil.getInstance().getErrByte(TemperatureBytes);
+
     }
 
     private int getBufLen(byte[] bytes, int offset) {

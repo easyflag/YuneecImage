@@ -1,6 +1,8 @@
 package com.yuneec.image.utils;
 
 import com.yuneec.image.Global;
+import com.yuneec.image.guide.GuiDeUtil;
+import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 
 public class TemperatureAlgorithm {
 
@@ -40,10 +42,14 @@ public class TemperatureAlgorithm {
 
     public float getTemperature(int x, int y) {
         float pointTemperature;
-        int pixel_value = getTemperaByteForXY(x,y);  // 0x5478 5478  --  21624
-        float fpa_compensated = (pixel_value + PixelToFpaTempB) / (1 - PixelToFpaTempM);
-        double temp = ((B1 / Math.log(R1 * 1.0f / (fpa_compensated - O1) + F1)) - CELSIUS_DEGREE_TO_KELVIN_DEGREE);
-        pointTemperature = compensate_temp_with_env_temp((float) temp, AmbientTemperature);
+        if (GuiDeUtil.getInstance().isE20T()){
+            pointTemperature =  GuideTemperatureAlgorithm.getInstance().getTemperature(x,y);
+        }else {
+            int pixel_value = getTemperaByteForXY(x,y);  // 0x5478 5478  --  21624
+            float fpa_compensated = (pixel_value + PixelToFpaTempB) / (1 - PixelToFpaTempM);
+            double temp = ((B1 / Math.log(R1 * 1.0f / (fpa_compensated - O1) + F1)) - CELSIUS_DEGREE_TO_KELVIN_DEGREE);
+            pointTemperature = compensate_temp_with_env_temp((float) temp, AmbientTemperature);
+        }
 //        YLog.I(" ---- > pointTemperature :" + pointTemperature);
 //        YLog.I(" -----------------------------------------------------------------------");
         return pointTemperature;
@@ -127,7 +133,7 @@ public class TemperatureAlgorithm {
 
     int tifWidth = 320;
     int tifHeight = 256;
-    static int TemperatureLen = 163846;
+    static int TemperatureLen = 320*256*2;
     private int getTemperaByteIndexForXY(int x, int y) {
         int index = 0;
         int lineTemperaBytes = 0;

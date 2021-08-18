@@ -93,7 +93,7 @@ public class CenterPane {
     public void showImage() {
         resetShowImageDefault();
         try {
-            ParseTemperatureBytes.getInstance().init(ImageUtil.read(Global.currentOpenImagePath));
+            ParseTemperatureBytes.getInstance().init(ImageUtil.readJpgToByte(Global.currentOpenImagePath));
         } catch (IOException e) {
             e.printStackTrace();
         }

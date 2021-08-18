@@ -7,6 +7,8 @@ import com.adobe.internal.xmp.impl.XMPIteratorImpl;
 import com.adobe.internal.xmp.options.PropertyOptions;
 import com.adobe.internal.xmp.properties.XMPPropertyInfo;
 import com.yuneec.image.Global;
+import com.yuneec.image.guide.GuiDeUtil;
+import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 
 import java.io.*;
 import java.util.Arrays;
@@ -31,18 +33,22 @@ public class XMPUtil {
     private final String xmpTag = "xxxx:";
     private Map<String, String> xmpMap;
 
-    public void getXMP() throws Exception {
-        File orgFile = new File(Global.currentOpenImagePath);
-        FileInputStream in = new FileInputStream(orgFile);
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        copy(in, out);
-        byte[] fileData = out.toByteArray();
-        int openIdx = indexOf(fileData, OPEN_ARR, 0);
-        if (openIdx > 0) {
-            int closeIdx = indexOf(fileData, CLOSE_ARR, openIdx + 1) + CLOSE_ARR.length;
-            byte[] xmpArr = Arrays.copyOfRange(fileData, openIdx, closeIdx);
-            XMPMeta xmpMeta = XMPMetaFactory.parseFromBuffer(xmpArr);
-            printXMPMeta(xmpMeta);
+    public void getXmp() {
+        try {
+            File orgFile = new File(Global.currentOpenImagePath);
+            FileInputStream in = new FileInputStream(orgFile);
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            copy(in, out);
+            byte[] fileData = out.toByteArray();
+            int openIdx = indexOf(fileData, OPEN_ARR, 0);
+            if (openIdx > 0) {
+                int closeIdx = indexOf(fileData, CLOSE_ARR, openIdx + 1) + CLOSE_ARR.length;
+                byte[] xmpArr = Arrays.copyOfRange(fileData, openIdx, closeIdx);
+                XMPMeta xmpMeta = XMPMetaFactory.parseFromBuffer(xmpArr);
+                printXMPMeta(xmpMeta);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -79,33 +85,36 @@ public class XMPUtil {
             PropertyOptions propertyOptions = obj.getOptions();
 //            YLog.I("XMP---> " + obj.getNamespace() + "--" + obj.getPath() + "--" + obj.getValue());
             if (obj.getNamespace().equals("http://pix4d.com/Camera/1.0/")){
-                setXMPvalue(obj.getPath(),obj.getValue());
+                if (GuiDeUtil.getInstance().isE20T()){
+                    setGuideXMPvalue(obj.getPath(),obj.getValue());
+                }else {
+                    setXMPvalue(obj.getPath(),obj.getValue());
+                }
             }
         }
-        YLog.I("XMP-->" + "AtmosphereTemperature:" + TemperatureAlgorithm.AtmosphereTemperature
-                + " ,SceneEmissivity:" + TemperatureAlgorithm.SceneEmissivity
-                + " ,TransmissionCoefficient:" + TemperatureAlgorithm.TransmissionCoefficient
-                + " ,R1:" + TemperatureAlgorithm.R1
-                + " ,B1:" + TemperatureAlgorithm.B1
-                + " ,O1:" + TemperatureAlgorithm.O1
-                + " ,PixelToFpaTempB:" + TemperatureAlgorithm.PixelToFpaTempB
-                + " ,PixelToFpaTempM:" + TemperatureAlgorithm.PixelToFpaTempM
-                + " ,GainMode:" + TemperatureAlgorithm.GainMode
-                + " ,AmbientTemperature:" + TemperatureAlgorithm.AmbientTemperature
-        );
-
-
-
-    }
-
-    public void getXmp() {
-        try {
-            getXMP();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (GuiDeUtil.getInstance().isE20T()){
+            YLog.I("XMP Guide -->" + "emiss:" + GuideTemperatureAlgorithm.pParamExt.emiss
+                    + " ,relHum:" + GuideTemperatureAlgorithm.pParamExt.relHum
+                    + " ,distance:" + GuideTemperatureAlgorithm.pParamExt.distance
+                    + " ,reflectedTemper:" + GuideTemperatureAlgorithm.pParamExt.reflectedTemper
+                    + " ,atmosphericTemper:" + GuideTemperatureAlgorithm.pParamExt.atmosphericTemper
+                    + " ,modifyK:" + GuideTemperatureAlgorithm.pParamExt.modifyK
+                    + " ,modifyB:" + GuideTemperatureAlgorithm.pParamExt.modifyB
+            );
+        }else {
+            YLog.I("XMP-->" + "AtmosphereTemperature:" + TemperatureAlgorithm.AtmosphereTemperature
+                    + " ,SceneEmissivity:" + TemperatureAlgorithm.SceneEmissivity
+                    + " ,TransmissionCoefficient:" + TemperatureAlgorithm.TransmissionCoefficient
+                    + " ,R1:" + TemperatureAlgorithm.R1
+                    + " ,B1:" + TemperatureAlgorithm.B1
+                    + " ,O1:" + TemperatureAlgorithm.O1
+                    + " ,PixelToFpaTempB:" + TemperatureAlgorithm.PixelToFpaTempB
+                    + " ,PixelToFpaTempM:" + TemperatureAlgorithm.PixelToFpaTempM
+                    + " ,GainMode:" + TemperatureAlgorithm.GainMode
+                    + " ,AmbientTemperature:" + TemperatureAlgorithm.AmbientTemperature
+            );
         }
     }
-
 
     private void setXMPvalue(String path, String value) {
         if (path == null){
@@ -133,6 +142,27 @@ public class XMPUtil {
             TemperatureAlgorithm.GainMode = Integer.parseInt(value);
         }else if(path.endsWith("AmbientTemperature")){
             TemperatureAlgorithm.AmbientTemperature = Float.parseFloat(value);
+        }
+    }
+
+    private void setGuideXMPvalue(String path, String value) {
+        if (path == null){
+            return;
+        }
+        if(path.endsWith("emiss")){
+            GuideTemperatureAlgorithm.pParamExt.emiss = Integer.parseInt(value);
+        }else if(path.endsWith("relHum")){
+            GuideTemperatureAlgorithm.pParamExt.relHum = Integer.parseInt(value);
+        }else if(path.endsWith("distance")){
+            GuideTemperatureAlgorithm.pParamExt.distance = Integer.parseInt(value);
+        }else if(path.endsWith("reflectedTemper")){
+            GuideTemperatureAlgorithm.pParamExt.reflectedTemper = Short.parseShort(value);
+        }else if(path.endsWith("atmosphericTemper")){
+            GuideTemperatureAlgorithm.pParamExt.atmosphericTemper = Short.parseShort(value);
+        }else if(path.endsWith("modifyK")){
+            GuideTemperatureAlgorithm.pParamExt.modifyK = Integer.parseInt(value);
+        }else if(path.endsWith("modifyB")){
+            GuideTemperatureAlgorithm.pParamExt.modifyB = Short.parseShort(value);
         }
     }
 

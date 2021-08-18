@@ -176,12 +176,12 @@ public class CenterImageThumbPane {
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 setAllBackground(button);
                 Global.currentLeftSelectImagePath = imageItem.filePath.replace("\\", "\\\\");
-                ImageUtil.readImage(Global.currentLeftSelectImagePath);
+                ImageUtil.readImageExif(Global.currentLeftSelectImagePath);
                 RightPane.getInstance().showRightImageInfo();
                 if (event.getClickCount() == 2) {
                     Global.currentOpenImagePath = imageItem.filePath;
                     try {
-                        ParseTemperatureBytes.getInstance().init(ImageUtil.read(Global.currentOpenImagePath));
+                        ParseTemperatureBytes.getInstance().init(ImageUtil.readJpgToByte(Global.currentOpenImagePath));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

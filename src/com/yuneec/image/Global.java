@@ -11,6 +11,10 @@ public class Global {
     public static double currentOpenImageWidth;
     public static double currentOpenImageHeight;
 
+    public static String cameraMode;
+    public static String cameraE20TMode = "E20T";
+    public static String cameraE10TMode = "E10T";
+
     public static TemperatureUnit NowTemperatureUnit = TemperatureUnit.Celsius;
     public enum TemperatureUnit {
         Celsius,

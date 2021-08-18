@@ -108,7 +108,7 @@ public class LeftImagePathPane{
 //                        YLog.I("Node click: " + item.getValue());
                         if (isTrueImagePathEnding(iamgeName)) {
                             Global.currentLeftSelectImagePath = filePath.replace("\\", "\\\\");
-                            ImageUtil.readImage(Global.currentLeftSelectImagePath);
+                            ImageUtil.readImageExif(Global.currentLeftSelectImagePath);
                             RightPane.getInstance().showRightImageInfo();
                         }
                     }

@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.guide.GuiDe;
 import com.yuneec.image.module.center.CenterImageThumbPane;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import javafx.application.Application;
@@ -50,6 +51,7 @@ public class YuneecImage extends Application {
 		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color);
 		Global.hBox.getChildren().add(rightLine);
 		RightPane.getInstance().init();
+		GuiDe.init();
 
 		primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
