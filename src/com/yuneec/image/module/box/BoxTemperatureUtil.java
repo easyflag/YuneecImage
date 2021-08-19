@@ -1,4 +1,6 @@
-package com.yuneec.image.utils;
+package com.yuneec.image.module.box;
+
+import com.yuneec.image.utils.TemperatureAlgorithm;
 
 import java.util.ArrayList;
 

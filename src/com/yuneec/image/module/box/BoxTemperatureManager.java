@@ -1,6 +1,7 @@
 package com.yuneec.image.module.box;
 
 import com.yuneec.image.CenterPane;
+import com.yuneec.image.utils.BackStepManager;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ public class BoxTemperatureManager {
         return instance;
     }
 
-    public void backStep() {
+    private void backStep() {
         if (!boxTemperatureList.isEmpty()) {
             int endIndex = boxTemperatureList.size() - 1;
             BoxTemperature boxTemperature = (BoxTemperature) boxTemperatureList.get(endIndex);
@@ -35,6 +36,7 @@ public class BoxTemperatureManager {
 
     public void addBoxTemperature(BoxTemperature boxTemperature){
         boxTemperatureList.add(boxTemperature);
+        BackStepManager.getInstance().addTemperatureInfo(boxTemperature);
     }
 
 

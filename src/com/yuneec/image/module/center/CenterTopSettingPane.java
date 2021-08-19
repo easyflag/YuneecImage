@@ -4,6 +4,7 @@ import com.yuneec.image.Configs;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.colorpalette.ColorPalette;
+import com.yuneec.image.utils.BackStepManager;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.views.YButton;
 import javafx.application.Platform;
@@ -146,7 +147,7 @@ public class CenterTopSettingPane {
                                 @Override
                                 public void run() {
                                     UndoButton.setBackground(centerSettingButtonUnclickBackground);
-                                    BoxTemperatureManager.getInstance().backStep();
+                                    BackStepManager.getInstance().backStep();
                                 }
                             });
                         }

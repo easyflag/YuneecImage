@@ -2,8 +2,11 @@ package com.yuneec.image;
 
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.box.BoxTemperatureUtil;
 import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.curve.CurveManager;
+import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.utils.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -38,12 +41,13 @@ public class CenterPane {
         CLEAR,
         POINT,
         BOX,
+        CURVE,
         ColorPalette,
         Undo
     }
 
     private int showImagePaneX, showImagePaneY;
-    private float pointTemperature;
+    public float pointTemperature;
     public ImageView imageView;
 
     private int startLineX = 0;
@@ -55,12 +59,12 @@ public class CenterPane {
     public CenterSettingSelect centerSettingFlag = CenterSettingSelect.NONE;
     public Background centerSettingButtonUnclickBackground;
     public Background centerSettingButtonClickBackground;
-    public Button SingleClickButton,BoxChooseButton,ColorPaletteButton,ClearButton,UndoButton;
+    public Button SingleClickButton,BoxChooseButton,CurveChooseButton,ColorPaletteButton,ClearButton,UndoButton;
     public ArrayList centerSettingButtonNodeList = new ArrayList();
 
     public ArrayList pointTemperatureNodeList = new ArrayList();
 
-    private String rightXYlabel;
+    public String rightXYlabel;
 
     private static CenterPane instance;
     public static CenterPane getInstance() {
@@ -146,6 +150,7 @@ public class CenterPane {
 //                showImagePane.getChildren().removeAll(boxTemperatureNodeMin);
                 MouseReleased = false;
             }
+            CurveManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MouseDragged);
         });
 
         imageView.setOnMousePressed(event->{
@@ -153,6 +158,7 @@ public class CenterPane {
 //			YLog.I("setOnMousePressed:" + s);
             startLineX = (int) event.getX();
             startLineY = (int) event.getY();
+            CurveManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MousePressed);
         });
 
         imageView.setOnMouseReleased(event->{
@@ -174,6 +180,7 @@ public class CenterPane {
                     }
                 });
             }
+            CurveManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MouseReleased);
         });
     }
 
@@ -215,7 +222,7 @@ public class CenterPane {
         return line;
     }
 
-    private ArrayList addLabelInImage(int x, int y ,float temperature,String color) {
+    public ArrayList addLabelInImage(int x, int y ,float temperature,String color) {
         ArrayList onePointTemperatureNode = new ArrayList();
         Label label = new Label();
 //        int num = new Random().nextInt(100) - 50;
@@ -277,21 +284,25 @@ public class CenterPane {
         centerSettingButtonUnclickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.lightGray_color), new CornerRadii(5), new Insets(1)));
         centerSettingButtonClickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.backgroundColor), new CornerRadii(5), new Insets(1)));
 
+        int translateX = 20;
         SingleClickButton = creatSettingButton("image/center_click.png",null);
-        SingleClickButton.setTranslateX(20);
-
+        SingleClickButton.setTranslateX(translateX);
+        translateX +=10;
         BoxChooseButton = creatSettingButton("image/box_choose.png",null);
-        BoxChooseButton.setTranslateX(30);
-
+        BoxChooseButton.setTranslateX(translateX);
+        translateX +=10;
+        CurveChooseButton = creatSettingButton("image/center_curve.png",null);
+        CurveChooseButton.setTranslateX(translateX);
+        translateX +=10;
         ColorPaletteButton = creatSettingButton("image/color_palette.png",null);
-        ColorPaletteButton.setTranslateX(40);
+        ColorPaletteButton.setTranslateX(translateX);
         ColorPalette.getInstance().init();
-
+        translateX +=10;
         ClearButton = creatSettingButton("image/clear.png",null);
-        ClearButton.setTranslateX(50);
-
+        ClearButton.setTranslateX(translateX);
+        translateX +=10;
         UndoButton = creatSettingButton("image/undo.png",null);
-        UndoButton.setTranslateX(60);
+        UndoButton.setTranslateX(translateX);
 
         setTooltip();
         SingleClickButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -313,6 +324,17 @@ public class CenterPane {
 //                    YLog.I("initCenterSettingPane BoxChooseButton MouseClicked ...");
                     setButtonClickBackground(centerSettingButtonNodeList,BoxChooseButton);
                     centerSettingFlag = CenterSettingSelect.BOX;
+                    ColorPalette.getInstance().dmissColorPalettePane();
+                }
+            }
+        });
+
+        CurveChooseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (Utils.mouseLeftClick(e)) {
+                    setButtonClickBackground(centerSettingButtonNodeList,CurveChooseButton);
+                    centerSettingFlag = CenterSettingSelect.CURVE;
                     ColorPalette.getInstance().dmissColorPalettePane();
                 }
             }
@@ -355,7 +377,7 @@ public class CenterPane {
                                 @Override
                                 public void run() {
                                     UndoButton.setBackground(centerSettingButtonUnclickBackground);
-                                    BoxTemperatureManager.getInstance().backStep();
+                                    BackStepManager.getInstance().backStep();
                                 }
                             });
                         }
@@ -369,11 +391,13 @@ public class CenterPane {
         centerSettingButtonNodeList.clear();
         centerSettingButtonNodeList.add(SingleClickButton);
         centerSettingButtonNodeList.add(BoxChooseButton);
+        centerSettingButtonNodeList.add(CurveChooseButton);
         centerSettingButtonNodeList.add(ColorPaletteButton);
         centerSettingButtonNodeList.add(ClearButton);
         centerSettingButtonNodeList.add(UndoButton);
         centerSettingPane.getChildren().add(SingleClickButton);
         centerSettingPane.getChildren().add(BoxChooseButton);
+        centerSettingPane.getChildren().add(CurveChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
         centerSettingPane.getChildren().add(UndoButton);
@@ -446,28 +470,11 @@ public class CenterPane {
             showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMin());
         }
         BoxTemperatureManager.getInstance().boxTemperatureList.clear();
-    }
-
-    public void transitionTemperature(){
-        for (int i=0;i<pointTemperatureNodeList.size();i++){
-            ArrayList pointNodeList = (ArrayList) pointTemperatureNodeList.get(i);
-            Label label = (Label) pointNodeList.get(0);
-            float temperature = (float) pointNodeList.get(4);
-            label.setText(Utils.getFormatTemperature(temperature));
-        }
-        for (int i =0;i < BoxTemperatureManager.getInstance().boxTemperatureList.size();i++) {
-            BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
-            if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()){
-                ((Label)boxTemperature.getBoxTemperatureNodeMax().get(0)).setText(
-                        Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMax().get(4)));
-            }
-            if (!boxTemperature.getBoxTemperatureNodeMin().isEmpty()){
-                ((Label)boxTemperature.getBoxTemperatureNodeMin().get(0)).setText(
-                        Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMin().get(4)));
-            }
-        }
-        if (Global.currentOpenImagePath != null){
-            RightPane.getInstance().showXYlabel.setText(rightXYlabel + Utils.getFormatTemperature(pointTemperature));
+        CurveManager.getInstance().curveTemperatureList.clear();
+        BackStepManager.getInstance().temperatureInfoList.clear();
+        showImagePane.getChildren().clear();
+        if (imageView != null){
+            showImagePane.getChildren().add(imageView);
         }
     }
 

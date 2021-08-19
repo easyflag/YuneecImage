@@ -20,14 +20,15 @@ public class Utils {
 
 	//	F=(℃×9/5)+32
 	//	K=℃+273.15
+	private static String format = "%1.1f";
 	public static String getFormatTemperature(float temperature) {
-		String t = String.format("%1.2f", temperature) + "℃";
+		String t = String.format(format, temperature) + "℃";
 		if (Global.NowTemperatureUnit == Global.TemperatureUnit.Fachrenheit) {
 			float f = (temperature * 9 / 5) + 32;
-			t = String.format("%1.2f", f) + "℉";
+			t = String.format(format, f) + "℉";
 		} else if (Global.NowTemperatureUnit == Global.TemperatureUnit.Kelvin) {
 			float k = temperature + 273.15f;
-			t = String.format("%1.2f", k) + "K";
+			t = String.format(format, k) + "K";
 		}
 		return t;
 	}

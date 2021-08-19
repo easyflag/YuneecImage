@@ -111,8 +111,12 @@ public class CenterImageThumbPane {
     }
 
     public void switchLanguage(){
-        lastButton.setText(Language.getString(Language.Back_Page_en,Language.Back_Page_ch));
-        nextButton.setText(Language.getString(Language.Next_Page_en,Language.Next_Page_ch));
+        if (lastButton != null){
+            lastButton.setText(Language.getString(Language.Back_Page_en,Language.Back_Page_ch));
+        }
+        if (nextButton != null){
+            nextButton.setText(Language.getString(Language.Next_Page_en,Language.Next_Page_ch));
+        }
         CenterImageManager.getInstance().updatePageLabel(currentPage);
     }
 

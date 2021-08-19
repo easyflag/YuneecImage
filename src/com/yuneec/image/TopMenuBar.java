@@ -2,6 +2,7 @@ package com.yuneec.image;
 
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.utils.UnitTransitions;
 import com.yuneec.image.utils.YDialog;
 import com.yuneec.image.utils.YLog;
 import javafx.application.Platform;
@@ -104,7 +105,7 @@ public class TopMenuBar {
             FahrenheitMenuItem.setSelected(false);
             KelvinMenuItem.setSelected(true);
         }
-        CenterPane.getInstance().transitionTemperature();
+        UnitTransitions.transitionTemperature();
     }
 
     private void LanguageClick(int flag) {
