@@ -1,5 +1,6 @@
 package com.yuneec.image;
 
+import com.yuneec.image.module.custom.CustomParameters;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.UnitTransitions;
@@ -12,6 +13,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 
@@ -23,6 +25,7 @@ public class TopMenuBar {
     public Menu TemperatureManeu,LanguageManeu;
     public RadioMenuItem EnglishMenuItem,ChineseMenuItem;
     public RadioMenuItem CelsiusMenuItem, FahrenheitMenuItem, KelvinMenuItem;
+    public MenuItem customParametersMenuItem;
     public MenuItem aboutMenuItem;
 
     private static TopMenuBar instance;
@@ -77,10 +80,13 @@ public class TopMenuBar {
         EnglishMenuItem.setSelected(true);
         LanguageManeu.getItems().addAll(EnglishMenuItem,ChineseMenuItem);
 
+        customParametersMenuItem = new MenuItem("Custom Parameters");
+        customParametersMenuItem.setOnAction(actionEvent -> customParameters());
+
         aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setOnAction(actionEvent -> about());
 
-        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,LanguageManeu,aboutMenuItem);
+        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,LanguageManeu,customParametersMenuItem,aboutMenuItem);
         Menu helpMenu = new Menu("Help");
         RadioMenuItem helpItem = new RadioMenuItem("Help");
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());
@@ -163,6 +169,10 @@ public class TopMenuBar {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    private void customParameters() {
+        new CustomParameters().start(new Stage());
     }
 
     private void about() {

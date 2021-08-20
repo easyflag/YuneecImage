@@ -38,8 +38,8 @@ public class YuneecImage extends Application {
 //		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("image/launcher.png"));
 		primaryStage.show();
-		primaryStage.setMinWidth(1320);
-		primaryStage.setMinHeight(700);
+		primaryStage.setMinWidth(Configs.SceneWidth);
+		primaryStage.setMinHeight(Configs.SceneHeight);
 
 		TopMenuBar.getInstance().init(root);
 //		LeftPane.getInstance().init();

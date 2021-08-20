@@ -18,12 +18,19 @@ import java.util.TimerTask;
 public class ToastUtil {
     private static Stage stage=new Stage();
     private static Label label=new Label();
+    private static int[] margin = {0,0};
     static {
         stage.initStyle(StageStyle.TRANSPARENT);
     }
     public static void toast(String msg) {
         toast(msg,3000);
     }
+
+    public static void toast(String msg,int[] margin) {
+        ToastUtil.margin = margin;
+        toast(msg,3000);
+    }
+
 
     public static void toast(String msg, int time) {
         label.setText(msg);
@@ -53,8 +60,8 @@ public class ToastUtil {
         Rectangle2D r2 = screen.getVisualBounds();
 //        stage.setWidth(r2.getWidth());
 //        stage.setHeight(r2.getHeight());
-        stage.setX(r2.getWidth()/2 - 200);
-        stage.setY(r2.getHeight()/2 + 100);
+        stage.setX(r2.getWidth()/2 - 200 + margin[0]);
+        stage.setY(r2.getHeight()/2 + 100 + margin[1]);
         stage.setScene(scene);
     }
 }
