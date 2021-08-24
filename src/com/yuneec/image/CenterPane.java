@@ -264,8 +264,6 @@ public class CenterPane {
         centerSettingPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
         centerPane.getChildren().add(centerSettingPane);
 
-        initCenterSettingPane(centerSettingPane);
-
         centerImagePane = new Pane();
         centerImagePane.setPrefWidth(Configs.CenterPanelWidth);
         centerImagePane.setPrefHeight(Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight);
@@ -276,6 +274,8 @@ public class CenterPane {
         showImagePane.setPrefWidth(Configs.DefaultImageWidth);
         showImagePane.setPrefHeight(Configs.DefaultImageHeight);
         centerImagePane.getChildren().add(showImagePane);
+
+        initCenterSettingPane(centerSettingPane);
 
         Global.hBox.getChildren().add(centerPane);
     }
@@ -417,6 +417,7 @@ public class CenterPane {
         }
         SingleClickButton.setTooltip(getTooltip(Language.getString(Language.SinglePointTemperature_en,Language.SinglePointTemperature_ch)));
         BoxChooseButton.setTooltip(getTooltip(Language.getString(Language.BoxTemperature_en,Language.BoxTemperature_ch)));
+        CurveChooseButton.setTooltip(getTooltip(Language.getString(Language.CurveTemperature_en,Language.CurveTemperature_ch)));
         ColorPaletteButton.setTooltip(getTooltip(Language.getString(Language.ColorPaletteTip_en,Language.ColorPaletteTip_ch)));
         ClearButton.setTooltip(getTooltip(Language.getString(Language.ClearTip_en,Language.ClearTip_ch)));
         UndoButton.setTooltip(getTooltip(Language.getString(Language.UndoTip_en,Language.UndoTip_ch)));

@@ -60,6 +60,8 @@ public class Language {
     public static String English_ch = "英语";
     public static String Chinese_en = "Chinese";
     public static String Chinese_ch = "中文";
+    public static String CustomParameters_en = "Custom Parameters";
+    public static String CustomParameters_ch = "自定义参数";
     public static String About_en = "About";
     public static String About_ch = "关于";
     public static String File_Size_en = "File Size";
@@ -70,6 +72,8 @@ public class Language {
     public static String SinglePointTemperature_ch = "点击图片可获取此位置的温度信息.";
     public static String BoxTemperature_en = "Select a rectangle on the picture box to get the maximum and minimum temperature information for this area.";
     public static String BoxTemperature_ch = "在图片上框选一个矩形可获取此区域的最大最小温度信息.";
+    public static String CurveTemperature_en = "Draw a line on the picture to obtain the maximum and minimum temperature information on the line.";
+    public static String CurveTemperature_ch = "在图片上画一个线条可获取此线条上的最大最小温度信息.";
     public static String ColorPaletteTip_en = "Color Palette.";
     public static String ColorPaletteTip_ch = "调色板.";
     public static String ClearTip_en = "One key to clear all temperature information.";
@@ -111,6 +115,7 @@ public class Language {
         TopMenuBar.getInstance().LanguageManeu.setText(Language_en);
         TopMenuBar.getInstance().EnglishMenuItem.setText(English_en);
         TopMenuBar.getInstance().ChineseMenuItem.setText(Chinese_en);
+        TopMenuBar.getInstance().customParametersMenuItem.setText(CustomParameters_en);
         TopMenuBar.getInstance().aboutMenuItem.setText(About_en);
         if (RightPane.getInstance().imageInfoTagNameLabelList.size() >0){
             for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size()-1;i++){
@@ -144,6 +149,7 @@ public class Language {
         TopMenuBar.getInstance().LanguageManeu.setText(Language_ch);
         TopMenuBar.getInstance().EnglishMenuItem.setText(English_ch);
         TopMenuBar.getInstance().ChineseMenuItem.setText(Chinese_ch);
+        TopMenuBar.getInstance().customParametersMenuItem.setText(CustomParameters_ch);
         TopMenuBar.getInstance().aboutMenuItem.setText(About_ch);
         if (RightPane.getInstance().imageInfoTagNameLabelList.size() >0){
             for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size()-1;i++){
