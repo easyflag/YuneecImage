@@ -51,11 +51,6 @@ public class CurveManager {
 
         getCurveAllXY();
         if (status == MouseStatus.MouseReleased){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             startCalculate();
         }
     }
@@ -90,6 +85,8 @@ public class CurveManager {
     float minTemperature = 0;
     int minTemperatureIndex = 0;
     private void getCurveMaxMinTemperature(){
+        maxTemperatureIndex = 0;
+        minTemperatureIndex = 0;
         maxTemperature = (float)temperatureList.get(0);
         minTemperature = (float)temperatureList.get(0);
         for (int i = 0; i < temperatureList.size(); i++) {

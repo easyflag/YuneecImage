@@ -69,6 +69,8 @@ public class BoxTemperatureUtil {
 	float minTemperature = 0;
 	int minTemperatureIndex = 0;
 	private void getMaxMinTemperature(){
+		maxTemperatureIndex = 0;
+		minTemperatureIndex = 0;
 		maxTemperature = (float)temperatureList.get(0);
 		minTemperature = (float)temperatureList.get(0);
 		for (int i = 0; i < temperatureList.size(); i++) {
