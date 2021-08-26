@@ -2,12 +2,11 @@ package com.yuneec.image.module.curve;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
+import com.yuneec.image.module.Temperature;
 import com.yuneec.image.utils.BackStepManager;
 import com.yuneec.image.utils.TemperatureAlgorithm;
-import com.yuneec.image.utils.YLog;
 import javafx.scene.shape.Line;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class CurveManager {
@@ -38,6 +37,9 @@ public class CurveManager {
         this.x = x;
         this.y = y;
         if (status == MouseStatus.MousePressed){
+            if (BackStepManager.getInstance().getCurrentCurveCount() == BackStepManager.MAX_CURVE_COUNT){
+                BackStepManager.getInstance().backStep(Temperature.TYPE.CURVE);
+            }
             this.lastx = x;
             this.lasty = y;
             lineList = new ArrayList();

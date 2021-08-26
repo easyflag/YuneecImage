@@ -1,7 +1,11 @@
 package com.yuneec.image.module.box;
 
 import com.yuneec.image.CenterPane;
+import com.yuneec.image.Configs;
+import com.yuneec.image.module.Temperature;
+import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.utils.BackStepManager;
+import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 
@@ -30,8 +34,29 @@ public class BoxTemperatureManager {
         }
     }
 
-    public void nextStep(){
+    private int lastx, lasty;
+    private int x, y;
 
+    public void setMouseMousePressedXY(int x, int y, CurveManager.MouseStatus status) {
+        if (CenterPane.getInstance().centerSettingFlag != CenterPane.CenterSettingSelect.BOX) {
+            return;
+        }
+//        YLog.I("CurveManager : " + "x=" + x + " y=" + y );
+        this.x = x;
+        this.y = y;
+        if (status == CurveManager.MouseStatus.MousePressed){
+            if (BackStepManager.getInstance().getCurrentBoxCount() == BackStepManager.MAX_BOX_COUNT){
+                BackStepManager.getInstance().backStep(Temperature.TYPE.BOX);
+            }
+            this.lastx = x;
+            this.lasty = y;
+        }
+        this.lastx = x;
+        this.lasty = y;
+
+        if (status == CurveManager.MouseStatus.MouseReleased){
+
+        }
     }
 
     public void addBoxTemperature(BoxTemperature boxTemperature){

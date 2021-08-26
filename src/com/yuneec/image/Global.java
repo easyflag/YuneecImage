@@ -10,6 +10,7 @@ public class Global {
     public static String currentLeftSelectImagePath;
     public static double currentOpenImageWidth;
     public static double currentOpenImageHeight;
+    public static boolean hasTemperatureBytes;
 
     public static String cameraMode;
     public static String cameraE20TMode = "E20T";

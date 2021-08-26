@@ -1,5 +1,6 @@
 package com.yuneec.image.guide;
 
+import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
 import com.yuneec.image.utils.ByteUtils;
 import com.yuneec.image.utils.ParseTemperatureBytes;
@@ -37,6 +38,11 @@ public class GuiDeUtil {
         }
         int length = jpgBytes.length;
         ArrayList findIndexList = ParseTemperatureBytes.simpleFind(jpgBytes, 0, length, HEADER);
+
+        if (findIndexList.isEmpty()){
+            CenterPane.getInstance().reset();
+            return;
+        }
 
         System.arraycopy(jpgBytes, (int) findIndexList.get(0) + 2 + 2,pParamLine,0,640);
 

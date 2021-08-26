@@ -140,6 +140,7 @@ public class CustomParameters extends Application {
         TextField field = new TextField();
         field.setPrefSize(80, 25);
         field.setEditable(true);
+        field.setText(data);
         field.setAlignment(Pos.CENTER_LEFT);
         hBox1.getChildren().addAll(label, field);
         hBox1.setMargin(label,new Insets(0, 0, 0, 30));

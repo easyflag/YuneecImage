@@ -151,6 +151,7 @@ public class CenterPane {
                 MouseReleased = false;
             }
             CurveManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MouseDragged);
+            BoxTemperatureManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MouseDragged);
         });
 
         imageView.setOnMousePressed(event->{
@@ -159,6 +160,7 @@ public class CenterPane {
             startLineX = (int) event.getX();
             startLineY = (int) event.getY();
             CurveManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MousePressed);
+            BoxTemperatureManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MousePressed);
         });
 
         imageView.setOnMouseReleased(event->{
@@ -181,6 +183,7 @@ public class CenterPane {
                 });
             }
             CurveManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MouseReleased);
+            BoxTemperatureManager.getInstance().setMouseMousePressedXY((int) event.getX(),(int) event.getY(), CurveManager.MouseStatus.MouseReleased);
         });
     }
 
@@ -463,13 +466,6 @@ public class CenterPane {
         }
         pointTemperatureNodeList.clear();
 
-        for (int i =0;i < BoxTemperatureManager.getInstance().boxTemperatureList.size();i++){
-            BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
-            showImagePane.getChildren().removeAll(boxTemperature.getTopLine(), boxTemperature.getBottomLine(),
-                    boxTemperature.getLeftLine(), boxTemperature.getRightLine());
-            showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMax());
-            showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMin());
-        }
         BoxTemperatureManager.getInstance().boxTemperatureList.clear();
         CurveManager.getInstance().curveTemperatureList.clear();
         BackStepManager.getInstance().temperatureInfoList.clear();

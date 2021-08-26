@@ -3,6 +3,7 @@ package com.yuneec.image.module;
 public class Temperature {
 
     public enum TYPE {
+        POINT,
         BOX,
         CURVE,
         NONE

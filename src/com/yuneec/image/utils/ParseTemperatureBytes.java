@@ -1,6 +1,8 @@
 package com.yuneec.image.utils;
 
+import com.yuneec.image.Global;
 import com.yuneec.image.guide.GuiDeUtil;
+import com.yuneec.image.module.Language;
 
 import java.util.ArrayList;
 
@@ -59,6 +61,12 @@ public class ParseTemperatureBytes {
 //        YLog.I("TemperatureBytes: " + ByteUtils.byteArrayToHexString(TemperatureBytes, 0,TemperatureBytesLen));
 //        GuiDeUtil.getInstance().getErrByte(TemperatureBytes);
 
+        if (TemperatureBytesLen == 0){
+            Global.hasTemperatureBytes = false;
+            ToastUtil.toast(Language.getString("No Temperature Info !","该图片无温度数据!"),new int[]{70,0});
+        }else {
+            Global.hasTemperatureBytes = true;
+        }
     }
 
     private int getBufLen(byte[] bytes, int offset) {
