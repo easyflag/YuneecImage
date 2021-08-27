@@ -7,6 +7,7 @@ import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.utils.*;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -61,8 +62,6 @@ public class CenterPane {
     public Background centerSettingButtonClickBackground;
     public Button SingleClickButton,BoxChooseButton,CurveChooseButton,ColorPaletteButton,ClearButton,UndoButton;
     public ArrayList centerSettingButtonNodeList = new ArrayList();
-
-    public ArrayList pointTemperatureNodeList = new ArrayList();
 
     public String rightXYlabel;
 
@@ -133,10 +132,7 @@ public class CenterPane {
             public void handle(MouseEvent e) {
 //				String s = "x=" + (int) e.getX() + " y=" + (int) e.getY();
 //				YLog.I("MouseClicked:" + s);
-                if(centerSettingFlag == CenterSettingSelect.POINT && Utils.mouseLeftClick(e)){
-                    ArrayList pointNodeList = addLabelInImage((int) e.getX(), (int) e.getY(),pointTemperature,Configs.white_color);
-                    pointTemperatureNodeList.add(pointNodeList);
-                }
+                PointManager.getInstance().setMouseMouseClickdXY(e, CurveManager.MouseStatus.MouseClicked);
             }
         });
 
@@ -171,6 +167,11 @@ public class CenterPane {
             }
             if(centerSettingFlag == CenterSettingSelect.BOX){
                 MouseReleased = true;
+                if (startLineX == endLineX || startLineY == endLineY){
+                    ToastUtil.toast(Language.getString("that isn't a rectangle !","不是矩形 !"),new int[]{70,0});
+                    showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
+                    return;
+                }
                 BoxTemperatureUtil.getInstance().init(startLineX, startLineY, endLineX, endLineY, new BoxTemperatureUtil.MaxMinTemperature() {
                     @Override
                     public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY) {
@@ -460,12 +461,7 @@ public class CenterPane {
         centerSettingFlag = CenterSettingSelect.NONE;
         ColorPalette.getInstance().centerSettingColorPalettePaneAdded = false;
         ColorPalette.getInstance().dmissColorPalettePane();
-        for (int i =0;i < pointTemperatureNodeList.size();i++){
-            ArrayList pointNodeList = (ArrayList)pointTemperatureNodeList.get(i);
-            showImagePane.getChildren().removeAll(pointNodeList);
-        }
-        pointTemperatureNodeList.clear();
-
+        PointManager.getInstance().pointTemperatureNodeList.clear();
         BoxTemperatureManager.getInstance().boxTemperatureList.clear();
         CurveManager.getInstance().curveTemperatureList.clear();
         BackStepManager.getInstance().temperatureInfoList.clear();

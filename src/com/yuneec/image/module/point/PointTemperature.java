@@ -12,6 +12,7 @@ public class PointTemperature extends Temperature {
 
     public PointTemperature(ArrayList pointTemperatureNode) {
         this.pointTemperatureNode = pointTemperatureNode;
+        setType(TYPE.POINT);
     }
 
     public ArrayList getPointTemperatureNode() {

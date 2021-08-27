@@ -7,6 +7,7 @@ import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.point.PointManager;
 import javafx.scene.control.Label;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import java.util.ArrayList;
 public class UnitTransitions {
 
     public static void transitionTemperature(){
-        for (int i=0;i<CenterPane.getInstance().pointTemperatureNodeList.size();i++){
-            ArrayList pointNodeList = (ArrayList) CenterPane.getInstance().pointTemperatureNodeList.get(i);
+        for (int i = 0; i< PointManager.getInstance().pointTemperatureNodeList.size(); i++){
+            ArrayList pointNodeList = (ArrayList) PointManager.getInstance().pointTemperatureNodeList.get(i);
             Label label = (Label) pointNodeList.get(0);
             float temperature = (float) pointNodeList.get(4);
             label.setText(Utils.getFormatTemperature(temperature));

@@ -10,6 +10,7 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import javafx.embed.swing.SwingFXUtils;
@@ -178,8 +179,8 @@ public class PdfReport {
 		table.addCell(createCell(Language.getString("Temperature","温度"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 		Integer totalQuantity = 0;
 
-		for (int i = 0; i < CenterPane.getInstance().pointTemperatureNodeList.size(); i++) {
-			ArrayList pointNodeList = (ArrayList) CenterPane.getInstance().pointTemperatureNodeList.get(i);
+		for (int i = 0; i < PointManager.getInstance().pointTemperatureNodeList.size(); i++) {
+			ArrayList pointNodeList = (ArrayList) PointManager.getInstance().pointTemperatureNodeList.get(i);
 			float temperature = (float) pointNodeList.get(4);
 			table.addCell(createCell(""+(i+1), textfont));
 			table.addCell(createCell(""+pointNodeList.get(5), textfont));

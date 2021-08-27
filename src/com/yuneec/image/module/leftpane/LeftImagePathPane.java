@@ -9,9 +9,7 @@ import com.yuneec.image.module.center.CenterImageManager;
 import com.yuneec.image.module.center.CenterImageThumbPane;
 import com.yuneec.image.module.center.ImageItem;
 import com.yuneec.image.module.center.ImageItem.ImageItemType;
-import com.yuneec.image.utils.ImageUtil;
-import com.yuneec.image.utils.Utils;
-import com.yuneec.image.utils.YLog;
+import com.yuneec.image.utils.*;
 import com.yuneec.image.views.YButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -98,6 +96,16 @@ public class LeftImagePathPane{
                 }
                 if (Utils.mouseLeftClick(mouseEvent)){
                     if(mouseEvent.getClickCount() == 2) {
+                        boolean result = YDialog.showConfirmDialog(Language.getString(
+                                "Make sure to open the new image and \nyour previous action will be cleared !",
+                                "确认打开新图片，您上次的操作会被清除 !"));
+                        if (!result){
+                            return;
+                        }
+                        if (!(Global.cameraMode.startsWith(Global.cameraE20TMode) || Global.cameraMode.startsWith(Global.cameraE10TMode))){
+                            ToastUtil.toast(Language.getString("Not Yuneec product image !","不是Yuneec产品图片 !"),new int[]{50,0});
+                            return;
+                        }
                         if (isTrueImagePathEnding(iamgeName)){
                             Global.currentOpenImagePath = filePath.replace("\\", "\\\\");
                             YLog.I("Double Click ,Global.currentOpenImagePath :" + Global.currentOpenImagePath);

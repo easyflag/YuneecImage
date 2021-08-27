@@ -177,7 +177,7 @@ public class TopMenuBar {
 
     private void about() {
         YDialog.showInformationDialog(Language.getString(Language.About_en,Language.About_ch),
-                (Language.getString(Configs.version,Configs.version_ch)) + "\n\n" +
+                (Language.getString(Configs.version_en,Configs.version_ch)) + "\n\n" +
                 (Language.getString(Configs.copyright,Configs.copyright_ch)));
     }
 }

@@ -1,6 +1,7 @@
 package com.yuneec.image.utils;
 
 import com.yuneec.image.Global;
+import com.yuneec.image.module.Language;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -60,10 +61,10 @@ public class YDialog {
 
     public static Response showConfirmDialog(Stage owner, String message, String title) {
         VBox vb = new VBox();
-        Scene scene = new Scene(vb);
+        Scene scene = new Scene(vb,300,150);
         final Dialog dial = new Dialog(title, owner, scene);
         vb.setPadding(new Insets(10, 10, 10, 10));
-        vb.setSpacing(10);
+        vb.setSpacing(50);
         Button yesButton = new Button("YES");
         yesButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -83,7 +84,7 @@ public class YDialog {
         BorderPane bp = new BorderPane();
         HBox buttons = new HBox();
         buttons.setAlignment(Pos.CENTER);
-        buttons.setSpacing(10);
+        buttons.setSpacing(50);
         buttons.getChildren().addAll(yesButton, noButton);
         bp.setCenter(buttons);
         HBox msg = new HBox();
@@ -122,9 +123,9 @@ public class YDialog {
     }
 
     public static boolean showConfirmDialog(String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, null, new ButtonType("NO", ButtonBar.ButtonData.NO),
-                new ButtonType("YES", ButtonBar.ButtonData.YES));
-        alert.setTitle("Tips");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, null, new ButtonType(Language.getString("NO","否"), ButtonBar.ButtonData.NO),
+                new ButtonType(Language.getString("YES","是"), ButtonBar.ButtonData.YES));
+        alert.setTitle(Language.getString("Tips","提示"));
         alert.setHeaderText(message);
         alert.initOwner(Global.primaryStage);
         Optional<ButtonType> _buttonType = alert.showAndWait();

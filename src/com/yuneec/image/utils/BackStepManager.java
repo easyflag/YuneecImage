@@ -4,6 +4,7 @@ import com.yuneec.image.CenterPane;
 import com.yuneec.image.module.Temperature;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.point.PointTemperature;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ public class BackStepManager {
 
     public ArrayList temperatureInfoList = new ArrayList(); // include box and curve
 
+    public static final int MAX_POINT_COUNT = 10;
     public static final int MAX_BOX_COUNT = 3;
     public static final int MAX_CURVE_COUNT = 3;
     public int currentCurveCount = 0;
@@ -34,7 +36,10 @@ public class BackStepManager {
             int endIndex = temperatureInfoList.size() - 1;
             Temperature temperature = (Temperature) temperatureInfoList.get(endIndex);
             Temperature.TYPE type = temperature.type;
-            if (type == Temperature.TYPE.BOX){
+            if (type == Temperature.TYPE.POINT){
+                PointTemperature pointTemperature = (PointTemperature) temperatureInfoList.get(endIndex);
+                CenterPane.getInstance().showImagePane.getChildren().removeAll(pointTemperature.getPointTemperatureNode());
+            } else if (type == Temperature.TYPE.BOX){
                 BoxTemperature boxTemperature = (BoxTemperature) temperatureInfoList.get(endIndex);
                 CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getTopLine(), boxTemperature.getBottomLine(),
                         boxTemperature.getLeftLine(), boxTemperature.getRightLine());
@@ -56,7 +61,10 @@ public class BackStepManager {
             for (int i = len - 1; i >= 0; i--) {
                 Temperature temperature = (Temperature) temperatureInfoList.get(i);
                 if (type == temperature.type){
-                    if (type == Temperature.TYPE.BOX){
+                    if (type == Temperature.TYPE.POINT){
+                        PointTemperature pointTemperature = (PointTemperature) temperature;
+                        CenterPane.getInstance().showImagePane.getChildren().removeAll(pointTemperature.getPointTemperatureNode());
+                    } else if (type == Temperature.TYPE.BOX){
                         BoxTemperature boxTemperature = (BoxTemperature) temperature;
                         CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getTopLine(), boxTemperature.getBottomLine(),
                                 boxTemperature.getLeftLine(), boxTemperature.getRightLine());
@@ -73,6 +81,20 @@ public class BackStepManager {
                 }
             }
         }
+    }
+
+    public int getCurrentPointCount() {
+        int currentPointCount = 0;
+        if (!temperatureInfoList.isEmpty()) {
+            int len = temperatureInfoList.size();
+            for (int i = len - 1; i >= 0; i--) {
+                Temperature temperature = (Temperature) temperatureInfoList.get(i);
+                if (temperature.type == Temperature.TYPE.POINT) {
+                    currentPointCount++;
+                }
+            }
+        }
+        return currentPointCount;
     }
 
     public int getCurrentCurveCount() {

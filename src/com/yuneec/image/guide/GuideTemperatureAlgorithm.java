@@ -29,6 +29,9 @@ public class GuideTemperatureAlgorithm {
 
     private int getTemperaByteForXY(int x, int y) {
         int index = getTemperaByteIndex(x,y);
+        if (index >= ParseTemperatureBytes.getInstance().TemperatureBytes.length){
+            index = ParseTemperatureBytes.getInstance().TemperatureBytes.length-2;
+        }
         byte[] spotTempByte = new byte[4];
         spotTempByte[0] = ParseTemperatureBytes.getInstance().TemperatureBytes[index];
         spotTempByte[1] = ParseTemperatureBytes.getInstance().TemperatureBytes[index + 1];

@@ -2,9 +2,11 @@ package com.yuneec.image.module.curve;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
+import com.yuneec.image.Global;
 import com.yuneec.image.module.Temperature;
 import com.yuneec.image.utils.BackStepManager;
 import com.yuneec.image.utils.TemperatureAlgorithm;
+import com.yuneec.image.utils.YLog;
 import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
@@ -23,7 +25,8 @@ public class CurveManager {
     public enum MouseStatus {
         MouseDragged,
         MousePressed,
-        MouseReleased
+        MouseReleased,
+        MouseClicked
     }
 
     private int lastx, lasty;
@@ -33,7 +36,18 @@ public class CurveManager {
         if (CenterPane.getInstance().centerSettingFlag != CenterPane.CenterSettingSelect.CURVE) {
             return;
         }
-//        YLog.I("CurveManager : " + "x=" + x + " y=" + y );
+        if (x >= Global.currentOpenImageWidth){
+            x = (int) Global.currentOpenImageWidth;
+        }
+        if (x <= 0){
+            x = 0;
+        }
+        if (y >= Global.currentOpenImageHeight){
+            y = (int) Global.currentOpenImageHeight;
+        }
+        if (y <= 0){
+            y = 0;
+        }
         this.x = x;
         this.y = y;
         if (status == MouseStatus.MousePressed){
@@ -42,6 +56,7 @@ public class CurveManager {
             }
             this.lastx = x;
             this.lasty = y;
+            xyList.clear();
             lineList = new ArrayList();
             lineList.clear();
         }

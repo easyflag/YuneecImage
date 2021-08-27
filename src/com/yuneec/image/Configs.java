@@ -2,8 +2,9 @@ package com.yuneec.image;
 
 public class Configs {
 
-	public static String version = "   Version : 1.0.0 Beta";
-	public static String version_ch = "   版本 : 1.0.0 测试版";
+	public static String version = "1.0.1 Beta";
+	public static String version_en = "   Version : " + version;
+	public static String version_ch = "   版本 : " + version;
 	public static String copyright = "   Copyright (C) 2021-2022 Yuneec Inc.";
 	public static String copyright_ch = "   版权所有 (C) 2021-2022 Yuneec 公司.";
 

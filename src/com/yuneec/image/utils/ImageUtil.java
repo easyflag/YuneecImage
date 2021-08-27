@@ -119,13 +119,13 @@ public class ImageUtil {
 		return index;
 	}
 
-	public static String[] whiteList = {"Make","Model","Date/Time","F-Number","ISO Speed","Brightness Value","Color Space","Image Width","Image Height"};
-	public static String[] whiteList_ch = {"制造","型号","时间","光圈","感光度","亮度","色彩度","宽度","高度"};
+	public static String[] whiteList = {"Make","Model","Date/Time","F-Number","ISO Speed","Brightness Value","Image Width","Image Height"};
+	public static String[] whiteList_ch = {"制造","型号","时间","光圈","感光度","亮度","宽度","高度"};
 	private static ArrayList<ArrayList<String>> imageInfoList = new  ArrayList<ArrayList<String>>();
 	public static ArrayList<ArrayList<String>> imageInfoSortList = new  ArrayList<ArrayList<String>>();
 	private static void storeImageInfo(Tag tag) {
 //		String s = tag.getDirectoryName() + " ; " + tag.getTagName()+ " ; " + tag.getDescription();
-//    	YLog.I("---> "+s);
+//    	YLog.I("EXIF ---> "+s);
 		String directoryName = tag.getDirectoryName();
     	String tagName = tag.getTagName();
     	String description = tag.getDescription();
