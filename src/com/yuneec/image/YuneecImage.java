@@ -1,12 +1,15 @@
 package com.yuneec.image;
 
 import com.yuneec.image.guide.GuiDe;
+import com.yuneec.image.module.Language;
 import com.yuneec.image.module.center.CenterImageThumbPane;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
+import com.yuneec.image.utils.YDialog;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -16,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class YuneecImage extends Application {
 
@@ -77,6 +81,14 @@ public class YuneecImage extends Application {
 //				YLog.I("heightProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,height:" + height);
 				Configs.SceneHeight = (int) height;
 				LeftImagePathPane.getInstance().treeView.setPrefHeight(height-66);
+			}
+		});
+
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				event.consume();
+				TopMenuBar.getInstance().exitSoft();
 			}
 		});
 

@@ -55,7 +55,7 @@ public class TopMenuBar {
         openFolderMenuItem.setOnAction(actionEvent -> openFolder());
         openFolderMenuItem.setAccelerator(KeyCombination.valueOf("ctrl+f"));
         exitMenuItem = new MenuItem("Exit");
-        exitMenuItem.setOnAction(actionEvent -> Platform.exit());
+        exitMenuItem.setOnAction(actionEvent -> exitSoft());
         fileMenu.getItems().addAll(openFileMenuItem,openFolderMenuItem, new SeparatorMenuItem(),exitMenuItem);
 
         settingsMenu = new Menu("Settings",new ImageView("image/setting.png"));
@@ -92,6 +92,15 @@ public class TopMenuBar {
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());
         menuBar.getMenus().addAll(fileMenu, settingsMenu);
 
+    }
+
+    public void exitSoft() {
+        boolean result = YDialog.showConfirmDialog(Language.getString(
+                "Confirm exit Software !",
+                "确认退出程序 !"));
+        if (result){
+            Platform.exit();
+        }
     }
 
     private void TemperatureManeuClick(int flag) {
