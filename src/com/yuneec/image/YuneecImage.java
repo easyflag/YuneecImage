@@ -4,6 +4,7 @@ import com.yuneec.image.guide.GuiDe;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.module.center.CenterImageThumbPane;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
+import com.yuneec.image.utils.SaveSettings;
 import com.yuneec.image.utils.YDialog;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -45,7 +46,6 @@ public class YuneecImage extends Application {
 		primaryStage.setMinWidth(Configs.SceneWidth);
 		primaryStage.setMinHeight(Configs.SceneHeight);
 
-		TopMenuBar.getInstance().init(root);
 //		LeftPane.getInstance().init();
 		LeftImagePathPane.getInstance().init();
 		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color);
@@ -55,6 +55,7 @@ public class YuneecImage extends Application {
 		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color);
 		Global.hBox.getChildren().add(rightLine);
 		RightPane.getInstance().init();
+		TopMenuBar.getInstance().init(root);
 		GuiDe.init();
 
 		primaryStage.widthProperty().addListener(new ChangeListener<Number>() {

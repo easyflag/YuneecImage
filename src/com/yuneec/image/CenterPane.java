@@ -101,6 +101,11 @@ public class CenterPane {
             e.printStackTrace();
         }
 
+        if (!Global.hasTemperatureBytes){
+            ToastUtil.toast(Language.getString("No Temperature Info !","该图片无温度数据!"),new int[]{70,0});
+            return;
+        }
+
         Image image = new Image("file:" + Global.currentOpenImagePath);
         if (imageView == null){
             imageView = new ImageView(image);

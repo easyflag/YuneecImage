@@ -3,6 +3,7 @@ package com.yuneec.image;
 import com.yuneec.image.module.custom.CustomParameters;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.utils.SaveSettings;
 import com.yuneec.image.utils.UnitTransitions;
 import com.yuneec.image.utils.YDialog;
 import com.yuneec.image.utils.YLog;
@@ -38,6 +39,10 @@ public class TopMenuBar {
 
     public void init(BorderPane root) {
         initMenu(root);
+        nowTemperatureUnitValue = SaveSettings.I().get(SaveSettings.temperatureUnit_KEY);
+        TemperatureManeuClick(nowTemperatureUnitValue);
+        nowLanguageValue = SaveSettings.I().get(SaveSettings.language_KEY);
+        LanguageClick(nowLanguageValue);
     }
 
     private void initMenu(BorderPane root) {
@@ -99,11 +104,15 @@ public class TopMenuBar {
                 "Confirm exit Software !",
                 "确认退出程序 !"));
         if (result){
+            SaveSettings.I().save(SaveSettings.temperatureUnit_KEY,nowTemperatureUnitValue);
+            SaveSettings.I().save(SaveSettings.language_KEY,nowLanguageValue);
             Platform.exit();
         }
     }
 
+    private int nowTemperatureUnitValue;
     private void TemperatureManeuClick(int flag) {
+        nowTemperatureUnitValue = flag;
         if (flag == 1) {
             Global.NowTemperatureUnit = Global.TemperatureUnit.Celsius;
             CelsiusMenuItem.setSelected(true);
@@ -123,7 +132,9 @@ public class TopMenuBar {
         UnitTransitions.transitionTemperature();
     }
 
+    private int nowLanguageValue;
     private void LanguageClick(int flag) {
+        nowLanguageValue = flag;
         if (flag == 1) {
             Language.LanguageSelect = Language.Languages.English;
             EnglishMenuItem.setSelected(true);
