@@ -2,11 +2,19 @@ package com.yuneec.image.module.colorpalette;
 
 
 import com.yuneec.image.Global;
+import com.yuneec.image.dll.Java2cpp;
+import com.yuneec.image.utils.ByteUtils;
+import com.yuneec.image.utils.ParseTemperatureBytes;
+import com.yuneec.image.utils.YLog;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ColorPaletteManager {
 
@@ -19,7 +27,10 @@ public class ColorPaletteManager {
         return instance;
     }
 
+    private byte[] rgb24Data;
     public Image pixWithImage(int type){
+        PaletteParam.currentPalette = type;
+        rgb24Data = Java2cpp.I().y16torgb24(ParseTemperatureBytes.getInstance().TemperatureBytes,type);
         Image image = new Image("file:" + Global.currentOpenImagePath);
         PixelReader pixelReader = image.getPixelReader();
         if(image.getWidth()>0 && image.getHeight() >0){
@@ -28,12 +39,50 @@ public class ColorPaletteManager {
             for(int y = 0; y < image.getHeight(); y++){
                 for(int x = 0; x < image.getWidth(); x++){
 //                    changeColor(type,pixelReader,pixelWriter,x,y);
-                    changeArgb(type,pixelReader,pixelWriter,x,y);
+//                    changeArgb(pixelReader,pixelWriter,x,y);
+                    changeColorRGB(pixelReader,pixelWriter,x,y);
                 }
             }
             return wImage;
         }
         return null;
+    }
+
+    private void waitRgb24DataToSetColor(){
+        TimerTask task= new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+        };
+        Timer timer=new Timer();
+        timer.schedule(task,1000);
+    }
+
+    private void changeColorRGB(PixelReader pixelReader, PixelWriter pixelWriter, int x, int y) {
+        int index = (y*640 + x) * 3;
+        int r = rgb24Data[index] & 0XFF;
+        int g = rgb24Data[index+1] & 0XFF;
+        int b = rgb24Data[index+2] & 0XFF;
+        Color color = pixelReader.getColor(x, y);
+        color = color.rgb(r,g,b);
+        pixelWriter.setColor(x, y, color);
+
+//        Color redColor = Color.rgb(255,0,0);
+//        Color greenColor = Color.rgb(0,255,0);
+//        Color blueColor = Color.rgb(0,0,255);
+//        if (x > 0 && x< 200){
+//            pixelWriter.setColor(x, y, redColor);
+//        }else if (x > 200 && x< 400){
+//            pixelWriter.setColor(x, y, greenColor);
+//        }else if (x > 400){
+//            pixelWriter.setColor(x, y, blueColor);
+//        }
     }
 
     private void changeColor(int type, PixelReader pixelReader, PixelWriter pixelWriter, int x, int y) {
@@ -70,8 +119,22 @@ public class ColorPaletteManager {
         pixelWriter.setColor(x, y, color);
     }
 
-    private void changeArgb(int type, PixelReader pixelReader, PixelWriter pixelWriter,int x,int y) {
-        int argb = pixelReader.getArgb(x, y);
+    private void changeArgb(PixelReader pixelReader, PixelWriter pixelWriter,int x,int y) {
+        int index;
+        if(y==0){
+            index = x * 3;
+        }else if(x==0){
+            index = y * 3;
+        }else {
+            index = y * x * 3;
+        }
+        byte[] rgbByte = new byte[4];
+        rgbByte[3] = rgb24Data[index];
+        rgbByte[2] = rgb24Data[index+1];
+        rgbByte[1] = rgb24Data[index+2];
+        int argb = ByteUtils.getInt(rgbByte);
+
+//        int argb = pixelReader.getArgb(x, y);
         int a = (argb >> 24) & 0xFF;
         int r = (argb >> 16) & 0xFF;
         int g = (argb >>  8) & 0xFF;

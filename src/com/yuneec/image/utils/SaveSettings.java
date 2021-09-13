@@ -34,7 +34,7 @@ public class SaveSettings {
 
     public int get(String key){
         int value = preferences.getInt(key,0);
-        YLog.I(" SaveSettings ------->" + key + " : " + value);
+//        YLog.I(" SaveSettings ------->" + key + " : " + value);
         return value;
     }
 

@@ -2,6 +2,7 @@ package com.yuneec.image.module.custom;
 
 import com.yuneec.image.Configs;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
+import com.yuneec.image.module.ota.DownLoad;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
@@ -116,6 +117,10 @@ public class CustomParameters extends Application {
                     + " ,modifyB:" + GuideTemperatureAlgorithm.pParamExt.modifyB
             );
             ToastUtil.toast("Change Succeed !!!",new int[]{90,0});
+//            DownLoad.I().dowanload(DownLoad.url,DownLoad.downloadPath);
+//            String result = DownLoad.I().sendGet(DownLoad.getUrl);
+//            String result = DownLoad.I().sendPost(DownLoad.getUrl,null);
+//            System.out.println("" + result);
         }catch (Exception e){
             ToastUtil.toast("Change Failed !!!",new int[]{90,0});
         }

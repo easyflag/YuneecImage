@@ -2,6 +2,7 @@ package com.yuneec.image.module.colorpalette;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
+import com.yuneec.image.Global;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.Utils;
 import javafx.event.EventHandler;
@@ -11,6 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class ColorPalette {
 
@@ -46,7 +49,7 @@ public class ColorPalette {
     }
 
     public void showColorPalettePane() {
-        if(centerSettingColorPalettePaneAdded){
+        if(centerSettingColorPalettePaneAdded || !Global.hasTemperatureBytes){
             return;
         }
         colorPaletteButtonList.clear();
@@ -59,6 +62,7 @@ public class ColorPalette {
         CenterPane.getInstance().centerImagePane.getChildren().add(centerSettingColorPalettePane);
         centerSettingColorPalettePaneAdded = true;
         addColorPaletteButton();
+        CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,colorPaletteButtonList.get(PaletteParam.currentPalette));
     }
 
     public void dmissColorPalettePane() {
@@ -87,42 +91,42 @@ public class ColorPalette {
         Button whiteHotButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(0));
         whiteHotButton.setTranslateY(10);
         centerSettingColorPalettePane.getChildren().add(whiteHotButton);
-        colorPaletteButtonList.add(whiteHotButton);
         Button FulguriteButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(1));
         FulguriteButton.setTranslateY(20);
         centerSettingColorPalettePane.getChildren().add(FulguriteButton);
-        colorPaletteButtonList.add(FulguriteButton);
         Button IronRedButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(2));
         IronRedButton.setTranslateY(30);
         centerSettingColorPalettePane.getChildren().add(IronRedButton);
-        colorPaletteButtonList.add(IronRedButton);
         Button HotIronButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(3));
         HotIronButton.setTranslateY(40);
         centerSettingColorPalettePane.getChildren().add(HotIronButton);
-        colorPaletteButtonList.add(HotIronButton);
         Button MedicalButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(4));
         MedicalButton.setTranslateY(50);
         centerSettingColorPalettePane.getChildren().add(MedicalButton);
-        colorPaletteButtonList.add(MedicalButton);
         Button ArcticButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(5));
         ArcticButton.setTranslateY(60);
         centerSettingColorPalettePane.getChildren().add(ArcticButton);
-        colorPaletteButtonList.add(ArcticButton);
         Button Rainbow1Button = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(6));
         Rainbow1Button.setTranslateY(70);
         centerSettingColorPalettePane.getChildren().add(Rainbow1Button);
-        colorPaletteButtonList.add(Rainbow1Button);
         Button Rainbow2Button = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(7));
         Rainbow2Button.setTranslateY(80);
         centerSettingColorPalettePane.getChildren().add(Rainbow2Button);
-        colorPaletteButtonList.add(Rainbow2Button);
         Button TintButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(8));
         TintButton.setTranslateY(90);
         centerSettingColorPalettePane.getChildren().add(TintButton);
-        colorPaletteButtonList.add(TintButton);
         Button BlackHotButton = CenterPane.getInstance().creatSettingButton(null,getColorPaletteName(9));
         BlackHotButton.setTranslateY(100);
         centerSettingColorPalettePane.getChildren().add(BlackHotButton);
+        colorPaletteButtonList.add(whiteHotButton);
+        colorPaletteButtonList.add(FulguriteButton);
+        colorPaletteButtonList.add(IronRedButton);
+        colorPaletteButtonList.add(HotIronButton);
+        colorPaletteButtonList.add(MedicalButton);
+        colorPaletteButtonList.add(ArcticButton);
+        colorPaletteButtonList.add(Rainbow1Button);
+        colorPaletteButtonList.add(Rainbow2Button);
+        colorPaletteButtonList.add(TintButton);
         colorPaletteButtonList.add(BlackHotButton);
 
         whiteHotButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -130,31 +134,35 @@ public class ColorPalette {
             public void handle(MouseEvent e) {
 //                boolean flag = YDialog.showConfirmDialog("Change To WhiteHot ...");
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,whiteHotButton);
-//                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(1));
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.WhiteHot));
             }
         });
         FulguriteButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,FulguriteButton);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.Fulgurite));
             }
         });
         IronRedButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,IronRedButton);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.IronRed));
             }
         });
         HotIronButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,HotIronButton);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.HotIron));
             }
         });
         MedicalButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,MedicalButton);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.Medical));
 //                new ScaleImage().start(new Stage());
             }
         });
@@ -162,30 +170,35 @@ public class ColorPalette {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,ArcticButton);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.Arctic));
             }
         });
         Rainbow1Button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,Rainbow1Button);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.Rainbow1));
             }
         });
         Rainbow2Button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,Rainbow2Button);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.Rainbow2));
             }
         });
         TintButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,TintButton);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.Tint));
             }
         });
         BlackHotButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 CenterPane.getInstance().setButtonClickBackground(colorPaletteButtonList,BlackHotButton);
+                CenterPane.getInstance().imageView.setImage(ColorPaletteManager.getInstance().pixWithImage(PaletteParam.BlackHot));
             }
         });
     }
