@@ -11,6 +11,7 @@ import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.module.point.PointManager;
+import com.yuneec.image.module.point.PointTemperature;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import javafx.embed.swing.SwingFXUtils;
@@ -180,7 +181,8 @@ public class PdfReport {
 		Integer totalQuantity = 0;
 
 		for (int i = 0; i < PointManager.getInstance().pointTemperatureNodeList.size(); i++) {
-			ArrayList pointNodeList = (ArrayList) PointManager.getInstance().pointTemperatureNodeList.get(i);
+			PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
+			ArrayList pointNodeList = pointTemperature.getPointTemperatureNode();
 			float temperature = (float) pointNodeList.get(4);
 			table.addCell(createCell(""+(i+1), textfont));
 			table.addCell(createCell(""+pointNodeList.get(5), textfont));
