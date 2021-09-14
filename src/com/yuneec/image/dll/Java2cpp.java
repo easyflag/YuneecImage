@@ -10,8 +10,8 @@ import java.io.*;
 public class Java2cpp {
 
     static {
-        System.loadLibrary("src/com/yuneec/image/dll/guide");
-        System.loadLibrary("src/com/yuneec/image/dll/GuideImageAnalysis");
+        System.loadLibrary("lib/guide");
+        System.loadLibrary("lib/GuideImageAnalysis");
     }
 
     private static Java2cpp instance;
