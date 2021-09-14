@@ -96,11 +96,13 @@ public class LeftImagePathPane{
                 }
                 if (Utils.mouseLeftClick(mouseEvent)){
                     if(mouseEvent.getClickCount() == 2) {
-                        boolean result = YDialog.showConfirmDialog(Language.getString(
-                                "Make sure to open the new image and \nyour previous action will be cleared !",
-                                "确认打开新图片，您上次的操作会被清除 !"));
-                        if (!result){
-                            return;
+                        if (Global.currentOpenImagePath != null){
+                            boolean result = YDialog.showConfirmDialog(Language.getString(
+                                    "Make sure to open the new image and \nyour previous action will be cleared !",
+                                    "确认打开新图片，您上次的操作会被清除 !"));
+                            if (!result){
+                                return;
+                            }
                         }
                         if (!(Global.cameraMode.startsWith(Global.cameraE20TMode) || Global.cameraMode.startsWith(Global.cameraE10TMode))){
                             ToastUtil.toast(Language.getString("Not Yuneec product image !","不是Yuneec产品图片 !"),new int[]{50,0});
