@@ -9,6 +9,7 @@ import com.adobe.internal.xmp.properties.XMPPropertyInfo;
 import com.yuneec.image.Global;
 import com.yuneec.image.guide.GuiDeUtil;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
+import com.yuneec.image.module.colorpalette.PaletteParam;
 
 import java.io.*;
 import java.util.Arrays;
@@ -83,7 +84,7 @@ public class XMPUtil {
         while (xmpIterator.hasNext()) {
             XMPPropertyInfo obj = (XMPPropertyInfo) xmpIterator.next();
             PropertyOptions propertyOptions = obj.getOptions();
-//            YLog.I("XMP---> " + obj.getNamespace() + "--" + obj.getPath() + "--" + obj.getValue());
+//            YLog.I("XMP---> " + obj.getNamespace() + " , " + obj.getPath() + " , " + obj.getValue());
             if (obj.getNamespace().equals("http://pix4d.com/Camera/1.0/")){
                 if (GuiDeUtil.getInstance().isE20T()){
                     setGuideXMPvalue(obj.getPath(),obj.getValue());
@@ -163,6 +164,12 @@ public class XMPUtil {
             GuideTemperatureAlgorithm.pParamExt.modifyK = Integer.parseInt(value);
         }else if(path.endsWith("modifyB")){
             GuideTemperatureAlgorithm.pParamExt.modifyB = Short.parseShort(value);
+        }else if(path.endsWith("paletteType")){
+            Global.imagePaletteType = Integer.parseInt(value);
+            PaletteParam.currentPalette = Global.imagePaletteType;
+        }else if(path.endsWith("dzoom")){
+            Global.dzoom = Integer.parseInt(value) / 8f;
+//            YLog.I("Global.dzoom ：" + Global.dzoom);
         }
     }
 

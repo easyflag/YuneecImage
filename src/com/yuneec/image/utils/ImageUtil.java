@@ -141,7 +141,8 @@ public class ImageUtil {
     	if(tagName.equals("File Size")){
 			ArrayList<String> arrayList = new ArrayList<String>();
 			arrayList.add(Language.getString(tagName,Language.File_Size_ch));
-			arrayList.add(description);
+			Float size = Float.parseFloat(description.replace("bytes","").trim()) / 1024 / 1024f;
+			arrayList.add(String.format("%.3f",size) + " M");
 			imageInfoList.add(arrayList);
 		}
 		if(tagName.equals("Model")){

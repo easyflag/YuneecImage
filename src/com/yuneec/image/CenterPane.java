@@ -5,6 +5,7 @@ import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.box.BoxTemperatureUtil;
 import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.colorpalette.ColorPaletteManager;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.point.PointManager;
@@ -116,6 +117,8 @@ public class CenterPane {
         }else {
             imageView.setImage(image);
         }
+
+        ColorPaletteManager.I().saveColorPaletteRGB();
 
 //        ScaleImage.getInstance().init(Global.currentOpenImagePath);
 

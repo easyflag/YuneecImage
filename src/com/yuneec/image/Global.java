@@ -11,6 +11,8 @@ public class Global {
     public static double currentOpenImageWidth;
     public static double currentOpenImageHeight;
     public static boolean hasTemperatureBytes;
+    public static int imagePaletteType;
+    public static float dzoom;
 
     public static String cameraMode = "";
     public static String cameraE20TMode = "E20T";

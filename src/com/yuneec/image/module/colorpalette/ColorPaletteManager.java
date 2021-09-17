@@ -1,6 +1,7 @@
 package com.yuneec.image.module.colorpalette;
 
 
+import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
 import com.yuneec.image.dll.Java2cpp;
 import com.yuneec.image.utils.ByteUtils;
@@ -13,6 +14,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,11 +22,56 @@ public class ColorPaletteManager {
 
     public static ColorPaletteManager instance;
 
-    public static ColorPaletteManager getInstance() {
+    public static ColorPaletteManager I() {
         if (instance == null) {
             instance = new ColorPaletteManager();
         }
         return instance;
+    }
+
+    ArrayList<Color> rgbList = new ArrayList<>();
+    public void saveColorPaletteRGB(){
+        rgbList.clear();
+        Image image = new Image("file:" + Global.currentOpenImagePath);
+        PixelReader pixelReader = image.getPixelReader();
+        if(image.getWidth()>0 && image.getHeight() >0) {
+            WritableImage wImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+            PixelWriter pixelWriter = wImage.getPixelWriter();
+            for (int y = 0; y < image.getHeight(); y++) {
+                for (int x = 0; x < image.getWidth(); x++) {
+                    Color color = pixelReader.getColor(x, y);
+                    rgbList.add(color);
+                }
+            }
+        }
+    }
+
+    public Image restoreImageRGB(){
+        Image image = new Image("file:" + Global.currentOpenImagePath);
+        PixelReader pixelReader = image.getPixelReader();
+        if(image.getWidth()>0 && image.getHeight() >0) {
+            WritableImage wImage = new WritableImage((int) image.getWidth(), (int) image.getHeight());
+            PixelWriter pixelWriter = wImage.getPixelWriter();
+            for (int y = 0; y < image.getHeight(); y++) {
+                for (int x = 0; x < image.getWidth(); x++) {
+                    int index = y * 640 + x;
+                    pixelWriter.setColor(x, y, rgbList.get(index));
+                }
+            }
+            return wImage;
+        }
+        return null;
+    }
+
+    public void setImageColorPalette(){
+        /*
+        if (PaletteParam.currentPalette == Global.imagePaletteType){
+            CenterPane.getInstance().imageView.setImage(restoreImageRGB());
+        }else {
+            CenterPane.getInstance().imageView.setImage(pixWithImage(PaletteParam.currentPalette));
+        }
+        */
+        CenterPane.getInstance().imageView.setImage(pixWithImage(PaletteParam.currentPalette));
     }
 
     private byte[] rgb24Data;
