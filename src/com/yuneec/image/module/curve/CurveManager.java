@@ -4,9 +4,12 @@ import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.module.Temperature;
+import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.utils.BackStepManager;
 import com.yuneec.image.utils.TemperatureAlgorithm;
+import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
+import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
@@ -128,6 +131,26 @@ public class CurveManager {
         CurveTemperature curveTemperature = new CurveTemperature(lineList,curveTemperatureNodeMax,curveTemperatureNodeMin);
         curveTemperatureList.add(curveTemperature);
         BackStepManager.getInstance().addTemperatureInfo(curveTemperature);
+    }
+
+    public void recalculate(){
+        for (int i = 0; i < curveTemperatureList.size(); i++) {
+            CurveTemperature curveTemperature = (CurveTemperature) curveTemperatureList.get(i);
+            if (!curveTemperature.getCurveTemperatureNodeMax().isEmpty()){
+                Label label = (Label) curveTemperature.getCurveTemperatureNodeMax().get(0);
+                int x = (int) curveTemperature.getCurveTemperatureNodeMax().get(5);
+                int y = (int) curveTemperature.getCurveTemperatureNodeMax().get(6);
+                float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
+                label.setText(Utils.getFormatTemperature(newPointTemperature));
+            }
+            if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
+                Label label = (Label) curveTemperature.getCurveTemperatureNodeMin().get(0);
+                int x = (int) curveTemperature.getCurveTemperatureNodeMin().get(5);
+                int y = (int) curveTemperature.getCurveTemperatureNodeMin().get(6);
+                float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
+                label.setText(Utils.getFormatTemperature(newPointTemperature));
+            }
+        }
     }
 
 }

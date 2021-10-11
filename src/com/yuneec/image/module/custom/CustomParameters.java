@@ -3,6 +3,9 @@ package com.yuneec.image.module.custom;
 import com.yuneec.image.Configs;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.curve.CurveManager;
+import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
@@ -115,6 +118,9 @@ public class CustomParameters extends Application {
                     + " ,modifyK:" + GuideTemperatureAlgorithm.pParamExt.modifyK
                     + " ,modifyB:" + GuideTemperatureAlgorithm.pParamExt.modifyB
             );
+            PointManager.getInstance().recalculate();
+            BoxTemperatureManager.getInstance().recalculate();
+            CurveManager.getInstance().recalculate();
             ToastUtil.toast("Change Succeed !!!",new int[]{90,0});
 //            DownLoad.I().dowanload(DownLoad.url,DownLoad.downloadPath);
 //            String result = DownLoad.I().sendGet(DownLoad.getUrl);
