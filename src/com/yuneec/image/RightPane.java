@@ -1,6 +1,8 @@
 package com.yuneec.image;
 
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.colorpalette.ColorPalette;
+import com.yuneec.image.module.colorpalette.PaletteParam;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
@@ -167,11 +169,18 @@ public class RightPane {
                 addImageInfoLabelToRightPane(tagName,description,i);
             }
         }
+        ColorPaletteInfoLabel = addImageInfoLabelToRightPane(Language.getString(Language.ColorPaletteTip_en,Language.ColorPaletteTip_ch),
+                ColorPalette.getInstance().getColorPaletteName(PaletteParam.currentPalette),imageInfoListLength);
+    }
+
+    public Label ColorPaletteInfoLabel;
+    public void setColorPaletteInfo(){
+        ColorPaletteInfoLabel.setText(ColorPalette.getInstance().getColorPaletteName(PaletteParam.currentPalette));
     }
 
     public ArrayList<Label> imageInfoTagNameLabelList = new ArrayList<Label>();
     public ArrayList<Label> imageInfoDescriptionLabelList = new ArrayList<Label>();
-    private void addImageInfoLabelToRightPane(String tagName,String description, int i) {
+    private Label addImageInfoLabelToRightPane(String tagName,String description, int i) {
         Label tagNamelabel = new Label();
         tagNamelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
         tagNamelabel.setTranslateY(Configs.RightPaneImageInfo.marginTop + Configs.RightPaneImageInfo.lineHeight * i + 8);
@@ -186,6 +195,7 @@ public class RightPane {
         rightImageInfoPane.getChildren().add(descriptionlabel);
         imageInfoTagNameLabelList.add(tagNamelabel);
         imageInfoDescriptionLabelList.add(descriptionlabel);
+        return descriptionlabel;
     }
 
     private void clearImageInfo(){

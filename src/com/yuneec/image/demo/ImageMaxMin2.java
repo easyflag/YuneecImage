@@ -31,7 +31,7 @@ public class ImageMaxMin2 extends Application {
     public void start(Stage primaryStage) {
 
         ImageView imageView = new ImageView();
-        String file = "F:\\intellijSpace\\YuneecImage\\src\\image\\Yuneec01.jpg";
+        String file = "F:\\git\\github\\YuneecImage\\src\\image\\Yuneec07.jpg";
         YLog.I(file);
         Image image = new Image("file:" + file);
         imageView.setImage(image);

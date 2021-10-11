@@ -3,6 +3,7 @@ package com.yuneec.image.module.colorpalette;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
+import com.yuneec.image.RightPane;
 import com.yuneec.image.dll.Java2cpp;
 import com.yuneec.image.utils.ByteUtils;
 import com.yuneec.image.utils.ParseTemperatureBytes;
@@ -72,6 +73,7 @@ public class ColorPaletteManager {
         }
         */
         CenterPane.getInstance().imageView.setImage(pixWithImage(PaletteParam.currentPalette));
+        RightPane.getInstance().setColorPaletteInfo();
     }
 
     private byte[] rgb24Data;

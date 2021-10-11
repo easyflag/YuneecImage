@@ -36,7 +36,7 @@ public class XMPUtil {
 
     public void getXmp() {
         try {
-            File orgFile = new File(Global.currentOpenImagePath);
+            File orgFile = new File(Global.currentLeftSelectImagePath);
             FileInputStream in = new FileInputStream(orgFile);
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             copy(in, out);
@@ -167,6 +167,7 @@ public class XMPUtil {
         }else if(path.endsWith("paletteType")){
             Global.imagePaletteType = Integer.parseInt(value);
             PaletteParam.currentPalette = Global.imagePaletteType;
+//            YLog.I("PaletteParam.currentPalette ：" + PaletteParam.currentPalette);
         }else if(path.endsWith("dzoom")){
             Global.dzoom = Integer.parseInt(value) / 8f;
 //            YLog.I("Global.dzoom ：" + Global.dzoom);

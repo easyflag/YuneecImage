@@ -20,13 +20,8 @@ public class ParseTemperatureBytes {
     private byte[] HEADER = new byte[]{(byte) 0xFF, (byte) 0xE3};
     private int[] bufLens;
 
-    //double click to get :  xmp , TemperatureBytes
+    //double click to get :   TemperatureBytes
     public void init(byte[] bytes) {
-        try {
-            XMPUtil.getInstance().getXmp();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         int length = bytes.length;
         YLog.I("image bytes length: " + length);
 //			YLog.I(ByteUtils.byteArrayToHexString(bytes));

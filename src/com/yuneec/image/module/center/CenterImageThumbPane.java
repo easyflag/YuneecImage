@@ -180,7 +180,7 @@ public class CenterImageThumbPane {
             button.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 setAllBackground(button);
                 Global.currentLeftSelectImagePath = imageItem.filePath.replace("\\", "\\\\");
-                ImageUtil.readImageExif(Global.currentLeftSelectImagePath);
+                ImageUtil.readImageExifAndXmp(Global.currentLeftSelectImagePath);
                 RightPane.getInstance().showRightImageInfo();
                 if (event.getClickCount() == 2) {
                     Global.currentOpenImagePath = imageItem.filePath;

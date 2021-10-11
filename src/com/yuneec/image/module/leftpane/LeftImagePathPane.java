@@ -11,6 +11,7 @@ import com.yuneec.image.module.center.ImageItem;
 import com.yuneec.image.module.center.ImageItem.ImageItemType;
 import com.yuneec.image.utils.*;
 import com.yuneec.image.views.YButton;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -28,6 +29,8 @@ import javafx.scene.paint.Color;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LeftImagePathPane{
 
@@ -115,10 +118,10 @@ public class LeftImagePathPane{
                         }
                     }
                     if(mouseEvent.getClickCount() == 1){
-//                        YLog.I("Node click: " + item.getValue());
+                        YLog.I("Node click: " + item.getValue());
                         if (isTrueImagePathEnding(iamgeName)) {
                             Global.currentLeftSelectImagePath = filePath.replace("\\", "\\\\");
-                            ImageUtil.readImageExif(Global.currentLeftSelectImagePath);
+                            ImageUtil.readImageExifAndXmp(Global.currentLeftSelectImagePath);
                             RightPane.getInstance().showRightImageInfo();
                         }
                     }

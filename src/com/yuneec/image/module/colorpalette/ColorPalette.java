@@ -75,7 +75,7 @@ public class ColorPalette {
     public static String[] colorPaletteNameList = {"White Hot","Fulgurite","Iron Red","Hot Iron","Medical","Arctic","Rainbow1","Rainbow2","Tint","Black Hot"};
     public static String[] colorPaletteNameList_ch = {"白热","熔岩","铁红","热铁","医疗","北极","彩虹1","彩虹2","描红","黑热"};
 
-    private String getColorPaletteName(int index) {
+    public String getColorPaletteName(int index) {
         return Language.getString(colorPaletteNameList[index],colorPaletteNameList_ch[index]);
     }
 

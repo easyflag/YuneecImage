@@ -2,7 +2,6 @@ package com.yuneec.image.module.custom;
 
 import com.yuneec.image.Configs;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
-import com.yuneec.image.module.ota.DownLoad;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
@@ -22,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;

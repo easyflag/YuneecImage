@@ -91,7 +91,7 @@ public class TopMenuBar {
         aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setOnAction(actionEvent -> about());
 
-        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,LanguageManeu,aboutMenuItem);
+        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,LanguageManeu,customParametersMenuItem,aboutMenuItem);
         Menu helpMenu = new Menu("Help");
         RadioMenuItem helpItem = new RadioMenuItem("Help");
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());

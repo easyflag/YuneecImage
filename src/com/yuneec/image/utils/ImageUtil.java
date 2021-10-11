@@ -33,10 +33,12 @@ public class ImageUtil {
 	}
 
 	public static byte[] imageBytes;
-	public static void readImageExif(String name){
+	public static void readImageExifAndXmp(String name){
+//		YLog.I("readImageExifAndXmp: " + name);
 		try {
 //			imageBytes = readJpgToByte(name);
 			readPic(name);
+			XMPUtil.getInstance().getXmp();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -119,8 +121,8 @@ public class ImageUtil {
 		return index;
 	}
 
-	public static String[] whiteList = {"Make","Model","Date/Time","F-Number","ISO Speed","Brightness Value","Image Width","Image Height"};
-	public static String[] whiteList_ch = {"制造","型号","时间","光圈","感光度","亮度","宽度","高度"};
+	public static String[] whiteList = {"Make","Model","Image Description","Image Width","Image Height","Date/Time Original","GPS Longitude","GPS Latitude"};
+	public static String[] whiteList_ch = {"制造","型号","文件名","宽度","高度","日期","经度","纬度"};
 	private static ArrayList<ArrayList<String>> imageInfoList = new  ArrayList<ArrayList<String>>();
 	public static ArrayList<ArrayList<String>> imageInfoSortList = new  ArrayList<ArrayList<String>>();
 	private static void storeImageInfo(Tag tag) {
@@ -129,7 +131,7 @@ public class ImageUtil {
 		String directoryName = tag.getDirectoryName();
     	String tagName = tag.getTagName();
     	String description = tag.getDescription();
-    	if(directoryName.startsWith("Exif")){
+//    	if(directoryName.startsWith("Exif")){
 			if(Arrays.asList(whiteList).contains(tagName)){
 				ArrayList<String> arrayList = new ArrayList<String>();
 				int index = Arrays.asList(whiteList).indexOf(tagName);
@@ -137,7 +139,7 @@ public class ImageUtil {
 				arrayList.add(description);
 				imageInfoList.add(arrayList);
 			}
-		}
+//		}
     	if(tagName.equals("File Size")){
 			ArrayList<String> arrayList = new ArrayList<String>();
 			arrayList.add(Language.getString(tagName,Language.File_Size_ch));
