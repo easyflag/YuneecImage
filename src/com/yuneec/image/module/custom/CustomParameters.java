@@ -2,6 +2,7 @@ package com.yuneec.image.module.custom;
 
 import com.yuneec.image.Configs;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
+import com.yuneec.image.module.Language;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import com.yuneec.image.utils.YLog;
@@ -53,7 +54,7 @@ public class CustomParameters extends Application {
         primaryStage.resizableProperty().setValue(false);
         primaryStage.setAlwaysOnTop(true);
 //        primaryStage.setX();
-        primaryStage.setTitle("Custom Parameters");
+        primaryStage.setTitle(Language.getString(Language.CustomParameters_en,Language.CustomParameters_ch));
         primaryStage.initModality(Modality.APPLICATION_MODAL);
         primaryStage.show();
     }
@@ -65,15 +66,15 @@ public class CustomParameters extends Application {
         vBox.setPrefHeight(windowHeight - 10);
         vBox.setPadding(new Insets(15, 15, 5, 15));
 
-        HBox hBox1 = getHBox("emiss",""+GuideTemperatureAlgorithm.pParamExt.emiss);
+        HBox hBox1 = getHBox(Language.getString("emiss","发射率"),""+GuideTemperatureAlgorithm.pParamExt.emiss); //发射率
         HBox hBox2 = getHBox("relHum",""+GuideTemperatureAlgorithm.pParamExt.relHum);
-        HBox hBox3 = getHBox("distance",""+GuideTemperatureAlgorithm.pParamExt.distance);
-        HBox hBox4 = getHBox("reflectedTemper",""+GuideTemperatureAlgorithm.pParamExt.reflectedTemper);
-        HBox hBox5 = getHBox("atmosphericTemper",""+GuideTemperatureAlgorithm.pParamExt.atmosphericTemper);
+        HBox hBox3 = getHBox(Language.getString("distance","距离"),""+GuideTemperatureAlgorithm.pParamExt.distance); //距离
+        HBox hBox4 = getHBox(Language.getString("reflectedTemper","反射温度"),""+GuideTemperatureAlgorithm.pParamExt.reflectedTemper);//反射温度
+        HBox hBox5 = getHBox(Language.getString("atmosphericTemper","空气温度"),""+GuideTemperatureAlgorithm.pParamExt.atmosphericTemper);//空气温度
         HBox hBox6 = getHBox("modifyK",""+GuideTemperatureAlgorithm.pParamExt.modifyK);
         HBox hBox7 = getHBox("modifyB",""+GuideTemperatureAlgorithm.pParamExt.modifyB);
 
-        Button changeButton = YButton.getInstance().initButton(null,"Change");
+        Button changeButton = YButton.getInstance().initButton(null,Language.getString("Change","确认修改"));
         HBox hBox8 = new HBox(changeButton);
         hBox8.setPrefHeight(50);
         hBox8.setMargin(changeButton,new Insets(0, 30, 0, 0));
@@ -87,7 +88,7 @@ public class CustomParameters extends Application {
             }
         });
 
-        vBox.getChildren().addAll(hBox1,hBox2,hBox3,hBox4,hBox5,hBox6,hBox7,hBox8);
+        vBox.getChildren().addAll(hBox1,hBox3,hBox4,hBox5,hBox8);
 
         rootPane.getChildren().add(vBox);
         rootPane.setAlignment(Pos.BOTTOM_CENTER);
@@ -136,7 +137,7 @@ public class CustomParameters extends Application {
         text1.setFont(Font.font(14));
         hBox1.getChildren().add(text1);
 
-        Label label = new Label("--->  new " + name + " : ");
+        Label label = new Label("--->   " + Language.getString("new ","新的 ") + name + " : ");
         label.setFont(Font.font(14));
         label.setPrefWidth(225);
         label.setTextFill(Color.WHITE);
