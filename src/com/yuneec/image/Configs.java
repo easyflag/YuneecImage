@@ -8,19 +8,26 @@ public class Configs {
 	public static String copyright = "   Copyright (C) 2021-2022 Yuneec Inc.";
 	public static String copyright_ch = "   版权所有 (C) 2021-2022 Yuneec 公司.";
 
-	public static int SceneWidth = 1320;
-	public static int SceneHeight = 700;
+	public final static int DefaultSceneWidth = 1320;
+	public final static int DefaultSceneHeight = 730;
+	public static int SceneWidth = DefaultSceneWidth;
+	public static int SceneHeight = DefaultSceneHeight;
 	
-	public static int MenuHeight = 30;
+	public final static int MenuHeight = 30;
 	
-	public static int LineHeight = 40;
+	public final static int LineHeight = 40;
 	
-	public static int LeftPanelWidth = 200;
-	public static int CenterPanelWidth = 800;
-	public static int RightPanelWidth = 320;
+	public final static int LeftPanelWidth = 200;
 
-	public static int DefaultImageWidth = 640;
-	public static int DefaultImageHeight = 512;
+	public final static int DefaultCenterPanelWidth = 800;
+	public final static int DefaultCenterPanelHeight = Configs.DefaultSceneHeight - Configs.MenuHeight - Configs.LineHeight;
+	public static double CenterPanelWidth = DefaultCenterPanelWidth;
+	public static double CenterPanelHeight = DefaultCenterPanelHeight;
+
+	public final static int RightPanelWidth = 320;
+
+	public final static int DefaultImageWidth = 640;
+	public final static int DefaultImageHeight = 512;
 	
 //	public static int Spacing = 1;
 	

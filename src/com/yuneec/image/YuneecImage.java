@@ -5,12 +5,15 @@ import com.yuneec.image.module.Language;
 import com.yuneec.image.module.center.CenterImageThumbPane;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import com.yuneec.image.utils.SaveSettings;
+import com.yuneec.image.utils.WindowChange;
 import com.yuneec.image.utils.YDialog;
+import com.yuneec.image.utils.YLog;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
@@ -19,6 +22,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -37,14 +41,18 @@ public class YuneecImage extends Application {
 //		Global.hBox.setPadding(new Insets(Configs.Spacing, 0, Configs.Spacing, 0));
 //		Global.hBox.setSpacing(1);
 		root.setCenter(Global.hBox);
-		Scene scene = new Scene(root, Configs.SceneWidth, Configs.SceneHeight);
+		Scene scene = new Scene(root);
 		root.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
 		primaryStage.setScene(scene);
 //		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("image/launcher.png"));
+		primaryStage.setWidth(Configs.DefaultSceneWidth);
+		primaryStage.setHeight(Configs.DefaultSceneHeight);
+		primaryStage.setMinWidth(Configs.DefaultSceneWidth);
+		primaryStage.setMinHeight(Configs.DefaultSceneHeight);
+		primaryStage.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
+		primaryStage.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight());
 		primaryStage.show();
-		primaryStage.setMinWidth(Configs.SceneWidth);
-		primaryStage.setMinHeight(Configs.SceneHeight);
 
 //		LeftPane.getInstance().init();
 		LeftImagePathPane.getInstance().init();
@@ -57,6 +65,14 @@ public class YuneecImage extends Application {
 		RightPane.getInstance().init();
 		TopMenuBar.getInstance().init(root);
 		GuiDe.init();
+
+		primaryStage.maximizedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+//				YLog.I("maximizedProperty  oldValue:" + oldValue + " ,newValue:" + newValue);
+//				WindowChange.I().setWindowMax(newValue);
+			}
+		});
 
 		primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override

@@ -83,7 +83,8 @@ public class CenterPane {
         showImagePaneY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight) / 2
                 - Global.currentOpenImageHeight / 2);
         showImagePane.setTranslateX(showImagePaneX);
-        showImagePane.setTranslateY(showImagePaneY);
+        showImagePane.setTranslateY(showImagePaneY - 20);
+//        YLog.I("getImagePaneOffsetXY " +  " showImagePaneX:" + showImagePaneX + "  ,showImagePaneY:" + showImagePaneY);
     }
 
     public void reset(){
@@ -285,6 +286,7 @@ public class CenterPane {
         showImagePane = new Pane();
         showImagePane.setPrefWidth(Configs.DefaultImageWidth);
         showImagePane.setPrefHeight(Configs.DefaultImageHeight);
+//        showImagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.green_color), null, null)));
         centerImagePane.getChildren().add(showImagePane);
 
         initCenterSettingPane(centerSettingPane);

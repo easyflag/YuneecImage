@@ -8,8 +8,8 @@ public class Global {
     public static HBox hBox;
     public static String currentOpenImagePath;
     public static String currentLeftSelectImagePath;
-    public static double currentOpenImageWidth;
-    public static double currentOpenImageHeight;
+    public static double currentOpenImageWidth = Configs.DefaultImageWidth;
+    public static double currentOpenImageHeight = Configs.DefaultImageHeight;
     public static boolean hasTemperatureBytes;
     public static int imagePaletteType;
     public static float dzoom;
