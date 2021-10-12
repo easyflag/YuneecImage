@@ -3,10 +3,7 @@ package com.yuneec.image;
 import com.yuneec.image.module.custom.CustomParameters;
 import com.yuneec.image.module.leftpane.LeftImagePathPane;
 import com.yuneec.image.module.Language;
-import com.yuneec.image.utils.SaveSettings;
-import com.yuneec.image.utils.UnitTransitions;
-import com.yuneec.image.utils.YDialog;
-import com.yuneec.image.utils.YLog;
+import com.yuneec.image.utils.*;
 import javafx.application.Platform;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -22,7 +19,7 @@ public class TopMenuBar {
 
     public Menu fileMenu,settingsMenu;
     public MenuItem openFileMenuItem,openFolderMenuItem,exitMenuItem;
-    public MenuItem reportMenuItem;
+    public MenuItem reportMenuItem,saveImageMenuItem;
     public Menu TemperatureManeu,LanguageManeu;
     public RadioMenuItem EnglishMenuItem,ChineseMenuItem;
     public RadioMenuItem CelsiusMenuItem, FahrenheitMenuItem, KelvinMenuItem;
@@ -66,6 +63,8 @@ public class TopMenuBar {
         settingsMenu = new Menu("Settings",new ImageView("image/setting.png"));
         reportMenuItem = new MenuItem("Create Report");
         reportMenuItem.setOnAction(actionEvent -> createReport());
+        saveImageMenuItem = new MenuItem("Save Image");
+        saveImageMenuItem.setOnAction(actionEvent -> saveImage());
 
         TemperatureManeu = new Menu("Temperature Unit");
         CelsiusMenuItem = new RadioMenuItem("Celsius(℃)");
@@ -91,7 +90,8 @@ public class TopMenuBar {
         aboutMenuItem = new MenuItem("About");
         aboutMenuItem.setOnAction(actionEvent -> about());
 
-        settingsMenu.getItems().addAll(reportMenuItem,TemperatureManeu,LanguageManeu,customParametersMenuItem,aboutMenuItem);
+        settingsMenu.getItems().addAll(reportMenuItem,saveImageMenuItem,
+                TemperatureManeu,LanguageManeu,customParametersMenuItem,aboutMenuItem);
         Menu helpMenu = new Menu("Help");
         RadioMenuItem helpItem = new RadioMenuItem("Help");
         helpMenu.getItems().addAll(helpItem, new SeparatorMenuItem());
@@ -185,6 +185,25 @@ public class TopMenuBar {
         }
         try {
             PdfReport.getInstance().creat(file.toString().replace("\\", "\\\\"));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private void saveImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JPG", "*.JPG"),
+                new FileChooser.ExtensionFilter("All", "*.*"));
+        File file = fileChooser.showSaveDialog(Global.primaryStage);
+        YLog.I("saveImage:"+file);
+        if (file == null) {
+            return;
+        }
+        try {
+            SaveImage.I().save(file.toString().replace("\\", "\\\\"));
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

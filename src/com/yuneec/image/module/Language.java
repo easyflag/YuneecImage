@@ -44,6 +44,8 @@ public class Language {
     public static String Open_Folder_ch = "打开文件夹\t\t";
     public static String Create_Report_en = "Create Report";
     public static String Create_Report_ch = "生成报告";
+    public static String Save_Image_en = "Save Image";
+    public static String Save_Image_ch = "保存图片";
     public static String Temperature_Unit_en = "Temperature Unit";
     public static String Temperature_Unit_ch = "温度单位";
     public static String Temperature_en = "Temperature";
@@ -108,6 +110,7 @@ public class Language {
         TopMenuBar.getInstance().openFileMenuItem.setText(Open_File_en);
         TopMenuBar.getInstance().openFolderMenuItem.setText(Open_Folder_en);
         TopMenuBar.getInstance().reportMenuItem.setText(Create_Report_en);
+        TopMenuBar.getInstance().saveImageMenuItem.setText(Save_Image_en);
         TopMenuBar.getInstance().TemperatureManeu.setText(Temperature_Unit_en);
         TopMenuBar.getInstance().CelsiusMenuItem.setText(Celsius_en);
         TopMenuBar.getInstance().FahrenheitMenuItem.setText(Fahrenheit_en);
@@ -145,6 +148,7 @@ public class Language {
         TopMenuBar.getInstance().openFileMenuItem.setText(Open_File_ch);
         TopMenuBar.getInstance().openFolderMenuItem.setText(Open_Folder_ch);
         TopMenuBar.getInstance().reportMenuItem.setText(Create_Report_ch);
+        TopMenuBar.getInstance().saveImageMenuItem.setText(Save_Image_ch);
         TopMenuBar.getInstance().TemperatureManeu.setText(Temperature_Unit_ch);
         TopMenuBar.getInstance().CelsiusMenuItem.setText(Celsius_ch);
         TopMenuBar.getInstance().FahrenheitMenuItem.setText(Fahrenheit_ch);

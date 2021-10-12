@@ -12,10 +12,12 @@ import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
+import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
@@ -23,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 
@@ -30,6 +33,7 @@ public class PdfReport {
 
 	private String tempImagePath = "C:\\tempYImage.png";
 	private static PdfReport pdfReport;
+	private Document document;
 	public static PdfReport getInstance() {
 		if (pdfReport == null) {
 			pdfReport = new PdfReport();
@@ -39,7 +43,7 @@ public class PdfReport {
  
     public void creat(String fileName) throws Exception {
         try {
-            Document document = new Document(PageSize.A4);
+			document = new Document(PageSize.A4);
  
             File file = new File(fileName);
             file.createNewFile();
@@ -47,11 +51,11 @@ public class PdfReport {
  
             document.open();
 
-            generatePDF(document);
+            generatePDF();
  
             document.close();
 
-			new File(tempImagePath).delete();
+//			new File(tempImagePath).delete();
 
 			ToastUtil.toast(Language.getString("PDF report generated successfully !","PDF报告生成成功!"));
 
@@ -88,7 +92,7 @@ public class PdfReport {
         }
     }
  
-	public void generatePDF(Document document) throws Exception {
+	public void generatePDF() throws Exception {
     	// 段落
 		Paragraph paragraph = new Paragraph(Language.getString("Yuneec Image","Yuneec 图片"), Language.isEnglish()?titlefont:titlefontCh);
 		paragraph.add(new Phrase(Language.getString(" Infrared Camera Report ","红外报告"),Language.isEnglish()?titlefont:titlefontCh));
@@ -117,12 +121,16 @@ public class PdfReport {
 //		// 定位
 //		Anchor gotoP = new Anchor("goto");
 //		gotoP.setReference("#top");
+		/*
 		// 添加图片
 		WritableImage showImagePane = CenterPane.getInstance().showImagePane.snapshot(new SnapshotParameters(), null);
 		ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File(tempImagePath));
 		Image image = Image.getInstance(tempImagePath);
 		image.setAlignment(Image.ALIGN_CENTER);
 		image.scalePercent(60); //依照比例缩放
+		*/
+
+		PdfPTable jpgInfoTable = getJpgInfoTable();
 		// 表格
 		PdfPTable pointTemperatureTable = getPointTemperature();
 
@@ -133,6 +141,12 @@ public class PdfReport {
 		document.add(p2);
 		document.add(paragraphTime);
 		document.add(p1);
+
+		Paragraph paragraphImagePath = new Paragraph(Global.currentOpenImagePath, headfont);
+		document.add(paragraphImagePath);
+
+		document.add(jpgInfoTable);
+		document.add(p2);
 		document.add(pointTemperatureTable);
 
 		if(!BoxTemperatureManager.getInstance().boxTemperatureList.isEmpty()){
@@ -146,7 +160,7 @@ public class PdfReport {
 		}
 
 //		document.add(paragraphEnd);
-		document.add(image);
+//		document.add(image);
 	}
 
 	private Paragraph getBoxTemperature(BoxTemperature boxTemperature) {
@@ -163,11 +177,26 @@ public class PdfReport {
 		return paragraph;
 	}
 
+	private PdfPTable getJpgInfoTable() throws Exception{
+		PdfPTable table = createTable(new float[] {150, 150},Element.ALIGN_LEFT);
+		PdfPCell cellTitle = createCell(Language.getString("Image Info:","图片信息:"),
+				Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 2, false);
+		cellTitle.setPaddingBottom(20.0f);
+		table.addCell(cellTitle);
+
+		for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size();i++){
+			Label tagNamelabel = RightPane.getInstance().imageInfoTagNameLabelList.get(i);
+			String tagName = tagNamelabel.getText();
+			Label descriptionlabel = RightPane.getInstance().imageInfoDescriptionLabelList.get(i);
+			String description = descriptionlabel.getText();
+			table.addCell(createCell(tagName, Language.isEnglish()?textfont:textfontCh));
+			table.addCell(createCell(description, Language.isEnglish()?textfont:textfontCh));
+		}
+		return table;
+	}
+
 	private PdfPTable getPointTemperature() {
-		PdfPTable table = createTable(new float[] {60, 100, 100, 120});
-		PdfPCell imagePathName = createCell(Global.currentOpenImagePath, headfont, Element.ALIGN_LEFT, 4, false);
-		imagePathName.setPaddingBottom(20.0f);
-		table.addCell(imagePathName);
+		PdfPTable table = createTable(new float[] {70, 110, 110, 130},Element.ALIGN_LEFT);
 
 		PdfPCell cellTitle = createCell(Language.getString("Point Temperature Data:","点测温数据:"),
 				Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 4, false);
@@ -298,12 +327,16 @@ public class PdfReport {
 	}
     /**
      */
-	public PdfPTable createTable(float[] widths) {
+	public PdfPTable createTable(float[] widths,int horizontalAlignment) {
+		maxWidth = 0;
+		for (int i=0;i<widths.length;i++){
+			maxWidth += widths[i];
+		}
 		PdfPTable table = new PdfPTable(widths);
 		try {
 			table.setTotalWidth(maxWidth);
 			table.setLockedWidth(true);
-			table.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.setHorizontalAlignment(horizontalAlignment);
 			table.getDefaultCell().setBorder(1);
 		} catch (Exception e) {
 			e.printStackTrace();
