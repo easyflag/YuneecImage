@@ -80,10 +80,9 @@ public class CenterPane {
 
     public void getImagePaneOffsetXY(){
         showImagePaneX = (int) (Configs.CenterPanelWidth / 2 - Global.currentOpenImageWidth / 2);
-        showImagePaneY = (int) ((Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight) / 2
-                - Global.currentOpenImageHeight / 2);
+        showImagePaneY = (int) (Configs.CenterPanelHeight / 2 - Global.currentOpenImageHeight / 2);
         showImagePane.setTranslateX(showImagePaneX);
-        showImagePane.setTranslateY(showImagePaneY - 20);
+        showImagePane.setTranslateY(showImagePaneY - 10);
 //        YLog.I("getImagePaneOffsetXY " +  " showImagePaneX:" + showImagePaneX + "  ,showImagePaneY:" + showImagePaneY);
     }
 
@@ -262,6 +261,7 @@ public class CenterPane {
         onePointTemperatureNode.add(temperature);//original temperature ℃
         onePointTemperatureNode.add(x);
         onePointTemperatureNode.add(y);
+        onePointTemperatureNode.add(WindowChange.I().maxWindow);
         return onePointTemperatureNode;
     }
 
@@ -288,7 +288,6 @@ public class CenterPane {
         showImagePane.setPrefHeight(Configs.DefaultImageHeight);
 //        showImagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.green_color), null, null)));
         centerImagePane.getChildren().add(showImagePane);
-
         initCenterSettingPane(centerSettingPane);
 
         Global.hBox.getChildren().add(centerPane);

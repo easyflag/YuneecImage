@@ -12,15 +12,15 @@ public class Configs {
 	public final static int DefaultSceneHeight = 730;
 	public static int SceneWidth = DefaultSceneWidth;
 	public static int SceneHeight = DefaultSceneHeight;
-	
+
+	public final static int SystemBarHeight = 20;
 	public final static int MenuHeight = 30;
-	
 	public final static int LineHeight = 40;
 	
 	public final static int LeftPanelWidth = 200;
 
 	public final static int DefaultCenterPanelWidth = 800;
-	public final static int DefaultCenterPanelHeight = Configs.DefaultSceneHeight - Configs.MenuHeight - Configs.LineHeight;
+	public final static int DefaultCenterPanelHeight = Configs.DefaultSceneHeight - SystemBarHeight - Configs.MenuHeight - Configs.LineHeight;
 	public static double CenterPanelWidth = DefaultCenterPanelWidth;
 	public static double CenterPanelHeight = DefaultCenterPanelHeight;
 

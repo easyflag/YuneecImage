@@ -70,7 +70,7 @@ public class YuneecImage extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 //				YLog.I("maximizedProperty  oldValue:" + oldValue + " ,newValue:" + newValue);
-//				WindowChange.I().setWindowMax(newValue);
+				WindowChange.I().setWindowMax(newValue);
 			}
 		});
 
@@ -97,6 +97,8 @@ public class YuneecImage extends Application {
 				double height = primaryStage.getHeight();
 //				YLog.I("heightProperty oldValue:" + oldValue + " ,newValue:" + newValue + " ,height:" + height);
 				Configs.SceneHeight = (int) height;
+				Configs.CenterPanelHeight = (int) (height - Configs.SystemBarHeight - Configs.MenuHeight - Configs.LineHeight);
+				CenterPane.getInstance().getImagePaneOffsetXY();
 				LeftImagePathPane.getInstance().treeView.setPrefHeight(height-66);
 			}
 		});
