@@ -19,4 +19,14 @@ public class PointTemperature extends Temperature {
         return pointTemperatureNode;
     }
 
+    private boolean maxWindowDraw;
+
+    public boolean isMaxWindowDraw() {
+        return maxWindowDraw;
+    }
+
+    public void setMaxWindowDraw(boolean maxWindowDraw) {
+        this.maxWindowDraw = maxWindowDraw;
+    }
+
 }

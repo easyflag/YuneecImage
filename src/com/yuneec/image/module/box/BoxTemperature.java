@@ -117,4 +117,14 @@ public class BoxTemperature extends Temperature {
     public void setBoxTemperatureNodeMin(ArrayList boxTemperatureNodeMin) {
         this.boxTemperatureNodeMin = boxTemperatureNodeMin;
     }
+
+    private boolean maxWindowDraw;
+
+    public boolean isMaxWindowDraw() {
+        return maxWindowDraw;
+    }
+
+    public void setMaxWindowDraw(boolean maxWindowDraw) {
+        this.maxWindowDraw = maxWindowDraw;
+    }
 }

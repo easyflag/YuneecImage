@@ -4,6 +4,8 @@ import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
+import com.yuneec.image.module.box.BoxTemperature;
+import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import javafx.geometry.Rectangle2D;
@@ -40,10 +42,10 @@ public class WindowChange {
     }
 
     public void setWindowMax(boolean max) {
-        maxWindow = max;
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
+                maxWindow = max;
                 double width = Global.primaryStage.getWidth();
                 double height = Global.primaryStage.getHeight();
 
@@ -100,34 +102,15 @@ public class WindowChange {
             GuideTemperatureAlgorithm.SupportScale = false;
         }
         reLayoutPointTemperatureLocation();
+        reLayoutBoxTemperatureLocation();
     }
 
     private void reLayoutPointTemperatureLocation() {
         for (int i = 0; i < PointManager.getInstance().pointTemperatureNodeList.size(); i++) {
             PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
             ArrayList pointNodeList = pointTemperature.getPointTemperatureNode();
-            Label label = (Label) pointNodeList.get(0);
-            Circle circle = (Circle) pointNodeList.get(1);
-            Line xLine = (Line) pointNodeList.get(2);
-            Line yLine = (Line) pointNodeList.get(3);
-            float temperature = (float) pointNodeList.get(4);
-            int x = (int) pointNodeList.get(5);
-            int y = (int) pointNodeList.get(6);
-            boolean maxClickPoint = (boolean) pointNodeList.get(7);
-            if (maxClickPoint){
-                if (maxWindow){
-                    imageZoomRatio = defaultImageZoomRatio;
-                }else {
-                    imageZoomRatio = maxToMinRatio;
-                }
-            }
-            label.setTranslateX((x*imageZoomRatio+7));
-            label.setTranslateY((y*imageZoomRatio-8));
-            circle.setCenterX(x*imageZoomRatio);
-            circle.setCenterY(y*imageZoomRatio);
-            double lineLEN = 7;
-            reLayoutLine(x*imageZoomRatio-lineLEN,y*imageZoomRatio,x*imageZoomRatio+lineLEN,y*imageZoomRatio,xLine);
-            reLayoutLine(x*imageZoomRatio,y*imageZoomRatio-lineLEN,x*imageZoomRatio,y*imageZoomRatio+lineLEN,yLine);
+            boolean maxClickPoint = pointTemperature.isMaxWindowDraw();
+            reLayoutPointLocation(pointNodeList,maxClickPoint);
         }
     }
 
@@ -136,6 +119,61 @@ public class WindowChange {
         line.setStartY(StartY);
         line.setEndX(EndX);
         line.setEndY(EndY);
+    }
+
+    private void reLayoutPointLocation(ArrayList pointNodeList,boolean maxClickPoint){
+        Label label = (Label) pointNodeList.get(0);
+        Circle circle = (Circle) pointNodeList.get(1);
+        Line xLine = (Line) pointNodeList.get(2);
+        Line yLine = (Line) pointNodeList.get(3);
+        float temperature = (float) pointNodeList.get(4);
+        int x = (int) pointNodeList.get(5);
+        int y = (int) pointNodeList.get(6);
+        if (maxClickPoint){
+            if (maxWindow){
+                imageZoomRatio = defaultImageZoomRatio;
+            }else {
+                imageZoomRatio = maxToMinRatio;
+            }
+        }
+        label.setTranslateX((x*imageZoomRatio+7));
+        label.setTranslateY((y*imageZoomRatio-8));
+        circle.setCenterX(x*imageZoomRatio);
+        circle.setCenterY(y*imageZoomRatio);
+        double lineLEN = 7;
+        reLayoutLine(x*imageZoomRatio-lineLEN,y*imageZoomRatio,x*imageZoomRatio+lineLEN,y*imageZoomRatio,xLine);
+        reLayoutLine(x*imageZoomRatio,y*imageZoomRatio-lineLEN,x*imageZoomRatio,y*imageZoomRatio+lineLEN,yLine);
+    }
+
+    private void reLayoutBoxTemperatureLocation() {
+        for (int i = 0; i < BoxTemperatureManager.getInstance().boxTemperatureList.size(); i++) {
+            BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
+            boolean maxClickPoint = boxTemperature.isMaxWindowDraw();
+            if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()){
+                ArrayList boxTemperatureNodeMaxList = boxTemperature.getBoxTemperatureNodeMax();
+                reLayoutPointLocation(boxTemperatureNodeMaxList,maxClickPoint);
+            }
+            if (!boxTemperature.getBoxTemperatureNodeMin().isEmpty()){
+                ArrayList boxTemperatureNodeMinList = boxTemperature.getBoxTemperatureNodeMin();
+                reLayoutPointLocation(boxTemperatureNodeMinList,maxClickPoint);
+            }
+//            topLine = drawLine(startLineX, startLineY, endLineX, startLineY,Configs.white_color);
+            reLayoutLine(boxTemperature.getStartLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
+                    boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
+                    boxTemperature.getTopLine());
+//            bottomLine = drawLine(startLineX, endLineY, endLineX, endLineY,Configs.white_color);
+            reLayoutLine(boxTemperature.getStartLineX()*imageZoomRatio,boxTemperature.getEndLineY()*imageZoomRatio,
+                    boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getEndLineY()*imageZoomRatio,
+                    boxTemperature.getBottomLine());
+//            leftLine = drawLine(startLineX, startLineY, startLineX, endLineY,Configs.white_color);
+            reLayoutLine(boxTemperature.getStartLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
+                    boxTemperature.getStartLineX()*imageZoomRatio,boxTemperature.getEndLineY()*imageZoomRatio,
+                    boxTemperature.getLeftLine());
+//            rightLine = drawLine(endLineX, startLineY, endLineX, endLineY,Configs.white_color);
+            reLayoutLine(boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
+                    boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getEndLineY()*imageZoomRatio,
+                    boxTemperature.getRightLine());
+        }
     }
 
 

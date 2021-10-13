@@ -5,9 +5,7 @@ import com.yuneec.image.Configs;
 import com.yuneec.image.module.Temperature;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.point.PointTemperature;
-import com.yuneec.image.utils.BackStepManager;
-import com.yuneec.image.utils.TemperatureAlgorithm;
-import com.yuneec.image.utils.Utils;
+import com.yuneec.image.utils.*;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 
@@ -64,6 +62,7 @@ public class BoxTemperatureManager {
     }
 
     public void addBoxTemperature(BoxTemperature boxTemperature){
+        boxTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
         boxTemperatureList.add(boxTemperature);
         BackStepManager.getInstance().addTemperatureInfo(boxTemperature);
     }

@@ -216,10 +216,10 @@ public class CenterPane {
         if (!MouseReleased){
             showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
         }
-        topLine = drawLine(startLineX, startLineY, x, startLineY,Configs.white_color);
-        bottomLine = drawLine(startLineX, y, x, y,Configs.white_color);
-        leftLine = drawLine(startLineX, startLineY, startLineX, y,Configs.white_color);
-        rightLine = drawLine(x, startLineY, x, y,Configs.white_color);
+        topLine = drawLine(startLineX, startLineY, endLineX, startLineY,Configs.white_color);
+        bottomLine = drawLine(startLineX, endLineY, endLineX, endLineY,Configs.white_color);
+        leftLine = drawLine(startLineX, startLineY, startLineX, endLineY,Configs.white_color);
+        rightLine = drawLine(endLineX, startLineY, endLineX, endLineY,Configs.white_color);
         showImagePane.getChildren().addAll(topLine, bottomLine, leftLine, rightLine);
     }
 
@@ -261,7 +261,6 @@ public class CenterPane {
         onePointTemperatureNode.add(temperature);//original temperature ℃
         onePointTemperatureNode.add(x);
         onePointTemperatureNode.add(y);
-        onePointTemperatureNode.add(WindowChange.I().maxWindow);
         return onePointTemperatureNode;
     }
 

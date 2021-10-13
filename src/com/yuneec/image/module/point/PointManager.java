@@ -7,6 +7,7 @@ import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.utils.BackStepManager;
 import com.yuneec.image.utils.TemperatureAlgorithm;
 import com.yuneec.image.utils.Utils;
+import com.yuneec.image.utils.WindowChange;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 
@@ -37,6 +38,7 @@ public class PointManager {
         if(Utils.mouseLeftClick(e)){
             ArrayList pointNodeList = CenterPane.getInstance().addLabelInImage(x,y,CenterPane.getInstance().pointTemperature, Configs.white_color);
             PointTemperature pointTemperature = new PointTemperature(pointNodeList);
+            pointTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
             pointTemperatureNodeList.add(pointTemperature);
             BackStepManager.getInstance().addTemperatureInfo(pointTemperature);
         }

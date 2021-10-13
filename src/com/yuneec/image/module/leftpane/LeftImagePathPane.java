@@ -99,7 +99,7 @@ public class LeftImagePathPane{
                 }
                 if (Utils.mouseLeftClick(mouseEvent)){
                     if(mouseEvent.getClickCount() == 2) {
-                        if (Global.currentOpenImagePath != null){
+                        if (Global.currentOpenImagePath != null && (isTrueImagePathEnding(filePath))){
                             boolean result = YDialog.showConfirmDialog(Language.getString(
                                     "Make sure to open the new image and \nyour previous action will be cleared !",
                                     "确认打开新图片，您上次的操作会被清除 !"));
