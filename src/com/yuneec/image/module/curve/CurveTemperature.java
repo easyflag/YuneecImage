@@ -30,4 +30,14 @@ public class CurveTemperature extends Temperature {
         return curveTemperatureNodeMin;
     }
 
+    private boolean maxWindowDraw;
+
+    public boolean isMaxWindowDraw() {
+        return maxWindowDraw;
+    }
+
+    public void setMaxWindowDraw(boolean maxWindowDraw) {
+        this.maxWindowDraw = maxWindowDraw;
+    }
+
 }

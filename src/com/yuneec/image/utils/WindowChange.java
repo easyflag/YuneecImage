@@ -6,6 +6,9 @@ import com.yuneec.image.Global;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.curve.CurveManager;
+import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.curve.OneLine;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import javafx.geometry.Rectangle2D;
@@ -103,6 +106,7 @@ public class WindowChange {
         }
         reLayoutPointTemperatureLocation();
         reLayoutBoxTemperatureLocation();
+        reLayoutCurveTemperatureLocation();
     }
 
     private void reLayoutPointTemperatureLocation() {
@@ -173,6 +177,28 @@ public class WindowChange {
             reLayoutLine(boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
                     boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getEndLineY()*imageZoomRatio,
                     boxTemperature.getRightLine());
+        }
+    }
+
+    public void reLayoutCurveTemperatureLocation(){
+        for (int i = 0; i < CurveManager.getInstance().curveTemperatureList.size(); i++) {
+            CurveTemperature curveTemperature = (CurveTemperature) CurveManager.getInstance().curveTemperatureList.get(i);
+            boolean maxClickPoint = curveTemperature.isMaxWindowDraw();
+            if (!curveTemperature.getCurveTemperatureNodeMax().isEmpty()){
+                ArrayList curveTemperatureNodeMax = curveTemperature.getCurveTemperatureNodeMax();
+                reLayoutPointLocation(curveTemperatureNodeMax,maxClickPoint);
+            }
+            if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
+                ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
+                reLayoutPointLocation(curveTemperatureNodeMin,maxClickPoint);
+            }
+            ArrayList allLine = curveTemperature.getAllLine();
+            for (int j=0;j<allLine.size();j++){
+                OneLine oneLine = (OneLine) allLine.get(j);
+                reLayoutLine(oneLine.getStartX()*imageZoomRatio,oneLine.getStartY()*imageZoomRatio,
+                        oneLine.getEndX()*imageZoomRatio,oneLine.getEndY()*imageZoomRatio,
+                        oneLine.getLine());
+            }
         }
     }
 

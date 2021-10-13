@@ -5,10 +5,7 @@ import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.module.Temperature;
 import com.yuneec.image.module.box.BoxTemperature;
-import com.yuneec.image.utils.BackStepManager;
-import com.yuneec.image.utils.TemperatureAlgorithm;
-import com.yuneec.image.utils.Utils;
-import com.yuneec.image.utils.YLog;
+import com.yuneec.image.utils.*;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
 
@@ -54,7 +51,7 @@ public class CurveManager {
         this.x = x;
         this.y = y;
         if (status == MouseStatus.MousePressed){
-            if (BackStepManager.getInstance().getCurrentCurveCount() == BackStepManager.MAX_CURVE_COUNT){
+            if (BackStepManager.getInstance().getCurrentCurveCount() == BackStepManager.MAX_CURVE_COUNT && BackStepManager.openTemperatureLimit){
                 BackStepManager.getInstance().backStep(Temperature.TYPE.CURVE);
             }
             this.lastx = x;
@@ -65,7 +62,8 @@ public class CurveManager {
         }
         Line line = CenterPane.getInstance().drawLine(lastx,lasty,x,y,Configs.white_color);
         CenterPane.getInstance().showImagePane.getChildren().add(line);
-        lineList.add(line);
+        OneLine oneLine = new OneLine(line,lastx,lasty,x,y);
+        lineList.add(oneLine);
         this.lastx = x;
         this.lasty = y;
 
@@ -129,6 +127,7 @@ public class CurveManager {
         ArrayList curveTemperatureNodeMin = CenterPane.getInstance().addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
 
         CurveTemperature curveTemperature = new CurveTemperature(lineList,curveTemperatureNodeMax,curveTemperatureNodeMin);
+        curveTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
         curveTemperatureList.add(curveTemperature);
         BackStepManager.getInstance().addTemperatureInfo(curveTemperature);
     }

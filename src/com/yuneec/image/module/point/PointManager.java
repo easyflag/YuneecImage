@@ -32,7 +32,7 @@ public class PointManager {
         if (CenterPane.getInstance().centerSettingFlag != CenterPane.CenterSettingSelect.POINT) {
             return;
         }
-        if (BackStepManager.getInstance().getCurrentPointCount() == BackStepManager.MAX_POINT_COUNT){
+        if (BackStepManager.getInstance().getCurrentPointCount() == BackStepManager.MAX_POINT_COUNT && BackStepManager.openTemperatureLimit){
             BackStepManager.getInstance().backStep(Temperature.TYPE.POINT);
         }
         if(Utils.mouseLeftClick(e)){

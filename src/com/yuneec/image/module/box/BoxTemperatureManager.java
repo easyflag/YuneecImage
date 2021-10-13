@@ -47,7 +47,7 @@ public class BoxTemperatureManager {
         this.x = x;
         this.y = y;
         if (status == CurveManager.MouseStatus.MousePressed){
-            if (BackStepManager.getInstance().getCurrentBoxCount() == BackStepManager.MAX_BOX_COUNT){
+            if (BackStepManager.getInstance().getCurrentBoxCount() == BackStepManager.MAX_BOX_COUNT && BackStepManager.openTemperatureLimit){
                 BackStepManager.getInstance().backStep(Temperature.TYPE.BOX);
             }
             this.lastx = x;

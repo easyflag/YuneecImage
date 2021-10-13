@@ -6,6 +6,7 @@ import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.curve.OneLine;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 
@@ -15,6 +16,7 @@ public class BackStepManager {
 
     public ArrayList temperatureInfoList = new ArrayList(); // include box and curve
 
+    public static final boolean openTemperatureLimit = false;
     public static final int MAX_POINT_COUNT = 10;
     public static final int MAX_BOX_COUNT = 3;
     public static final int MAX_CURVE_COUNT = 3;
@@ -50,7 +52,11 @@ public class BackStepManager {
                 CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMin());
             } else if (type == Temperature.TYPE.CURVE){
                 CurveTemperature curveTemperature = (CurveTemperature) temperatureInfoList.get(endIndex);
-                CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getAllLine());
+                ArrayList allLine = curveTemperature.getAllLine();
+                for (int i=0;i<allLine.size();i++){
+                    OneLine oneLine = (OneLine) allLine.get(i);
+                    CenterPane.getInstance().showImagePane.getChildren().removeAll(oneLine.getLine());
+                }
                 CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getCurveTemperatureNodeMax());
                 CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getCurveTemperatureNodeMin());
             }
@@ -77,7 +83,11 @@ public class BackStepManager {
                         BoxTemperatureManager.getInstance().boxTemperatureList.remove(BoxTemperatureManager.getInstance().boxTemperatureList.size()-1);
                     } else if (type == Temperature.TYPE.CURVE){
                         CurveTemperature curveTemperature = (CurveTemperature) temperature;
-                        CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getAllLine());
+                        ArrayList allLine = curveTemperature.getAllLine();
+                        for (int j=0;j<allLine.size();j++){
+                            OneLine oneLine = (OneLine) allLine.get(j);
+                            CenterPane.getInstance().showImagePane.getChildren().removeAll(oneLine.getLine());
+                        }
                         CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getCurveTemperatureNodeMax());
                         CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getCurveTemperatureNodeMin());
                         CurveManager.getInstance().curveTemperatureList.remove(CurveManager.getInstance().curveTemperatureList.size()-1);
