@@ -115,6 +115,7 @@ public class LeftImagePathPane{
                             Global.currentOpenImagePath = filePath.replace("\\", "\\\\");
                             YLog.I("Double Click ,Global.currentOpenImagePath :" + Global.currentOpenImagePath);
                             CenterPane.getInstance().showImage();
+                            WindowChange.I().reLoadImage();
                         }
                     }
                     if(mouseEvent.getClickCount() == 1){

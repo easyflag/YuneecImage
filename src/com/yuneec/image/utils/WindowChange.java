@@ -77,7 +77,7 @@ public class WindowChange {
         }, 100);
     }
 
-    private void reLoadImage() {
+    public void reLoadImage() {
         if (maxWindow) {
             GuideTemperatureAlgorithm.SupportScale = true;
             Global.currentOpenImageWidth = Configs.DefaultImageWidth * imageZoomRatio;
