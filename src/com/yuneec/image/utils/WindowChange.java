@@ -26,6 +26,7 @@ public class WindowChange {
     private static WindowChange instance;
     public boolean maxWindow = false;
     private final double defaultImageZoomRatio = 1;
+    private double maxImageZoomRatio;
     private double imageZoomRatio = defaultImageZoomRatio;
     private double maxToMinRatio;
 
@@ -68,6 +69,7 @@ public class WindowChange {
                     imageZoomRatio = hRatio;
                 }
                 imageZoomRatio-=0.1;
+                maxImageZoomRatio = imageZoomRatio;
 //                YLog.I("WindowChange   width:" + width + " , height:" + height + "  ,max :" + max +
 //                        " ,wRatio:" + wRatio + " ,hRatio:" + hRatio + " ,imageZoomRatio:" + imageZoomRatio);
                 reLoadImage();
@@ -77,6 +79,7 @@ public class WindowChange {
 
     private void reLoadImage() {
         if (maxWindow) {
+            GuideTemperatureAlgorithm.SupportScale = true;
             Global.currentOpenImageWidth = Configs.DefaultImageWidth * imageZoomRatio;
             Global.currentOpenImageHeight = Configs.DefaultImageHeight * imageZoomRatio;
             maxToMinRatio = Configs.DefaultImageWidth / Global.currentOpenImageWidth;
@@ -85,6 +88,8 @@ public class WindowChange {
             CenterPane.getInstance().showImagePane.setPrefWidth(Configs.DefaultImageWidth * imageZoomRatio);
             CenterPane.getInstance().showImagePane.setPrefHeight(Configs.DefaultImageHeight * imageZoomRatio);
         } else {
+            GuideTemperatureAlgorithm.SupportScale = false;
+            imageZoomRatio = defaultImageZoomRatio;
             Global.currentOpenImageWidth = Configs.DefaultImageWidth;
             Global.currentOpenImageHeight = Configs.DefaultImageHeight;
             CenterPane.getInstance().imageView.setFitWidth(Configs.DefaultImageWidth);
@@ -97,13 +102,6 @@ public class WindowChange {
     }
 
     private void reLayoutTemperature() {
-        if (maxWindow) {
-            GuideTemperatureAlgorithm.SupportScale = true;
-        }else {
-//            YLog.I("maxToMinRatio:" + maxToMinRatio);
-            imageZoomRatio = defaultImageZoomRatio;
-            GuideTemperatureAlgorithm.SupportScale = false;
-        }
         reLayoutPointTemperatureLocation();
         reLayoutBoxTemperatureLocation();
         reLayoutCurveTemperatureLocation();
@@ -114,18 +112,11 @@ public class WindowChange {
             PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
             ArrayList pointNodeList = pointTemperature.getPointTemperatureNode();
             boolean maxClickPoint = pointTemperature.isMaxWindowDraw();
-            reLayoutPointLocation(pointNodeList,maxClickPoint);
+            reLayoutPoint(pointNodeList,maxClickPoint);
         }
     }
 
-    private void reLayoutLine(double StartX, double StartY, double EndX, double EndY, Line line) {
-        line.setStartX(StartX);
-        line.setStartY(StartY);
-        line.setEndX(EndX);
-        line.setEndY(EndY);
-    }
-
-    private void reLayoutPointLocation(ArrayList pointNodeList,boolean maxClickPoint){
+    private void reLayoutPoint(ArrayList pointNodeList,boolean maxClickPoint){
         Label label = (Label) pointNodeList.get(0);
         Circle circle = (Circle) pointNodeList.get(1);
         Line xLine = (Line) pointNodeList.get(2);
@@ -139,7 +130,14 @@ public class WindowChange {
             }else {
                 imageZoomRatio = maxToMinRatio;
             }
+        }else {
+            if (maxWindow){
+                imageZoomRatio = maxImageZoomRatio;
+            }else {
+                imageZoomRatio = defaultImageZoomRatio;
+            }
         }
+//        YLog.I("------> imageZoomRatio :" +imageZoomRatio);
         label.setTranslateX((x*imageZoomRatio+7));
         label.setTranslateY((y*imageZoomRatio-8));
         circle.setCenterX(x*imageZoomRatio);
@@ -149,17 +147,27 @@ public class WindowChange {
         reLayoutLine(x*imageZoomRatio,y*imageZoomRatio-lineLEN,x*imageZoomRatio,y*imageZoomRatio+lineLEN,yLine);
     }
 
+    private void reLayoutLine(double StartX, double StartY, double EndX, double EndY, Line line) {
+        line.setStartX(StartX);
+        line.setStartY(StartY);
+        line.setEndX(EndX);
+        line.setEndY(EndY);
+    }
+
     private void reLayoutBoxTemperatureLocation() {
         for (int i = 0; i < BoxTemperatureManager.getInstance().boxTemperatureList.size(); i++) {
             BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
             boolean maxClickPoint = boxTemperature.isMaxWindowDraw();
+//            YLog.I("reLayoutBoxTemperatureLocation maxClickPoint :" + maxClickPoint +
+//                    " size:" + BoxTemperatureManager.getInstance().boxTemperatureList.size() +
+//                    " isMaxWindowDraw:" + boxTemperature.isMaxWindowDraw());
             if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()){
                 ArrayList boxTemperatureNodeMaxList = boxTemperature.getBoxTemperatureNodeMax();
-                reLayoutPointLocation(boxTemperatureNodeMaxList,maxClickPoint);
+                reLayoutPoint(boxTemperatureNodeMaxList,maxClickPoint);
             }
             if (!boxTemperature.getBoxTemperatureNodeMin().isEmpty()){
                 ArrayList boxTemperatureNodeMinList = boxTemperature.getBoxTemperatureNodeMin();
-                reLayoutPointLocation(boxTemperatureNodeMinList,maxClickPoint);
+                reLayoutPoint(boxTemperatureNodeMinList,maxClickPoint);
             }
 //            topLine = drawLine(startLineX, startLineY, endLineX, startLineY,Configs.white_color);
             reLayoutLine(boxTemperature.getStartLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
@@ -186,11 +194,11 @@ public class WindowChange {
             boolean maxClickPoint = curveTemperature.isMaxWindowDraw();
             if (!curveTemperature.getCurveTemperatureNodeMax().isEmpty()){
                 ArrayList curveTemperatureNodeMax = curveTemperature.getCurveTemperatureNodeMax();
-                reLayoutPointLocation(curveTemperatureNodeMax,maxClickPoint);
+                reLayoutPoint(curveTemperatureNodeMax,maxClickPoint);
             }
             if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
                 ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
-                reLayoutPointLocation(curveTemperatureNodeMin,maxClickPoint);
+                reLayoutPoint(curveTemperatureNodeMin,maxClickPoint);
             }
             ArrayList allLine = curveTemperature.getAllLine();
             for (int j=0;j<allLine.size();j++){
