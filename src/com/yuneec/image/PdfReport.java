@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ import java.util.Date;
 
 public class PdfReport {
 
-	private String tempImagePath = "C:\\tempYImage.png";
+	private String tempImagePath = FileSystemView.getFileSystemView().getDefaultDirectory() + "\\tempYImage.png";
 	private static PdfReport pdfReport;
 	private Document document;
 	public static PdfReport getInstance() {
@@ -55,13 +56,12 @@ public class PdfReport {
  
             document.close();
 
-//			new File(tempImagePath).delete();
-
-			ToastUtil.toast(Language.getString("PDF report generated successfully !","PDF报告生成成功!"));
+			new File(tempImagePath).delete();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+		ToastUtil.toast(Language.getString("PDF report generated successfully !","PDF报告生成成功!"));
     }
  
 	private static Font titlefont,titlefontCh;
@@ -121,16 +121,8 @@ public class PdfReport {
 //		// 定位
 //		Anchor gotoP = new Anchor("goto");
 //		gotoP.setReference("#top");
-		/*
-		// 添加图片
-		WritableImage showImagePane = CenterPane.getInstance().showImagePane.snapshot(new SnapshotParameters(), null);
-		ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File(tempImagePath));
-		Image image = Image.getInstance(tempImagePath);
-		image.setAlignment(Image.ALIGN_CENTER);
-		image.scalePercent(60); //依照比例缩放
-		*/
 
-		PdfPTable jpgInfoTable = getJpgInfoTable();
+		//getJpgInfoTable();
 		// 表格
 		PdfPTable pointTemperatureTable = getPointTemperature();
 
@@ -145,8 +137,7 @@ public class PdfReport {
 		Paragraph paragraphImagePath = new Paragraph(Global.currentOpenImagePath, headfont);
 		document.add(paragraphImagePath);
 
-		document.add(jpgInfoTable);
-		document.add(p2);
+//		document.add(p2);
 		document.add(pointTemperatureTable);
 
 		if(!BoxTemperatureManager.getInstance().boxTemperatureList.isEmpty()){
@@ -160,7 +151,25 @@ public class PdfReport {
 		}
 
 //		document.add(paragraphEnd);
-//		document.add(image);
+
+		addImage();
+//
+	}
+
+	private void addImage() {
+		try {
+			WritableImage showImagePane = CenterPane.getInstance().showImagePane.snapshot(new SnapshotParameters(), null);
+			ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File(tempImagePath));
+			Image image = Image.getInstance(tempImagePath);
+			image.setAlignment(Image.ALIGN_CENTER);
+			image.scalePercent(60); //依照比例缩放
+			document.add(image);
+		}catch (Exception e){
+			ToastUtil.toast(Language.getString("PDF report generated fail !","PDF报告生成失败!"));
+		}finally {
+			document.close();
+		}
+		// 添加图片
 	}
 
 	private Paragraph getBoxTemperature(BoxTemperature boxTemperature) {
@@ -177,7 +186,7 @@ public class PdfReport {
 		return paragraph;
 	}
 
-	private PdfPTable getJpgInfoTable() throws Exception{
+	private void getJpgInfoTable() throws Exception{
 		PdfPTable table = createTable(new float[] {150, 150},Element.ALIGN_LEFT);
 		PdfPCell cellTitle = createCell(Language.getString("Image Info:","图片信息:"),
 				Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 2, false);
@@ -192,7 +201,7 @@ public class PdfReport {
 			table.addCell(createCell(tagName, Language.isEnglish()?textfont:textfontCh));
 			table.addCell(createCell(description, Language.isEnglish()?textfont:textfontCh));
 		}
-		return table;
+		document.add(table);
 	}
 
 	private PdfPTable getPointTemperature() {

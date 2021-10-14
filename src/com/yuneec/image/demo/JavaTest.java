@@ -4,6 +4,7 @@ import com.yuneec.image.utils.ByteUtils;
 import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.YLog;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 
 public class JavaTest {
@@ -16,6 +17,10 @@ public class JavaTest {
     }
 
     private static void test2() {
+
+        FileSystemView fsv = FileSystemView.getFileSystemView();
+        System.out.println("桌面路径："+fsv.getHomeDirectory());
+        System.out.println("默认路径：" + fsv.getDefaultDirectory());
 
     }
 
