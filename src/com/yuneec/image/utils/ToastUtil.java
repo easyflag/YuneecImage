@@ -42,7 +42,10 @@ public class ToastUtil {
     }
 
     private static void init(String msg) {
-        stage=new Stage();
+        if (stage != null){
+            stage.close();
+        }
+        stage = new Stage();
         Label label=new Label(msg);
         label.setStyle("-fx-background: rgba(56,56,56,0.7);-fx-border-radius: 25;-fx-background-radius: 25");
         label.setTextFill(Color.rgb(225,255,226));
