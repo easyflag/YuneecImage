@@ -69,7 +69,7 @@ public class CustomParameters extends Application {
         vBox.setPrefHeight(windowHeight - 10);
         vBox.setPadding(new Insets(15, 15, 5, 15));
 
-        HBox hBox1 = getHBox(Language.getString("emissivty","发射率"),""+GuideTemperatureAlgorithm.pParamExt.emiss / 100f); //发射率
+        HBox hBox1 = getHBox(Language.getString("emissivity","发射率"),""+GuideTemperatureAlgorithm.pParamExt.emiss / 100f); //发射率
         HBox hBox2 = getHBox("relHum",""+GuideTemperatureAlgorithm.pParamExt.relHum);
         HBox hBox3 = getHBox(Language.getString("distance","距离"),""+GuideTemperatureAlgorithm.pParamExt.distance / 10); //距离
         HBox hBox4 = getHBox(Language.getString("reflectedTemperature","反射温度"),""+GuideTemperatureAlgorithm.pParamExt.reflectedTemper / 10);//反射温度
