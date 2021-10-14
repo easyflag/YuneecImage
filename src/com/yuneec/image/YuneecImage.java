@@ -70,7 +70,7 @@ public class YuneecImage extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 //				YLog.I("maximizedProperty  oldValue:" + oldValue + " ,newValue:" + newValue);
-				WindowChange.I().setWindowMax(newValue);
+//				WindowChange.I().setWindowMax(newValue);
 			}
 		});
 

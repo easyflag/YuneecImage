@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class CustomParameters extends Application {
     double screenWidth,screenHeight;
     double windowWidth = 700;
-    double windowHeight = 350;
+    double windowHeight = 260;
     FlowPane rootPane;
 
     public void start(Stage primaryStage) {
@@ -52,7 +52,7 @@ public class CustomParameters extends Application {
         screenWidth = rectangle2D.getWidth();
         screenHeight = rectangle2D.getHeight();
         primaryStage.setX(screenWidth/2-windowWidth/2 - 60);
-        primaryStage.setY(screenHeight/2-Configs.SceneHeight/2 + 70);
+        primaryStage.setY(screenHeight/2-Configs.SceneHeight/2 + 100);
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.resizableProperty().setValue(false);
         primaryStage.setAlwaysOnTop(true);
