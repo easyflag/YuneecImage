@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 public class CustomParameters extends Application {
     double screenWidth,screenHeight;
-    double windowWidth = 620;
+    double windowWidth = 700;
     double windowHeight = 350;
     FlowPane rootPane;
 
@@ -51,8 +51,8 @@ public class CustomParameters extends Application {
         Rectangle2D rectangle2D = screen.getBounds();
         screenWidth = rectangle2D.getWidth();
         screenHeight = rectangle2D.getHeight();
-        primaryStage.setX(screenWidth/2-windowWidth/2 - 50);
-        primaryStage.setY(screenHeight/2-Configs.SceneHeight/2 + 50);
+        primaryStage.setX(screenWidth/2-windowWidth/2 - 60);
+        primaryStage.setY(screenHeight/2-Configs.SceneHeight/2 + 70);
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.resizableProperty().setValue(false);
         primaryStage.setAlwaysOnTop(true);
@@ -69,11 +69,11 @@ public class CustomParameters extends Application {
         vBox.setPrefHeight(windowHeight - 10);
         vBox.setPadding(new Insets(15, 15, 5, 15));
 
-        HBox hBox1 = getHBox(Language.getString("emiss","发射率"),""+GuideTemperatureAlgorithm.pParamExt.emiss); //发射率
+        HBox hBox1 = getHBox(Language.getString("emissivty","发射率"),""+GuideTemperatureAlgorithm.pParamExt.emiss / 100f); //发射率
         HBox hBox2 = getHBox("relHum",""+GuideTemperatureAlgorithm.pParamExt.relHum);
-        HBox hBox3 = getHBox(Language.getString("distance","距离"),""+GuideTemperatureAlgorithm.pParamExt.distance); //距离
-        HBox hBox4 = getHBox(Language.getString("reflectedTemper","反射温度"),""+GuideTemperatureAlgorithm.pParamExt.reflectedTemper);//反射温度
-        HBox hBox5 = getHBox(Language.getString("atmosphericTemper","空气温度"),""+GuideTemperatureAlgorithm.pParamExt.atmosphericTemper);//空气温度
+        HBox hBox3 = getHBox(Language.getString("distance","距离"),""+GuideTemperatureAlgorithm.pParamExt.distance / 10); //距离
+        HBox hBox4 = getHBox(Language.getString("reflectedTemperature","反射温度"),""+GuideTemperatureAlgorithm.pParamExt.reflectedTemper / 10);//反射温度
+        HBox hBox5 = getHBox(Language.getString("atmosphericTemperature","空气温度"),""+GuideTemperatureAlgorithm.pParamExt.atmosphericTemper/ 10);//空气温度
         HBox hBox6 = getHBox("modifyK",""+GuideTemperatureAlgorithm.pParamExt.modifyK);
         HBox hBox7 = getHBox("modifyB",""+GuideTemperatureAlgorithm.pParamExt.modifyB);
 
@@ -103,11 +103,11 @@ public class CustomParameters extends Application {
     ArrayList textFieldList = new ArrayList();
     private void changeData() {
         try {
-            GuideTemperatureAlgorithm.pParamExt.emiss = Integer.parseInt(((TextField) textFieldList.get(0)).getText());
+            GuideTemperatureAlgorithm.pParamExt.emiss = (int) (Float.parseFloat(((TextField) textFieldList.get(0)).getText()) * 100);
             GuideTemperatureAlgorithm.pParamExt.relHum = Integer.parseInt(((TextField) textFieldList.get(1)).getText());
-            GuideTemperatureAlgorithm.pParamExt.distance = Integer.parseInt(((TextField) textFieldList.get(2)).getText());
-            GuideTemperatureAlgorithm.pParamExt.reflectedTemper = Short.parseShort(((TextField) textFieldList.get(3)).getText());
-            GuideTemperatureAlgorithm.pParamExt.atmosphericTemper = Short.parseShort(((TextField) textFieldList.get(4)).getText());
+            GuideTemperatureAlgorithm.pParamExt.distance = Integer.parseInt(((TextField) textFieldList.get(2)).getText()) * 10;
+            GuideTemperatureAlgorithm.pParamExt.reflectedTemper = (short) (Short.parseShort(((TextField) textFieldList.get(3)).getText()) * 10);
+            GuideTemperatureAlgorithm.pParamExt.atmosphericTemper = (short) (Short.parseShort(((TextField) textFieldList.get(4)).getText()) * 10);
             GuideTemperatureAlgorithm.pParamExt.modifyK = Integer.parseInt(((TextField) textFieldList.get(5)).getText());
             GuideTemperatureAlgorithm.pParamExt.modifyB = Short.parseShort(((TextField) textFieldList.get(6)).getText());
             YLog.I("changeData after -->" + "emiss:" + GuideTemperatureAlgorithm.pParamExt.emiss
@@ -127,6 +127,7 @@ public class CustomParameters extends Application {
 //            String result = DownLoad.I().sendPost(DownLoad.getUrl,null);
 //            System.out.println("" + result);
         }catch (Exception e){
+            e.printStackTrace();
             ToastUtil.toast("Change Failed !!!",new int[]{90,0});
         }
     }
@@ -138,14 +139,14 @@ public class CustomParameters extends Application {
         hBox1.setPadding(new Insets(5,5,5,5));
 
         Label text1 = new Label(name + " : " + data);
-        text1.setPrefWidth(180);
+        text1.setPrefWidth(220);
         text1.setTextFill(Color.web(Configs.white_color));
         text1.setFont(Font.font(14));
         hBox1.getChildren().add(text1);
 
         Label label = new Label("--->   " + Language.getString("new ","新的 ") + name + " : ");
         label.setFont(Font.font(14));
-        label.setPrefWidth(225);
+        label.setPrefWidth(265);
         label.setTextFill(Color.WHITE);
         TextField field = new TextField();
         field.setPrefSize(80, 25);
@@ -161,9 +162,9 @@ public class CustomParameters extends Application {
                 if (newValue.length()>5){
                     field.setText(newValue.substring(0,5));
                 }
-                if (!newValue.matches("\\d*")) {
-                    field.setText(newValue.replaceAll("[^\\d]", ""));
-                }
+//                if (!newValue.matches("\\d*")) {
+//                    field.setText(newValue.replaceAll("[^\\d]", ""));
+//                }
             }
         });
         return hBox1;

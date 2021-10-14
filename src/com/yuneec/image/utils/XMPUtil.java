@@ -150,16 +150,16 @@ public class XMPUtil {
         if (path == null){
             return;
         }
-        if(path.endsWith("emiss")){
-            GuideTemperatureAlgorithm.pParamExt.emiss = Integer.parseInt(value);
+        if(path.endsWith("emissivity")){
+            GuideTemperatureAlgorithm.pParamExt.emiss = (int) (Float.parseFloat(value) * 100);
         }else if(path.endsWith("relHum")){
             GuideTemperatureAlgorithm.pParamExt.relHum = Integer.parseInt(value);
         }else if(path.endsWith("distance")){
-            GuideTemperatureAlgorithm.pParamExt.distance = Integer.parseInt(value);
-        }else if(path.endsWith("reflectedTemper")){
-            GuideTemperatureAlgorithm.pParamExt.reflectedTemper = Short.parseShort(value);
-        }else if(path.endsWith("atmosphericTemper")){
-            GuideTemperatureAlgorithm.pParamExt.atmosphericTemper = Short.parseShort(value);
+            GuideTemperatureAlgorithm.pParamExt.distance = Integer.parseInt(value) * 10;
+        }else if(path.endsWith("reflectedTemperature")){
+            GuideTemperatureAlgorithm.pParamExt.reflectedTemper = (short) (Short.parseShort(value) * 10);
+        }else if(path.endsWith("atmosphericTemperature")){
+            GuideTemperatureAlgorithm.pParamExt.atmosphericTemper = (short) (Short.parseShort(value) * 10);
         }else if(path.endsWith("modifyK")){
             GuideTemperatureAlgorithm.pParamExt.modifyK = Integer.parseInt(value);
         }else if(path.endsWith("modifyB")){
