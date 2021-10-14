@@ -2,6 +2,7 @@ package com.yuneec.image.utils;
 
 import com.yuneec.image.Global;
 import com.yuneec.image.module.Language;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -22,6 +23,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class YDialog {
     public enum Response {
@@ -127,7 +130,7 @@ public class YDialog {
                 new ButtonType(Language.getString("YES","是"), ButtonBar.ButtonData.YES));
         alert.setTitle(Language.getString("Tips","提示"));
         alert.setHeaderText(message);
-        alert.initOwner(Global.primaryStage);
+//        alert.initOwner(Global.primaryStage);
         Optional<ButtonType> _buttonType = alert.showAndWait();
         if (_buttonType.get().getButtonData().equals(ButtonBar.ButtonData.YES)) {
             return true;
@@ -141,8 +144,16 @@ public class YDialog {
                 new ButtonType("OK", ButtonBar.ButtonData.YES));
         alert.setTitle(title);
         alert.setHeaderText(message);
-        alert.initOwner(Global.primaryStage);
+//        alert.initOwner(Global.primaryStage);
         alert.show();
+        TimerTask task= new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(()->alert.close());
+            }
+        };
+        Timer timer=new Timer();
+        timer.schedule(task,3000);
     }
 
 }

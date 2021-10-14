@@ -16,12 +16,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ToastUtil {
-    private static Stage stage=new Stage();
-    private static Label label=new Label();
+    private static Stage stage;
     private static int[] margin = {0,0};
-    static {
-        stage.initStyle(StageStyle.TRANSPARENT);
-    }
+
     public static void toast(String msg) {
         toast(msg,3000);
     }
@@ -33,20 +30,19 @@ public class ToastUtil {
 
 
     public static void toast(String msg, int time) {
-        label.setText(msg);
+        init(msg);
         TimerTask task= new TimerTask() {
             @Override
             public void run() {
                 Platform.runLater(()->stage.close());
             }
         };
-        init(msg);
         Timer timer=new Timer();
         timer.schedule(task,time);
-        stage.show();
     }
 
     private static void init(String msg) {
+        stage=new Stage();
         Label label=new Label(msg);
         label.setStyle("-fx-background: rgba(56,56,56,0.7);-fx-border-radius: 25;-fx-background-radius: 25");
         label.setTextFill(Color.rgb(225,255,226));
@@ -63,6 +59,8 @@ public class ToastUtil {
         stage.setX(r2.getWidth()/2 - 200 + margin[0]);
         stage.setY(r2.getHeight()/2 + 100 + margin[1]);
         stage.setScene(scene);
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.show();
     }
 }
 
