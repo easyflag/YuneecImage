@@ -2,8 +2,8 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "YuneecImage"
-#define MyAppVersion "1.0.5"
-#define MyAppPublisher "YuneecImage"
+#define MyAppVersion "1.0.6"
+#define MyAppPublisher "yuneec"
 #define MyAppURL "http://www.yuneec.com/"
 #define MyAppExeName "YuneecImage.exe"
 
@@ -11,7 +11,7 @@
 ; 注: AppId的值为单独标识该应用程序。
 ; 不要为其他安装程序使用相同的AppId值。
 ; (若要生成新的 GUID，可在菜单中点击 "工具|生成 GUID"。)
-AppId={{E62A34E0-CBD3-4704-B7B9-AC318023AA15}
+AppId={{405B4C0C-55E5-4052-8F1C-A70E212DCED0}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -19,7 +19,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={autopf}\YuneecImageTool
 DisableProgramGroupPage=yes
 ; 以下行取消注释，以在非管理安装模式下运行（仅为当前用户安装）。
 ;PrivilegesRequired=lowest
