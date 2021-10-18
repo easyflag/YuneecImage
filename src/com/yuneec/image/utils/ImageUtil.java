@@ -113,13 +113,13 @@ public class ImageUtil {
 		}
 		String imageWidth = "640";
 		String imageHeight = "512";
-		if(tagName.equals(RightImageInfo.sharpness[0])){
+		if(tagName.equals(RightImageInfo.resolution[0])){
 			imageWidth = description;
 		}
-		if(tagName.equals(RightImageInfo.sharpness[1])){
+		if(tagName.equals(RightImageInfo.resolution[1])){
 			imageHeight = description;
 		}
-		RightImageInfo.sharpness[4] = imageWidth + "x" + imageHeight;
+		RightImageInfo.resolution[4] = imageWidth + " x " + imageHeight;
 
 		if(tagName.equals(RightImageInfo.time[0])){
 			RightImageInfo.time[3] = description;

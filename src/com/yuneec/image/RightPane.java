@@ -169,7 +169,7 @@ public class RightPane {
         makeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.make[1],RightImageInfo.make[2]), RightImageInfo.make[3],0);
         modelLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.model[1],RightImageInfo.model[2]), RightImageInfo.model[3],1);
         imageDescriptionLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.imageDescription[1],RightImageInfo.imageDescription[2]), RightImageInfo.imageDescription[3],2);
-        sharpnessLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.sharpness[2],RightImageInfo.sharpness[3]), RightImageInfo.sharpness[4],3);
+        sharpnessLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.resolution[2],RightImageInfo.resolution[3]), RightImageInfo.resolution[4],3);
         timeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.time[1],RightImageInfo.time[2]), RightImageInfo.time[3],4);
         longitudeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.longitude[1],RightImageInfo.longitude[2]), RightImageInfo.longitude[3],5);
         latitudeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.latitude[1],RightImageInfo.latitude[2]), RightImageInfo.latitude[3],6);
@@ -200,7 +200,7 @@ public class RightPane {
         makeLabels[0].setText(Language.getString(RightImageInfo.make[1],RightImageInfo.make[2]));
         modelLabels[0].setText(Language.getString(RightImageInfo.model[1],RightImageInfo.model[2]));
         imageDescriptionLabels[0].setText(Language.getString(RightImageInfo.imageDescription[1],RightImageInfo.imageDescription[2]));
-        sharpnessLabels[0].setText(Language.getString(RightImageInfo.sharpness[2],RightImageInfo.sharpness[3]));
+        sharpnessLabels[0].setText(Language.getString(RightImageInfo.resolution[2],RightImageInfo.resolution[3]));
         timeLabels[0].setText(Language.getString(RightImageInfo.time[1],RightImageInfo.time[2]));
         longitudeLabels[0].setText(Language.getString(RightImageInfo.longitude[1],RightImageInfo.longitude[2]));
         latitudeLabels[0].setText(Language.getString(RightImageInfo.latitude[1],RightImageInfo.latitude[2]));

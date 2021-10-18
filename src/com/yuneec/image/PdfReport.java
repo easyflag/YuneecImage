@@ -180,6 +180,7 @@ public class PdfReport {
 			document.newPage();
 			Paragraph title = new Paragraph(Language.getString("Point Temperature Data:","点测温数据:"), Language.isEnglish()?headfont:headfontCh);
 			title.setAlignment(0);
+//			title.setLeading(30);
 			title.setIndentationLeft(12);
 			title.setSpacingBefore(15f);
 

@@ -8,7 +8,7 @@ public class RightImageInfo {
     public static String[] make = {"Make","Make","制造商",""};
     public static String[] model = {"Model","Model","型号",""};
     public static String[] imageDescription = {"Image Description","Image Name","文件名",""};
-    public static String[] sharpness = {"Image Width","Image Height","Sharpness ","分辨率",""};
+    public static String[] resolution = {"Image Width","Image Height","Resolution ","分辨率",""};
     public static String[] time = {"Date/Time Original","Time ","时间",""};
     public static String[] longitude = {"GPS Longitude","Longitude ","经度",""};
     public static String[] latitude = {"GPS Latitude","Latitude ","纬度",""};
