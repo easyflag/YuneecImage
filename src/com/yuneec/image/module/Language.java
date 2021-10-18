@@ -120,17 +120,7 @@ public class Language {
         TopMenuBar.getInstance().ChineseMenuItem.setText(Chinese_en);
         TopMenuBar.getInstance().customParametersMenuItem.setText(CustomParameters_en);
         TopMenuBar.getInstance().aboutMenuItem.setText(About_en);
-        if (RightPane.getInstance().imageInfoTagNameLabelList.size() >0){
-            for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size()-2;i++){
-                Label tagNamelabel = RightPane.getInstance().imageInfoTagNameLabelList.get(i);
-                tagNamelabel.setText(ImageUtil.whiteList[Arrays.asList(ImageUtil.whiteList_ch).indexOf(tagNamelabel.getText())]);
-            }
-            RightPane.getInstance().imageInfoTagNameLabelList.get(
-                    RightPane.getInstance().imageInfoTagNameLabelList.size()-2).setText(File_Size_en);
-            RightPane.getInstance().imageInfoTagNameLabelList.get(
-                    RightPane.getInstance().imageInfoTagNameLabelList.size()-1).setText(ColorPaletteTip_en);
-            RightPane.getInstance().setColorPaletteInfo();
-        }
+        RightPane.getInstance().setImageInfoLanguage();
         RightPane.getInstance().titlelabel.setText(Image_Info_en);
         String XYlabelText = RightPane.getInstance().showXYlabel.getText();
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_ch,Language.Temperature_en));
@@ -158,17 +148,7 @@ public class Language {
         TopMenuBar.getInstance().ChineseMenuItem.setText(Chinese_ch);
         TopMenuBar.getInstance().customParametersMenuItem.setText(CustomParameters_ch);
         TopMenuBar.getInstance().aboutMenuItem.setText(About_ch);
-        if (RightPane.getInstance().imageInfoTagNameLabelList.size() >0){
-            for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size()-2;i++){
-                Label tagNamelabel = RightPane.getInstance().imageInfoTagNameLabelList.get(i);
-                tagNamelabel.setText(ImageUtil.whiteList_ch[Arrays.asList(ImageUtil.whiteList).indexOf(tagNamelabel.getText())]);
-            }
-            RightPane.getInstance().imageInfoTagNameLabelList.get(
-                    RightPane.getInstance().imageInfoTagNameLabelList.size()-2).setText(File_Size_ch);
-            RightPane.getInstance().imageInfoTagNameLabelList.get(
-                    RightPane.getInstance().imageInfoTagNameLabelList.size()-1).setText(ColorPaletteTip_ch);
-            RightPane.getInstance().setColorPaletteInfo();
-        }
+        RightPane.getInstance().setImageInfoLanguage();
         RightPane.getInstance().titlelabel.setText(Image_Info_ch);
         String XYlabelText = RightPane.getInstance().showXYlabel.getText();
         RightPane.getInstance().showXYlabel.setText(XYlabelText.replace(Language.Temperature_en,Language.Temperature_ch));

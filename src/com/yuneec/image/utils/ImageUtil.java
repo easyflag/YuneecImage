@@ -14,6 +14,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.yuneec.image.Global;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.RightImageInfo;
 
 public class ImageUtil {
 
@@ -79,8 +80,6 @@ public class ImageUtil {
 	
 	private static void print(Metadata metadata, String method){
 //        YLog.I("---------------- "+method+" ----------------");
-        imageInfoList.clear();
-		imageInfoSortList.clear();
         // A Metadata object contains multiple Directory objects
         Metadata metadataImage = metadata;
         for (Directory directory : metadata.getDirectories()) {
@@ -95,59 +94,47 @@ public class ImageUtil {
                 System.err.println("ERROR: " + error);
             }
         }
-        sortImageInfoList();
     }
 
-	private static void sortImageInfoList() {
-		String[] list = Language.isEnglish()?whiteList:whiteList_ch;
-		for (int i=0;i<list.length;i++){
-			String name = list[i];
-			int index = getIndexForImageInfoList(name);
-			imageInfoSortList.add(imageInfoList.get(index));
-		}
-		imageInfoSortList.add(imageInfoList.get(imageInfoList.size()-1));
-	}
-
-	private static int getIndexForImageInfoList(String name) {
-		int index = 0;
-		for (int i=0;i<imageInfoList.size();i++){
-			ArrayList<String> list = imageInfoList.get(i);
-			String tagName = list.get(0);
-			if (name.equals(tagName)){
-				index = i;
-				break;
-			}
-		}
-		return index;
-	}
-
-	public static String[] whiteList = {"Make","Model","Image Description","Image Width","Image Height","Date/Time Original","GPS Longitude","GPS Latitude"};
-	public static String[] whiteList_ch = {"制造","型号","文件名","宽度","高度","日期","经度","纬度"};
-	private static ArrayList<ArrayList<String>> imageInfoList = new  ArrayList<ArrayList<String>>();
-	public static ArrayList<ArrayList<String>> imageInfoSortList = new  ArrayList<ArrayList<String>>();
 	private static void storeImageInfo(Tag tag) {
 //		String s = tag.getDirectoryName() + " ; " + tag.getTagName()+ " ; " + tag.getDescription();
 //    	YLog.I("EXIF ---> "+s);
 		String directoryName = tag.getDirectoryName();
     	String tagName = tag.getTagName();
     	String description = tag.getDescription();
-//    	if(directoryName.startsWith("Exif")){
-			if(Arrays.asList(whiteList).contains(tagName)){
-				ArrayList<String> arrayList = new ArrayList<String>();
-				int index = Arrays.asList(whiteList).indexOf(tagName);
-				arrayList.add(Language.getString(tagName,whiteList_ch[index]));
-				arrayList.add(description);
-				imageInfoList.add(arrayList);
-			}
-//		}
-    	if(tagName.equals("File Size")){
-			ArrayList<String> arrayList = new ArrayList<String>();
-			arrayList.add(Language.getString(tagName,Language.File_Size_ch));
-			Float size = Float.parseFloat(description.replace("bytes","").trim()) / 1024 / 1024f;
-			arrayList.add(String.format("%.3f",size) + " M");
-			imageInfoList.add(arrayList);
+		if(tagName.equals(RightImageInfo.make[0])){
+			RightImageInfo.make[3] = description;
 		}
-		if(tagName.equals("Model")){
+		if(tagName.equals(RightImageInfo.model[0])){
+			RightImageInfo.model[3] = description;
+		}
+		if(tagName.equals(RightImageInfo.imageDescription[0])){
+			RightImageInfo.imageDescription[3] = description;
+		}
+		String imageWidth = "640";
+		String imageHeight = "512";
+		if(tagName.equals(RightImageInfo.sharpness[0])){
+			imageWidth = description;
+		}
+		if(tagName.equals(RightImageInfo.sharpness[1])){
+			imageHeight = description;
+		}
+		RightImageInfo.sharpness[4] = imageWidth + "x" + imageHeight;
+
+		if(tagName.equals(RightImageInfo.time[0])){
+			RightImageInfo.time[3] = description;
+		}
+		if(tagName.equals(RightImageInfo.longitude[0])){
+			RightImageInfo.longitude[3] = description;
+		}
+		if(tagName.equals(RightImageInfo.latitude[0])){
+			RightImageInfo.latitude[3] = description;
+		}
+		 if(tagName.equals(RightImageInfo.fileSize[0])){
+			Float size = Float.parseFloat(description.replace("bytes","").trim()) / 1024 / 1024f;
+			RightImageInfo.fileSize[3] = (String.format("%.3f",size) + " M");
+		}
+		 if(tagName.equals("Model")){
 //			YLog.I(" Model ---> "+ description);
 			Global.cameraMode = description;
 		}

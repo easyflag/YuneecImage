@@ -193,14 +193,14 @@ public class PdfReport {
 		cellTitle.setPaddingBottom(20.0f);
 		table.addCell(cellTitle);
 
-		for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size();i++){
-			Label tagNamelabel = RightPane.getInstance().imageInfoTagNameLabelList.get(i);
-			String tagName = tagNamelabel.getText();
-			Label descriptionlabel = RightPane.getInstance().imageInfoDescriptionLabelList.get(i);
-			String description = descriptionlabel.getText();
-			table.addCell(createCell(tagName, Language.isEnglish()?textfont:textfontCh));
-			table.addCell(createCell(description, Language.isEnglish()?textfont:textfontCh));
-		}
+//		for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size();i++){
+//			Label tagNamelabel = RightPane.getInstance().imageInfoTagNameLabelList.get(i);
+//			String tagName = tagNamelabel.getText();
+//			Label descriptionlabel = RightPane.getInstance().imageInfoDescriptionLabelList.get(i);
+//			String description = descriptionlabel.getText();
+//			table.addCell(createCell(tagName, Language.isEnglish()?textfont:textfontCh));
+//			table.addCell(createCell(description, Language.isEnglish()?textfont:textfontCh));
+//		}
 		document.add(table);
 	}
 
