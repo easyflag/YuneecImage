@@ -107,6 +107,7 @@ public class ImageUtil {
 		}
 		if(tagName.equals(RightImageInfo.model[0])){
 			RightImageInfo.model[3] = description;
+			Global.cameraMode = description; //E20Tvx 0.1.29A
 		}
 		if(tagName.equals(RightImageInfo.imageDescription[0])){
 			RightImageInfo.imageDescription[3] = description;
@@ -130,13 +131,9 @@ public class ImageUtil {
 		if(tagName.equals(RightImageInfo.latitude[0])){
 			RightImageInfo.latitude[3] = description;
 		}
-		 if(tagName.equals(RightImageInfo.fileSize[0])){
-			Float size = Float.parseFloat(description.replace("bytes","").trim()) / 1024 / 1024f;
-			RightImageInfo.fileSize[3] = (String.format("%.3f",size) + " M");
-		}
-		 if(tagName.equals("Model")){
-//			YLog.I(" Model ---> "+ description);
-			Global.cameraMode = description;
+		if(tagName.equals(RightImageInfo.fileSize[0])) {
+			Float size = Float.parseFloat(description.replace("bytes", "").trim()) / 1024 / 1024f;
+			RightImageInfo.fileSize[3] = (String.format("%.3f", size) + " M");
 		}
 	}
 
