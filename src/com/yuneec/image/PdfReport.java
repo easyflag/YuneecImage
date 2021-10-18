@@ -7,17 +7,18 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.yuneec.image.guide.GuideTemperatureAlgorithm;
+import com.yuneec.image.module.Language;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
-import com.yuneec.image.module.Language;
+import com.yuneec.image.module.curve.CurveManager;
+import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
-import com.yuneec.image.utils.ImageUtil;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Label;
 import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
@@ -26,7 +27,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 
@@ -100,7 +100,7 @@ public class PdfReport {
 		paragraph.setIndentationLeft(12); //设置左缩进
 		paragraph.setIndentationRight(12); //设置右缩进
 		paragraph.setFirstLineIndent(24); //设置首行缩进
-		paragraph.setLeading(20f); //行间距
+		paragraph.setLeading(50f); //行间距
 		paragraph.setSpacingBefore(5f); //设置段落上空白
 		paragraph.setSpacingAfter(10f); //设置段落下空白
 		// 直线
@@ -115,6 +115,13 @@ public class PdfReport {
 		// 点线
 		Paragraph p2 = new Paragraph();
 		p2.add(new Chunk(new DottedLineSeparator()));
+
+		//add 标题 和 时间
+		document.add(paragraph);
+		document.add(p2);
+		document.add(paragraphTime);
+		document.add(p1);
+
 //		// 超链接
 //		Anchor anchor = new Anchor("baidu");
 //		anchor.setReference("www.baidu.com");
@@ -122,127 +129,190 @@ public class PdfReport {
 //		Anchor gotoP = new Anchor("goto");
 //		gotoP.setReference("#top");
 
-		//getJpgInfoTable();
-		// 表格
-		PdfPTable pointTemperatureTable = getPointTemperature();
+		//1、测试环境
+		addTestingEnvironment();
+		//5、图片
+		addImage();
+		//2、点测温数据
+		addPointTemperature();
+		//3、区域测温数据
+		addBoxTemperature();
+		//4、曲线测温数据
+		addCurveTemperature();
 
-		Paragraph paragraphEnd = new Paragraph("...", textfont);
-		paragraphEnd.setSpacingAfter(30f);
+//		Paragraph paragraphEnd = new Paragraph("...", textfont);
+//		paragraphEnd.setSpacingAfter(30f);
+//
+//		Paragraph paragraphImagePath = new Paragraph(Global.currentOpenImagePath, headfont);
+//		document.add(paragraphImagePath);
+//
+	}
 
-		document.add(paragraph);
-		document.add(p2);
-		document.add(paragraphTime);
-		document.add(p1);
 
-		Paragraph paragraphImagePath = new Paragraph(Global.currentOpenImagePath, headfont);
-		document.add(paragraphImagePath);
+	private void addTestingEnvironment(){
+		Paragraph title = new Paragraph(Language.getString("Image Info:","图片信息:"), Language.isEnglish()?headfont:headfontCh);
+		title.setAlignment(0);
+		title.setIndentationLeft(12);
+		title.setSpacingBefore(5f);
 
-//		document.add(p2);
-		document.add(pointTemperatureTable);
+		PdfPTable table = createTable(new float[] {120, 120, 120, 120},Element.ALIGN_CENTER);
+		table.setSpacingBefore(10f);
 
-		if(!BoxTemperatureManager.getInstance().boxTemperatureList.isEmpty()){
-			for (int i =0;i < BoxTemperatureManager.getInstance().boxTemperatureList.size();i++) {
-				BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
-				Paragraph boxParagraph = getBoxTemperature(boxTemperature);
-				if (boxParagraph != null){
-					document.add(boxParagraph);
-				}
+		table.addCell(createCell(Language.getString("Camera:","相机机型:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(RightPane.modelLabels[1].getText(), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Image Name:","图片名称:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(RightPane.imageDescriptionLabels[1].getText(), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Atmospheric Temperature:","大气环境温度:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.atmosphericTemper/ 10 + "", Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Shooting Time:","拍摄时间:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(RightPane.timeLabels[1].getText(), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		try {
+			document.add(title);
+			document.add(table);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+			document.close();
+		}
+	}
+
+	private void addPointTemperature() {
+		if (PointManager.getInstance().pointTemperatureNodeList.size() > 0){
+			document.newPage();
+			Paragraph title = new Paragraph(Language.getString("Point Temperature Data:","点测温数据:"), Language.isEnglish()?headfont:headfontCh);
+			title.setAlignment(0);
+			title.setIndentationLeft(12);
+			title.setSpacingBefore(15f);
+
+			PdfPTable table = createTable(new float[] {70, 110, 110, 130},Element.ALIGN_CENTER);
+			table.setSpacingBefore(10f);
+			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell("X", Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell("Y", Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Temperature","温度"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+
+			for (int i = 0; i < PointManager.getInstance().pointTemperatureNodeList.size(); i++) {
+				PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
+				ArrayList pointNodeList = pointTemperature.getPointTemperatureNode();
+				float temperature = (float) pointNodeList.get(4);
+				table.addCell(createCell(""+(i+1), Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(""+pointNodeList.get(5), Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(""+pointNodeList.get(6), Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(Utils.getFormatTemperature(temperature), textfontCh));
+			}
+			try {
+				document.add(title);
+				document.add(table);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				document.close();
 			}
 		}
+	}
 
-//		document.add(paragraphEnd);
+	private void addBoxTemperature() {
+		if (BoxTemperatureManager.getInstance().boxTemperatureList.size() > 0){
+			Paragraph title = new Paragraph(Language.getString("Box Temperature Data:","区域测温数据:"), Language.isEnglish()?headfont:headfontCh);
+			title.setAlignment(0);
+			title.setIndentationLeft(12);
+			title.setSpacingBefore(15f);
 
-		addImage();
-//
+			PdfPTable table = createTable(new float[] {70, 100, 100, 100, 100},Element.ALIGN_CENTER);
+			table.setSpacingBefore(10f);
+			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Max","最大值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Min","最小值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			for (int i = 0; i < BoxTemperatureManager.getInstance().boxTemperatureList.size(); i++) {
+				BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
+				float maxTemperature = 0;
+				float minTemperature = 0;
+				if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()) {
+					ArrayList boxTemperatureNodeMaxList = boxTemperature.getBoxTemperatureNodeMax();
+					maxTemperature = (float) boxTemperatureNodeMaxList.get(4);
+				}
+				if (!boxTemperature.getBoxTemperatureNodeMin().isEmpty()) {
+					ArrayList boxTemperatureNodeMinList = boxTemperature.getBoxTemperatureNodeMin();
+					minTemperature = (float) boxTemperatureNodeMinList.get(4);
+				}
+				table.addCell(createCell(""+(i+1), textfont));
+				table.addCell(createCell(Utils.getFormatTemperature(maxTemperature), textfontCh));
+				table.addCell(createCell(Utils.getFormatTemperature(minTemperature), textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss / 100f + "", Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance / 10 + "", Language.isEnglish()?textfont:textfontCh));
+			}
+			try {
+				document.add(title);
+				document.add(table);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				document.close();
+			}
+		}
+	}
+
+	private void addCurveTemperature() {
+		if (CurveManager.getInstance().curveTemperatureList.size() > 0){
+			Paragraph title = new Paragraph(Language.getString("Curve Temperature Data:","曲线测温数据:"), Language.isEnglish()?headfont:headfontCh);
+			title.setAlignment(0);
+			title.setIndentationLeft(12);
+			title.setSpacingBefore(15f);
+
+			PdfPTable table = createTable(new float[] {70, 100, 100, 100, 100},Element.ALIGN_CENTER);
+			table.setSpacingBefore(10f);
+			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Max","最大值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Min","最小值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			for (int i = 0; i < CurveManager.getInstance().curveTemperatureList.size(); i++) {
+				BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
+				float maxTemperature = 0;
+				float minTemperature = 0;
+				CurveTemperature curveTemperature = (CurveTemperature) CurveManager.getInstance().curveTemperatureList.get(i);
+				if (!curveTemperature.getCurveTemperatureNodeMax().isEmpty()){
+					ArrayList curveTemperatureNodeMax = curveTemperature.getCurveTemperatureNodeMax();
+					maxTemperature = (float) curveTemperatureNodeMax.get(4);
+				}
+				if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
+					ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
+					minTemperature = (float) curveTemperatureNodeMin.get(4);
+				}
+				table.addCell(createCell(""+(i+1), textfont));
+				table.addCell(createCell(Utils.getFormatTemperature(maxTemperature), textfontCh));
+				table.addCell(createCell(Utils.getFormatTemperature(minTemperature), textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss / 100f + "", Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance / 10 + "", Language.isEnglish()?textfont:textfontCh));
+			}
+			try {
+				document.add(title);
+				document.add(table);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				document.close();
+			}
+		}
 	}
 
 	private void addImage() {
 		try {
+			Paragraph title = new Paragraph(Language.getString("Test Image:","测试图像:"), Language.isEnglish()?headfont:headfontCh);
+			title.setAlignment(0);
+			title.setIndentationLeft(12);
+			title.setSpacingBefore(15f);
+
 			WritableImage showImagePane = CenterPane.getInstance().showImagePane.snapshot(new SnapshotParameters(), null);
 			ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File(tempImagePath));
 			Image image = Image.getInstance(tempImagePath);
 			image.setAlignment(Image.ALIGN_CENTER);
-			image.scalePercent(60); //依照比例缩放
+			image.scalePercent(70); //依照比例缩放
+
+			document.add(title);
 			document.add(image);
 		}catch (Exception e){
-			ToastUtil.toast(Language.getString("PDF report generated fail !","PDF报告生成失败!"));
-		}finally {
+			e.printStackTrace();
 			document.close();
 		}
-		// 添加图片
-	}
-
-	private Paragraph getBoxTemperature(BoxTemperature boxTemperature) {
-		Paragraph paragraph = new Paragraph(Language.getString("Start Point: (","起点坐标: (") + boxTemperature.getStartLineX() + "," +  boxTemperature.getStartLineY() + ") , " +
-				Language.getString(" End Point: ("," 终点坐标: (") + boxTemperature.getEndLineX() + "," +  boxTemperature.getEndLineY() + ")\n",
-				Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh);
-		paragraph.add(new Phrase(Language.getString("Max Temperature: ","最高温度: "),Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh));
-		paragraph.add(new Phrase(Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMax().get(4)),boxTemperaturefontCh));
-		paragraph.add(new Phrase(Language.getString(" , Min Temperature: "," , 最低温度: "),Language.isEnglish()?boxTemperaturefont:boxTemperaturefontCh));
-		paragraph.add(new Phrase(Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMin().get(4)),boxTemperaturefontCh));
-		paragraph.setAlignment(0);
-		paragraph.setIndentationLeft(20);
-		paragraph.setSpacingAfter(10f);
-		return paragraph;
-	}
-
-	private void getJpgInfoTable() throws Exception{
-		PdfPTable table = createTable(new float[] {150, 150},Element.ALIGN_LEFT);
-		PdfPCell cellTitle = createCell(Language.getString("Image Info:","图片信息:"),
-				Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 2, false);
-		cellTitle.setPaddingBottom(20.0f);
-		table.addCell(cellTitle);
-
-//		for (int i=0;i<RightPane.getInstance().imageInfoTagNameLabelList.size();i++){
-//			Label tagNamelabel = RightPane.getInstance().imageInfoTagNameLabelList.get(i);
-//			String tagName = tagNamelabel.getText();
-//			Label descriptionlabel = RightPane.getInstance().imageInfoDescriptionLabelList.get(i);
-//			String description = descriptionlabel.getText();
-//			table.addCell(createCell(tagName, Language.isEnglish()?textfont:textfontCh));
-//			table.addCell(createCell(description, Language.isEnglish()?textfont:textfontCh));
-//		}
-		document.add(table);
-	}
-
-	private PdfPTable getPointTemperature() {
-		PdfPTable table = createTable(new float[] {70, 110, 110, 130},Element.ALIGN_LEFT);
-
-		PdfPCell cellTitle = createCell(Language.getString("Point Temperature Data:","点测温数据:"),
-				Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 4, false);
-		cellTitle.setPaddingBottom(20.0f);
-		table.addCell(cellTitle);
-
-		table.addCell(createCell("", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("X", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell("Y", keyfont, Element.ALIGN_CENTER));
-		table.addCell(createCell(Language.getString("Temperature","温度"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
-		Integer totalQuantity = 0;
-
-		for (int i = 0; i < PointManager.getInstance().pointTemperatureNodeList.size(); i++) {
-			PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
-			ArrayList pointNodeList = pointTemperature.getPointTemperatureNode();
-			float temperature = (float) pointNodeList.get(4);
-			table.addCell(createCell(""+(i+1), textfont));
-			table.addCell(createCell(""+pointNodeList.get(5), textfont));
-			table.addCell(createCell(""+pointNodeList.get(6), textfont));
-			table.addCell(createCell(Utils.getFormatTemperature(temperature), textfontCh));
-			totalQuantity ++;
-		}
-//		table.addCell(createCell("total", keyfont));
-//		table.addCell(createCell("", textfont));
-//		table.addCell(createCell("", textfont));
-//		table.addCell(createCell("", textfont));
-//		table.addCell(createCell(String.valueOf(totalQuantity) + " image", textfont));
-//		table.addCell(createCell("end", textfont));
-
-		if(!BoxTemperatureManager.getInstance().boxTemperatureList.isEmpty()){
-			PdfPCell boxCellTitle = createCell(Language.getString("Box Temperature Data:","区域温度数据:"),
-					Language.isEnglish()?headfont:headfontCh, Element.ALIGN_LEFT, 4, false);
-			boxCellTitle.setPaddingBottom(5.0f);
-			table.addCell(boxCellTitle);
-		}
-
-		return table;
 	}
 
 
@@ -252,6 +322,7 @@ public class PdfReport {
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell.setPhrase(new Phrase(value, font));
+		cell.setPaddingBottom(5.0f);
         return cell;
     }
     /**
@@ -262,6 +333,7 @@ public class PdfReport {
 		cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 		cell.setHorizontalAlignment(align);
 		cell.setPhrase(new Phrase(value, font));
+		cell.setPaddingBottom(5.0f);
 		return cell;
 	}
     /**
