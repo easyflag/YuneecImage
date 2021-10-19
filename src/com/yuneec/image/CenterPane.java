@@ -243,7 +243,7 @@ public class CenterPane {
         Label label = new Label();
 //        int num = new Random().nextInt(100) - 50;
         label.setText(Utils.getFormatTemperature(temperature));
-        label.setTextFill(Color.web(Configs.white_color));
+        label.setTextFill(Color.web(Configs.temperatureColor));
         label.setTranslateX(x + 7);
         label.setTranslateY(y - 8);
         showImagePane.getChildren().add(label);

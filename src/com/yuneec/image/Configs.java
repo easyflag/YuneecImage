@@ -31,7 +31,6 @@ public class Configs {
 	
 //	public static int Spacing = 1;
 	
-	
 	public static String backgroundColor = "#252526";
 	public static String blue_color = "#234F91";
 	public static String lightGray_color = "#333333";
@@ -42,6 +41,7 @@ public class Configs {
 	public static String blue2_color = "#0000FF";
 	public static String green_color = "#008000";
 
+	public static String temperatureColor = white_color;
 	
 	static class RightPaneImageInfo{
 		static int row = 12;

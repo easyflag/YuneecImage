@@ -1,5 +1,6 @@
 package com.yuneec.image.utils;
 
+import com.yuneec.image.Configs;
 import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 
 public class ColorPickerManager {
 
-    private String newColor;
     private static ColorPickerManager instance;
 
     public static ColorPickerManager I() {
@@ -21,7 +21,7 @@ public class ColorPickerManager {
     }
 
     public void setColor(String color){
-        newColor = color;
+        Configs.temperatureColor = color;
         setColorPointTemperatureColor();
     }
 
@@ -30,7 +30,7 @@ public class ColorPickerManager {
             PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
             ArrayList pointNodeList = pointTemperature.getPointTemperatureNode();
             Label label = (Label) pointNodeList.get(0);
-            label.setTextFill(Color.web(newColor));
+            label.setTextFill(Color.web(Configs.temperatureColor));
         }
     }
 }
