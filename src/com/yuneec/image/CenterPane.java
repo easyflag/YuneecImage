@@ -11,9 +11,11 @@ import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.utils.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -45,7 +47,8 @@ public class CenterPane {
         BOX,
         CURVE,
         ColorPalette,
-        Undo
+        Undo,
+        ColorPicker
     }
 
     private int showImagePaneX, showImagePaneY;
@@ -62,6 +65,7 @@ public class CenterPane {
     public Background centerSettingButtonUnclickBackground;
     public Background centerSettingButtonClickBackground;
     public Button SingleClickButton,BoxChooseButton,CurveChooseButton,ColorPaletteButton,ClearButton,UndoButton;
+    public ColorPicker ColorPickerButton;
     public ArrayList centerSettingButtonNodeList = new ArrayList();
 
     public String rightXYlabel;
@@ -315,6 +319,18 @@ public class CenterPane {
         translateX +=10;
         UndoButton = creatSettingButton("image/undo.png",null);
         UndoButton.setTranslateX(translateX);
+        translateX +=10;
+        ColorPickerButton = new ColorPicker();
+        ColorPickerButton.setTranslateX(translateX);
+        ColorPickerButton.setBackground(centerSettingButtonUnclickBackground);
+        ColorPickerButton.setPrefWidth(50);
+        ColorPickerButton.setPrefHeight(31);
+        ColorPickerButton.setTranslateY(5);
+        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
+        ColorPickerButton.setBorder(border);
+        ColorPickerButton.setOnAction((ActionEvent t) -> {
+            ColorPickerManager.I().setColor(ColorPickerButton.getValue().toString());
+        });
 
         setTooltip();
         SingleClickButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -400,6 +416,17 @@ public class CenterPane {
             }
         });
 
+        ColorPickerButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (Utils.mouseLeftClick(e)) {
+                    setButtonClickBackground(centerSettingButtonNodeList,null);
+                    centerSettingFlag = CenterSettingSelect.ColorPicker;
+                    ColorPalette.getInstance().dmissColorPalettePane();
+                }
+            }
+        });
+
         centerSettingButtonNodeList.clear();
         centerSettingButtonNodeList.add(SingleClickButton);
         centerSettingButtonNodeList.add(BoxChooseButton);
@@ -407,12 +434,14 @@ public class CenterPane {
         centerSettingButtonNodeList.add(ColorPaletteButton);
         centerSettingButtonNodeList.add(ClearButton);
         centerSettingButtonNodeList.add(UndoButton);
+//        centerSettingButtonNodeList.add(ColorPickerButton);
         centerSettingPane.getChildren().add(SingleClickButton);
         centerSettingPane.getChildren().add(BoxChooseButton);
         centerSettingPane.getChildren().add(CurveChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
         centerSettingPane.getChildren().add(UndoButton);
+//        centerSettingPane.getChildren().add(ColorPickerButton);
     }
 
     private Tooltip getTooltip(String info) {
