@@ -2,7 +2,7 @@
 ; 有关创建 Inno Setup 脚本文件的详细资料请查阅帮助文档！
 
 #define MyAppName "YuneecImage"
-#define MyAppVersion "1.0.6"
+#define MyAppVersion "1.0.7"
 #define MyAppPublisher "yuneec"
 #define MyAppURL "http://www.yuneec.com/"
 #define MyAppExeName "YuneecImage.exe"
