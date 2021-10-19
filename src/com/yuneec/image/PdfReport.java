@@ -158,14 +158,22 @@ public class PdfReport {
 		PdfPTable table = createTable(new float[] {120, 120, 120, 120},Element.ALIGN_CENTER);
 		table.setSpacingBefore(10f);
 
-		table.addCell(createCell(Language.getString("Camera:","相机机型:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Camera","相机机型"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
 		table.addCell(createCell(RightPane.modelLabels[1].getText(), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
-		table.addCell(createCell(Language.getString("Image Name:","图片名称:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Image Name","图片名称"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
 		table.addCell(createCell(RightPane.imageDescriptionLabels[1].getText(), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
-		table.addCell(createCell(Language.getString("Atmospheric Temperature:","大气环境温度:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
-		table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.atmosphericTemper/ 10 + "", Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("ColorPalette","调色板"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(RightPane.colorPaletteLabels[1].getText(), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
 		table.addCell(createCell(Language.getString("Shooting Time:","拍摄时间:"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
 		table.addCell(createCell(RightPane.timeLabels[1].getText(), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss/ 100f + "", Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance/ 10 + "", Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Reflected Temperature","反射温度"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.reflectedTemper/ 10 + "", Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(Language.getString("Atmospheric Temperature","空气温度"), Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
+		table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.atmosphericTemper/ 10 + "", Language.isEnglish()?textfont:textfontCh,Element.ALIGN_CENTER));
 		try {
 			document.add(title);
 			document.add(table);
@@ -301,7 +309,7 @@ public class PdfReport {
 
 	private void addImage() {
 		try {
-			Paragraph title = new Paragraph(Language.getString("Test Image:","测试图像:"), Language.isEnglish()?headfont:headfontCh);
+			Paragraph title = new Paragraph(Language.getString("Temperature Image:","温度图像:"), Language.isEnglish()?headfont:headfontCh);
 			title.setAlignment(0);
 			title.setIndentationLeft(12);
 			title.setSpacingBefore(15f);
