@@ -65,14 +65,12 @@ public class ColorPaletteManager {
     }
 
     public void setImageColorPalette(){
-        /*
         if (PaletteParam.currentPalette == Global.imagePaletteType){
             CenterPane.getInstance().imageView.setImage(restoreImageRGB());
         }else {
             CenterPane.getInstance().imageView.setImage(pixWithImage(PaletteParam.currentPalette));
         }
-        */
-        CenterPane.getInstance().imageView.setImage(pixWithImage(PaletteParam.currentPalette));
+//        CenterPane.getInstance().imageView.setImage(pixWithImage(PaletteParam.currentPalette));
         RightPane.getInstance().setColorPaletteInfo();
     }
 
