@@ -184,12 +184,14 @@ public class PdfReport {
 			title.setIndentationLeft(12);
 			title.setSpacingBefore(15f);
 
-			PdfPTable table = createTable(new float[] {70, 110, 110, 130},Element.ALIGN_CENTER);
+			PdfPTable table = createTable(new float[] {70, 70, 70, 90, 85, 85},Element.ALIGN_CENTER);
 			table.setSpacingBefore(10f);
 			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell("X", Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell("Y", Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Temperature","温度"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 
 			for (int i = 0; i < PointManager.getInstance().pointTemperatureNodeList.size(); i++) {
 				PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
@@ -199,6 +201,8 @@ public class PdfReport {
 				table.addCell(createCell(""+pointNodeList.get(5), Language.isEnglish()?textfont:textfontCh));
 				table.addCell(createCell(""+pointNodeList.get(6), Language.isEnglish()?textfont:textfontCh));
 				table.addCell(createCell(Utils.getFormatTemperature(temperature), textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss / 100f + "", Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance / 10 + "", Language.isEnglish()?textfont:textfontCh));
 			}
 			try {
 				document.add(title);
