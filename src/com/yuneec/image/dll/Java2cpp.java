@@ -90,4 +90,24 @@ public class Java2cpp {
    javac Java2cpp.java
 *  javah -classpath F:\intellijSpace\YuneecImage\src com.yuneec.image.dll.Java2cpp
 *
+
+
+JNIEXPORT jbyteArray JNICALL Java_com_yuneec_image_dll_Java2cpp_guideToRGB
+	(JNIEnv *env, jobject, jbyteArray temperatureBytes, jint size, jint paletteIndex)
+	{
+		int rgb24size = 640*512*3;
+		jbyteArray rgb24DataToJave = env->NewByteArray(rgb24size);
+
+		//guide_image_y16torgb24(short* y16Data, unsigned char* rgb24Data, int size, int paletteIndex);
+		jbyte* y16Data = env->GetByteArrayElements(temperatureBytes, NULL);
+		unsigned char* rgb24Data = (unsigned char*)malloc(rgb24size);
+		guide_image_y16torgb24((short*)y16Data, rgb24Data,size,paletteIndex);
+
+		env->SetByteArrayRegion(rgb24DataToJave,0, rgb24size,(jbyte *)rgb24Data);
+
+		return rgb24DataToJave;
+	}
+
 * */
+
+
