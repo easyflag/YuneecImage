@@ -60,7 +60,7 @@ public class CurveManager {
             lineList = new ArrayList();
             lineList.clear();
         }
-        Line line = CenterPane.getInstance().drawLine(lastx,lasty,x,y,Configs.white_color);
+        Line line = CenterPane.getInstance().drawLine(lastx,lasty,x,y,Configs.temperatureColor);
         CenterPane.getInstance().showImagePane.getChildren().add(line);
         OneLine oneLine = new OneLine(line,lastx,lasty,x,y);
         lineList.add(oneLine);

@@ -1,7 +1,12 @@
 package com.yuneec.image.utils;
 
 import com.yuneec.image.Configs;
+import com.yuneec.image.module.box.BoxTemperature;
+import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.colorpalette.ColorPalette;
+import com.yuneec.image.module.curve.CurveManager;
+import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.curve.OneLine;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import javafx.scene.control.Label;
@@ -22,15 +27,58 @@ public class ColorPickerManager {
 
     public void setColor(String color){
         Configs.temperatureColor = color;
-        setColorPointTemperatureColor();
+        setPointTemperatureColor();
+        setBoxTemperatureColor();
+        setCurveTemperatureColor();
     }
 
-    private void setColorPointTemperatureColor() {
+    private void setPointTemperatureColor() {
         for (int i = 0; i < PointManager.getInstance().pointTemperatureNodeList.size(); i++) {
             PointTemperature pointTemperature = (PointTemperature) PointManager.getInstance().pointTemperatureNodeList.get(i);
             ArrayList pointNodeList = pointTemperature.getPointTemperatureNode();
             Label label = (Label) pointNodeList.get(0);
             label.setTextFill(Color.web(Configs.temperatureColor));
+        }
+    }
+
+    private void setBoxTemperatureColor() {
+        for (int i = 0; i < BoxTemperatureManager.getInstance().boxTemperatureList.size(); i++) {
+            BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
+            if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()) {
+                ArrayList boxTemperatureNodeMaxList = boxTemperature.getBoxTemperatureNodeMax();
+                Label label = (Label) boxTemperatureNodeMaxList.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            if (!boxTemperature.getBoxTemperatureNodeMin().isEmpty()) {
+                ArrayList boxTemperatureNodeMinList = boxTemperature.getBoxTemperatureNodeMin();
+                Label label = (Label) boxTemperatureNodeMinList.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            boxTemperature.getTopLine().setStroke(Color.web(Configs.temperatureColor));
+            boxTemperature.getBottomLine().setStroke(Color.web(Configs.temperatureColor));
+            boxTemperature.getLeftLine().setStroke(Color.web(Configs.temperatureColor));
+            boxTemperature.getRightLine().setStroke(Color.web(Configs.temperatureColor));
+        }
+    }
+
+    private void setCurveTemperatureColor(){
+        for (int i = 0; i < CurveManager.getInstance().curveTemperatureList.size(); i++) {
+            CurveTemperature curveTemperature = (CurveTemperature) CurveManager.getInstance().curveTemperatureList.get(i);
+            if (!curveTemperature.getCurveTemperatureNodeMax().isEmpty()){
+                ArrayList curveTemperatureNodeMax = curveTemperature.getCurveTemperatureNodeMax();
+                Label label = (Label) curveTemperatureNodeMax.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
+                ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
+                Label label = (Label) curveTemperatureNodeMin.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            ArrayList allLine = curveTemperature.getAllLine();
+            for (int j=0;j<allLine.size();j++){
+                OneLine oneLine = (OneLine) allLine.get(j);
+                oneLine.getLine().setStroke(Color.web(Configs.temperatureColor));
+            }
         }
     }
 }

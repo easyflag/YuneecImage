@@ -222,10 +222,10 @@ public class CenterPane {
         if (!MouseReleased){
             showImagePane.getChildren().removeAll(topLine, bottomLine, leftLine, rightLine);
         }
-        topLine = drawLine(startLineX, startLineY, endLineX, startLineY,Configs.white_color);
-        bottomLine = drawLine(startLineX, endLineY, endLineX, endLineY,Configs.white_color);
-        leftLine = drawLine(startLineX, startLineY, startLineX, endLineY,Configs.white_color);
-        rightLine = drawLine(endLineX, startLineY, endLineX, endLineY,Configs.white_color);
+        topLine = drawLine(startLineX, startLineY, endLineX, startLineY,Configs.temperatureColor);
+        bottomLine = drawLine(startLineX, endLineY, endLineX, endLineY,Configs.temperatureColor);
+        leftLine = drawLine(startLineX, startLineY, startLineX, endLineY,Configs.temperatureColor);
+        rightLine = drawLine(endLineX, startLineY, endLineX, endLineY,Configs.temperatureColor);
         showImagePane.getChildren().addAll(topLine, bottomLine, leftLine, rightLine);
     }
 
@@ -443,7 +443,7 @@ public class CenterPane {
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
         centerSettingPane.getChildren().add(UndoButton);
-//        centerSettingPane.getChildren().add(ColorPickerButton);
+        centerSettingPane.getChildren().add(ColorPickerButton);
     }
 
     private Tooltip getTooltip(String info) {
