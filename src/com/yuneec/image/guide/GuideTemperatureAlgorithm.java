@@ -1,6 +1,7 @@
 package com.yuneec.image.guide;
 
 import com.yuneec.image.Global;
+import com.yuneec.image.module.colorpalette.ZoomManager;
 import com.yuneec.image.utils.ByteUtils;
 import com.yuneec.image.utils.ParseTemperatureBytes;
 import com.yuneec.image.utils.YLog;
@@ -41,15 +42,17 @@ public class GuideTemperatureAlgorithm {
 
     public static boolean SupportScale = false;
     private int getTemperaByteIndex(int x, int y){
-        if (SupportScale){
-            if (ParseTemperatureBytes.getInstance().TemperatureBytes.length == TemperatureLen){
-                return getTemperaByteIndexSupportScaleForXY(x,y);
-            }else {
-                return getTemperaByteIndexSupportScaleForXY2(x,y);
-            }
-        }else {
-            return getTemperaByteIndexForXY(x,y);
-        }
+//        if (SupportScale){
+//            if (ParseTemperatureBytes.getInstance().TemperatureBytes.length == TemperatureLen){
+//                return getTemperaByteIndexSupportScaleForXY(x,y);
+//            }else {
+//                return getTemperaByteIndexSupportScaleForXY2(x,y);
+//            }
+//        }else {
+//            return getTemperaByteIndexForXY(x,y);
+//        }
+
+        return getTemperaByteIndexSupportScaleForXY2(x,y);
     }
 
     private int getTemperaByteIndexSupportScaleForXY(int x, int y) {
@@ -83,6 +86,7 @@ public class GuideTemperatureAlgorithm {
         lineTemperaBytes = tifWidth * 2;
         double yScale = Global.currentOpenImageHeight / tifHeight;
         double xScale = Global.currentOpenImageWidth / tifWidth;
+
         int s_y = (int) (y / yScale);
         int s_x = (int) (x / xScale);
         if(y==0){
@@ -92,6 +96,19 @@ public class GuideTemperatureAlgorithm {
         }else {
             index = ((s_y * lineTemperaBytes) + s_x * 2);
         }
+
+/*
+//        if (Global.dzoom != 1.0){
+        int topLeftX = ZoomManager.zoomRect[0];
+        int topLeftY = ZoomManager.zoomRect[1];
+        int width = ZoomManager.zoomRect[2];
+        double zoom = Global.currentOpenImageWidth / width;
+//            index = (int) ((topLeftY + y/Global.dzoom) * lineTemperaBytes + (topLeftX + x/Global.dzoom)*2);
+        index = (int) ((topLeftY + y/zoom) * lineTemperaBytes + (topLeftX + x/zoom)*2);
+        YLog.I(" zoomRect : " + ZoomManager.zoomRect[0] + "," + ZoomManager.zoomRect[1] +","+ ZoomManager.zoomRect[2] + "," + ZoomManager.zoomRect[3]
+                + " ,zoom:" +zoom + " ,index:" + index);
+//        }
+*/
         return index;
     }
 

@@ -10,6 +10,7 @@ import com.yuneec.image.Global;
 import com.yuneec.image.guide.GuiDeUtil;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 import com.yuneec.image.module.colorpalette.PaletteParam;
+import com.yuneec.image.module.colorpalette.ZoomManager;
 
 import java.io.*;
 import java.util.Arrays;
@@ -167,10 +168,11 @@ public class XMPUtil {
         }else if(path.endsWith("paletteType")){
             Global.imagePaletteType = Integer.parseInt(value);
             PaletteParam.currentPalette = Global.imagePaletteType;
-//            YLog.I("PaletteParam.currentPalette ：" + PaletteParam.currentPalette);
+            YLog.I("PaletteParam.currentPalette ：" + PaletteParam.currentPalette);
         }else if(path.endsWith("dzoom")){
             Global.dzoom = Integer.parseInt(value) / 8f;
-//            YLog.I("Global.dzoom ：" + Global.dzoom);
+            ZoomManager.I().getRect();
+            YLog.I("Global.dzoom ：" + Global.dzoom);
         }
     }
 

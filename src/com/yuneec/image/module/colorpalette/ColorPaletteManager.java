@@ -72,6 +72,7 @@ public class ColorPaletteManager {
         }
 //        CenterPane.getInstance().imageView.setImage(pixWithImage(PaletteParam.currentPalette));
         RightPane.getInstance().setColorPaletteInfo();
+        ZoomManager.I().zoomImage();
     }
 
     private byte[] rgb24Data;

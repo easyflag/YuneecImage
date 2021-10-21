@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -119,6 +120,7 @@ public class CenterPane {
             getImagePaneOffsetXY();
             showImagePane.getChildren().add(imageView);
         }else {
+            imageView.setViewport(new Rectangle2D(0, 0, 640, 512));
             imageView.setImage(image);
         }
 
