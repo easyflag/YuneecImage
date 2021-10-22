@@ -109,6 +109,7 @@ public class TopMenuBar {
         if (result){
             SaveSettings.I().save(SaveSettings.temperatureUnit_KEY,nowTemperatureUnitValue);
             SaveSettings.I().save(SaveSettings.language_KEY,nowLanguageValue);
+            System.exit(0);
             Platform.exit();
         }
     }
