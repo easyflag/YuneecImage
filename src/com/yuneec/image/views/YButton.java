@@ -15,9 +15,9 @@ public class YButton {
 
     private static YButton instance;
     public Background centerSettingButtonUnclickBackground = new Background(
-            new BackgroundFill(Paint.valueOf(Configs.lightGray_color), new CornerRadii(5), new Insets(1)));
+            new BackgroundFill(Paint.valueOf(Configs.white_color), new CornerRadii(5), new Insets(1)));
     public Background centerSettingButtonClickBackground = new Background(
-            new BackgroundFill(Paint.valueOf(Configs.backgroundColor), new CornerRadii(5), new Insets(1)));
+            new BackgroundFill(Paint.valueOf(Configs.light_gray), new CornerRadii(5), new Insets(1)));
     private OnClickListener onClickListener;
     public interface OnClickListener{
         void onLeftClick();
@@ -41,7 +41,7 @@ public class YButton {
         button.setTranslateX(10);
         button.setTranslateY(5);
         button.setPrefWidth(80);
-        button.setTextFill(Paint.valueOf(Configs.grey_color));
+        button.setTextFill(Paint.valueOf(Configs.black));
         if(imagePath != null){
             ImageView imageView = new ImageView(new Image(imagePath));
             imageView.setFitHeight(20);
@@ -49,7 +49,7 @@ public class YButton {
             button.setGraphic(imageView);
         }
         button.setBackground(centerSettingButtonUnclickBackground);
-        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color), BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
+        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1.0)));
         button.setBorder(border);
 
         button.setOnMousePressed(new EventHandler<MouseEvent>() {

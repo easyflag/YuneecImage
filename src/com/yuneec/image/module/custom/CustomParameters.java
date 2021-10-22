@@ -34,14 +34,14 @@ import java.util.ArrayList;
 
 public class CustomParameters extends Application {
     double screenWidth,screenHeight;
-    double windowWidth = 700;
+    double windowWidth = 660;
     double windowHeight = 260;
     FlowPane rootPane;
 
     public void start(Stage primaryStage) {
 
         rootPane = new FlowPane();
-        rootPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
+        rootPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
         Scene scene = new Scene(rootPane, windowWidth, windowHeight);
 
         initView();
@@ -51,7 +51,7 @@ public class CustomParameters extends Application {
         Rectangle2D rectangle2D = screen.getBounds();
         screenWidth = rectangle2D.getWidth();
         screenHeight = rectangle2D.getHeight();
-        primaryStage.setX(screenWidth/2-windowWidth/2 - 60);
+        primaryStage.setX(screenWidth/2-windowWidth/2 - 80);
         primaryStage.setY(screenHeight/2-Configs.SceneHeight/2 + 100);
         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.resizableProperty().setValue(false);
@@ -80,7 +80,7 @@ public class CustomParameters extends Application {
         Button changeButton = YButton.getInstance().initButton(null,Language.getString("Change","确认修改"));
         HBox hBox8 = new HBox(changeButton);
         hBox8.setPrefHeight(50);
-        hBox8.setMargin(changeButton,new Insets(0, 30, 0, 0));
+        hBox8.setMargin(changeButton,new Insets(0, 10, 0, 0));
         hBox8.setAlignment(Pos.BOTTOM_RIGHT);
         changeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -140,14 +140,14 @@ public class CustomParameters extends Application {
 
         Label text1 = new Label(name + " : " + data);
         text1.setPrefWidth(220);
-        text1.setTextFill(Color.web(Configs.white_color));
+        text1.setTextFill(Color.web(Configs.black));
         text1.setFont(Font.font(14));
         hBox1.getChildren().add(text1);
 
         Label label = new Label("--->   " + Language.getString("new ","新的 ") + name + " : ");
         label.setFont(Font.font(14));
         label.setPrefWidth(265);
-        label.setTextFill(Color.WHITE);
+        label.setTextFill(Color.web(Configs.black));
         TextField field = new TextField();
         field.setPrefSize(80, 25);
         field.setEditable(true);
