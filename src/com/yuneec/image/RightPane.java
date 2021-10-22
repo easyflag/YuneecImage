@@ -169,6 +169,7 @@ public class RightPane {
     public static Label[] timeLabels;
     public static Label[] longitudeLabels;
     public static Label[] latitudeLabels;
+    public static Label[] altitudeLabels;
     public static Label[] fileSizeLabels;
     public static Label[] colorPaletteLabels;
     private void showImageInfoToRightPane() {
@@ -180,9 +181,10 @@ public class RightPane {
         timeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.time[1],RightImageInfo.time[2]), RightImageInfo.time[3],4);
         longitudeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.longitude[1],RightImageInfo.longitude[2]), RightImageInfo.longitude[3],5);
         latitudeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.latitude[1],RightImageInfo.latitude[2]), RightImageInfo.latitude[3],6);
-        fileSizeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.fileSize[1],RightImageInfo.fileSize[2]), RightImageInfo.fileSize[3],7);
+        altitudeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.altitude[1],RightImageInfo.altitude[2]), RightImageInfo.altitude[3],7);
+        fileSizeLabels = addImageInfoLabelToRightPane(Language.getString(RightImageInfo.fileSize[1],RightImageInfo.fileSize[2]), RightImageInfo.fileSize[3],8);
         colorPaletteLabels = addImageInfoLabelToRightPane(Language.getString(Language.ColorPaletteTip_en,Language.ColorPaletteTip_ch),
-                ColorPalette.getInstance().getColorPaletteName(PaletteParam.currentPalette),8);
+                ColorPalette.getInstance().getColorPaletteName(PaletteParam.currentPalette),9);
     }
 
     private void resetImageInfoLabel() {
@@ -196,6 +198,7 @@ public class RightPane {
         timeLabels[0].setText("");timeLabels[1].setText("");
         longitudeLabels[0].setText("");longitudeLabels[1].setText("");
         latitudeLabels[0].setText("");latitudeLabels[1].setText("");
+        altitudeLabels[0].setText("");altitudeLabels[1].setText("");
         fileSizeLabels[0].setText("");fileSizeLabels[1].setText("");
         colorPaletteLabels[0].setText("");colorPaletteLabels[1].setText("");
     }
@@ -211,6 +214,7 @@ public class RightPane {
         timeLabels[0].setText(Language.getString(RightImageInfo.time[1],RightImageInfo.time[2]));
         longitudeLabels[0].setText(Language.getString(RightImageInfo.longitude[1],RightImageInfo.longitude[2]));
         latitudeLabels[0].setText(Language.getString(RightImageInfo.latitude[1],RightImageInfo.latitude[2]));
+        altitudeLabels[0].setText(Language.getString(RightImageInfo.altitude[1],RightImageInfo.altitude[2]));
         fileSizeLabels[0].setText(Language.getString(RightImageInfo.fileSize[1],RightImageInfo.fileSize[2]));
         colorPaletteLabels[0].setText(Language.getString(RightImageInfo.colorPalette[0],RightImageInfo.colorPalette[1]));
         colorPaletteLabels[1].setText(ColorPalette.getInstance().getColorPaletteName(PaletteParam.currentPalette));

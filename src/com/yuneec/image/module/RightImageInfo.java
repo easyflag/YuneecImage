@@ -12,6 +12,7 @@ public class RightImageInfo {
     public static String[] time = {"Date/Time Original","Time ","时间",""};
     public static String[] longitude = {"GPS Longitude","Longitude ","经度",""};
     public static String[] latitude = {"GPS Latitude","Latitude ","纬度",""};
+    public static String[] altitude = {"GPS Altitude","Altitude ","高度",""};
     public static String[] fileSize = {"File Size","FileSize ","文件大小",""};
     public static String[] colorPalette = {"ColorPalette ","调色板",""};
 

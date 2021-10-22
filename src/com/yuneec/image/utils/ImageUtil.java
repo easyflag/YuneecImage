@@ -131,6 +131,9 @@ public class ImageUtil {
 		if(tagName.equals(RightImageInfo.latitude[0])){
 			RightImageInfo.latitude[3] = description;
 		}
+		if(tagName.equals(RightImageInfo.altitude[0])){
+			RightImageInfo.altitude[3] = description;
+		}
 		if(tagName.equals(RightImageInfo.fileSize[0])) {
 			Float size = Float.parseFloat(description.replace("bytes", "").trim()) / 1024 / 1024f;
 			RightImageInfo.fileSize[3] = (String.format("%.3f", size) + " M");
