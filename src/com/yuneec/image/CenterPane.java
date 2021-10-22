@@ -135,8 +135,8 @@ public class CenterPane {
                 int y = (int) e.getY();
                 // YLog.I("MouseEvent:" + s);
                 pointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
-                String ts = Language.getString(" ,"+Language.Temperature_en+" = " , " ,"+Language.Temperature_ch+" = ");
-                rightXYlabel = "x = " + x + " y = " + y + ts;
+                String ts = Language.getString(" , "+Language.Temperature_en+" = " , " ,"+Language.Temperature_ch+" = ");
+                rightXYlabel = "x : " + x + " , y : " + y + ts;
                 String s = rightXYlabel + Utils.getFormatTemperature(pointTemperature);
                 RightPane.getInstance().showXYlabel.setText(s);
             }

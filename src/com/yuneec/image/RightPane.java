@@ -54,7 +54,7 @@ public class RightPane {
 //        pane1.setTranslateX(1);
 
         showXYlabel = new Label();
-        showXYlabel.setTranslateX(10);
+        showXYlabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft);
         showXYlabel.setTranslateY(12);
         showXYlabel.setTextFill(Color.web(Configs.black));
         pane1.getChildren().add(showXYlabel);
