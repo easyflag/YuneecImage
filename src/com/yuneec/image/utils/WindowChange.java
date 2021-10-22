@@ -83,19 +83,23 @@ public class WindowChange {
             Global.currentOpenImageWidth = Configs.DefaultImageWidth * imageZoomRatio;
             Global.currentOpenImageHeight = Configs.DefaultImageHeight * imageZoomRatio;
             maxToMinRatio = Configs.DefaultImageWidth / Global.currentOpenImageWidth;
-            CenterPane.getInstance().imageView.setFitWidth(Configs.DefaultImageWidth * imageZoomRatio);
-            CenterPane.getInstance().imageView.setFitHeight(Configs.DefaultImageHeight * imageZoomRatio);
-            CenterPane.getInstance().showImagePane.setPrefWidth(Configs.DefaultImageWidth * imageZoomRatio);
-            CenterPane.getInstance().showImagePane.setPrefHeight(Configs.DefaultImageHeight * imageZoomRatio);
+            if (CenterPane.getInstance().imageView != null){
+                CenterPane.getInstance().imageView.setFitWidth(Configs.DefaultImageWidth * imageZoomRatio);
+                CenterPane.getInstance().imageView.setFitHeight(Configs.DefaultImageHeight * imageZoomRatio);
+                CenterPane.getInstance().showImagePane.setPrefWidth(Configs.DefaultImageWidth * imageZoomRatio);
+                CenterPane.getInstance().showImagePane.setPrefHeight(Configs.DefaultImageHeight * imageZoomRatio);
+            }
         } else {
             GuideTemperatureAlgorithm.SupportScale = false;
             imageZoomRatio = defaultImageZoomRatio;
             Global.currentOpenImageWidth = Configs.DefaultImageWidth;
             Global.currentOpenImageHeight = Configs.DefaultImageHeight;
-            CenterPane.getInstance().imageView.setFitWidth(Configs.DefaultImageWidth);
-            CenterPane.getInstance().imageView.setFitHeight(Configs.DefaultImageHeight);
-            CenterPane.getInstance().showImagePane.setPrefWidth(Configs.DefaultImageWidth);
-            CenterPane.getInstance().showImagePane.setPrefHeight(Configs.DefaultImageHeight);
+            if (CenterPane.getInstance().imageView != null){
+                CenterPane.getInstance().imageView.setFitWidth(Configs.DefaultImageWidth);
+                CenterPane.getInstance().imageView.setFitHeight(Configs.DefaultImageHeight);
+                CenterPane.getInstance().showImagePane.setPrefWidth(Configs.DefaultImageWidth);
+                CenterPane.getInstance().showImagePane.setPrefHeight(Configs.DefaultImageHeight);
+            }
         }
         CenterPane.getInstance().getImagePaneOffsetXY();
         reLayoutTemperature();

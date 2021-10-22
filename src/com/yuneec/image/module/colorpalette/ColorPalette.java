@@ -58,7 +58,7 @@ public class ColorPalette {
         centerSettingColorPalettePane.setPrefWidth(100);
         centerSettingColorPalettePane.setTranslateX(10);
         centerSettingColorPalettePane.setTranslateY(10);
-        centerSettingColorPalettePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), new CornerRadii(5), null)));
+        centerSettingColorPalettePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray), new CornerRadii(5), null)));
         CenterPane.getInstance().centerImagePane.getChildren().add(centerSettingColorPalettePane);
         centerSettingColorPalettePaneAdded = true;
         addColorPaletteButton();

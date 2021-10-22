@@ -31,13 +31,13 @@
 }
 
 .tree-cell:selected{
-    -fx-background-color:#234F91;
+    -fx-background-color:#C4E1FF;
 }
 
 .tree-cell {
     /*-fx-min-height: 40px;*/
     -fx-padding: 10px;
-    -fx-background-color: #252526;
+    -fx-background-color: #E0E0E0;
     /*-fx-border-color: burlywood;*/
-    -fx-text-fill:"#FFFFFF"
+    -fx-text-fill:"#000000"
 }

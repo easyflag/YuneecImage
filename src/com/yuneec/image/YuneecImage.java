@@ -56,11 +56,11 @@ public class YuneecImage extends Application {
 
 //		LeftPane.getInstance().init();
 		LeftImagePathPane.getInstance().init();
-		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.white_color);
+		Line leftLine = CenterPane.getInstance().drawLine(Configs.LeftPanelWidth,0,Configs.LeftPanelWidth,Configs.SceneWidth,Configs.light_gray);
 		Global.hBox.getChildren().add(leftLine);
 		CenterPane.getInstance().init();
 //		CenterImageThumbPane.getInstance().init();
-		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.white_color);
+		Line rightLine = CenterPane.getInstance().drawLine(0,0,0,Configs.SceneWidth,Configs.light_gray);
 		Global.hBox.getChildren().add(rightLine);
 		RightPane.getInstance().init();
 		TopMenuBar.getInstance().init(root);
@@ -70,7 +70,7 @@ public class YuneecImage extends Application {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 //				YLog.I("maximizedProperty  oldValue:" + oldValue + " ,newValue:" + newValue);
-//				WindowChange.I().setWindowMax(newValue);
+				WindowChange.I().setWindowMax(newValue);
 			}
 		});
 

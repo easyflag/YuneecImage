@@ -273,19 +273,19 @@ public class CenterPane {
     private void initCenterPane() {
         centerPane = new FlowPane();
         centerPane.setPrefWidth(Configs.CenterPanelWidth);
-        centerPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
+        centerPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.white_color), null, null)));
 
         centerSettingPane = new FlowPane();
         centerSettingPane.setPrefHeight(Configs.LineHeight);
         centerSettingPane.setPrefWidth(Configs.CenterPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
-        centerSettingPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
+        centerSettingPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray), null, null)));
         centerPane.getChildren().add(centerSettingPane);
 
         centerImagePane = new Pane();
         centerImagePane.setPrefWidth(Configs.CenterPanelWidth);
         centerImagePane.setPrefHeight(Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight);
-        centerImagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
+        centerImagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.white_color), null, null)));
         centerPane.getChildren().add(centerImagePane);
 
         showImagePane = new Pane();
@@ -299,8 +299,8 @@ public class CenterPane {
     }
 
     private void initCenterSettingPane(Pane centerSettingPane) {
-        centerSettingButtonUnclickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.lightGray_color), new CornerRadii(5), new Insets(1)));
-        centerSettingButtonClickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.backgroundColor), new CornerRadii(5), new Insets(1)));
+        centerSettingButtonUnclickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.white_color), new CornerRadii(5), new Insets(1)));
+        centerSettingButtonClickBackground = new Background(new BackgroundFill(Paint.valueOf(Configs.light_gray), new CornerRadii(5), new Insets(1)));
 
         int translateX = 20;
         SingleClickButton = creatSettingButton("image/center_click.png",null);
@@ -321,14 +321,14 @@ public class CenterPane {
         translateX +=10;
         UndoButton = creatSettingButton("image/undo.png",null);
         UndoButton.setTranslateX(translateX);
-        translateX +=10;
+        translateX +=12;
         ColorPickerButton = new ColorPicker();
         ColorPickerButton.setTranslateX(translateX);
         ColorPickerButton.setBackground(centerSettingButtonUnclickBackground);
         ColorPickerButton.setPrefWidth(50);
-        ColorPickerButton.setPrefHeight(31);
-        ColorPickerButton.setTranslateY(5);
-        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
+        ColorPickerButton.setPrefHeight(30);
+        ColorPickerButton.setTranslateY(4);
+        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1)));
         ColorPickerButton.setBorder(border);
         ColorPickerButton.setOnAction((ActionEvent t) -> {
             ColorPickerManager.I().setColor(ColorPickerButton.getValue().toString());
@@ -480,9 +480,9 @@ public class CenterPane {
         Button button = new Button();
         button.setText(text);
         button.setTranslateX(10);
-        button.setTranslateY(5);
+        button.setTranslateY(4);
         button.setPrefWidth(80);
-        button.setTextFill(Paint.valueOf(Configs.grey_color));
+        button.setTextFill(Paint.valueOf(Configs.black));
         if(imagePath != null){
             ImageView imageView = new ImageView(new Image(imagePath));
             imageView.setFitHeight(20);
@@ -490,7 +490,7 @@ public class CenterPane {
             button.setGraphic(imageView);
         }
         button.setBackground(centerSettingButtonUnclickBackground);
-        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
+        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1.0)));
         button.setBorder(border);
         return button;
     }

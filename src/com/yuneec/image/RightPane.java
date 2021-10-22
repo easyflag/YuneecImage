@@ -44,19 +44,19 @@ public class RightPane {
     private void initRightPane() {
         rightPane = new FlowPane();
         rightPane.setPrefWidth(Configs.RightPanelWidth);
-        rightPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.backgroundColor), null, null)));
+        rightPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.white_color), null, null)));
 
         Pane pane1 = new Pane();
         pane1.setPrefHeight(Configs.LineHeight);
         pane1.setPrefWidth(Configs.RightPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
-        pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
+        pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
         pane1.setTranslateX(1);
 
         showXYlabel = new Label();
         showXYlabel.setTranslateX(10);
         showXYlabel.setTranslateY(12);
-        showXYlabel.setTextFill(Color.WHITE);
+        showXYlabel.setTextFill(Color.web(Configs.black));
         pane1.getChildren().add(showXYlabel);
 
         enterDeveloperMode(pane1);
@@ -101,7 +101,7 @@ public class RightPane {
         rightImagePreviewPane.setPrefHeight(210);
         rightImagePreviewPane.setPrefWidth(Configs.RightPanelWidth);
         rightImagePreviewPane.setTranslateY(10);
-        rightImagePreviewPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
+        rightImagePreviewPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
     }
 
     public void showRightImageInfo(){
@@ -130,27 +130,27 @@ public class RightPane {
         rightImageInfoPane.setPrefWidth(Configs.RightPanelWidth);
         rightImageInfoPane.setTranslateY(5);
 //        rightImageInfoPane.setTranslateY(Configs.Spacing);
-        rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.lightGray_color), null, null)));
+        rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
 
         titlelabel = new Label();
         titlelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
         titlelabel.setTranslateY(Configs.RightPaneImageInfo.marginTop - 30);
         titlelabel.setText(Language.getString(Language.Image_Info_en,Language.Image_Info_ch));
         titlelabel.setFont(Font.font(null, FontWeight.BOLD, 14));
-        titlelabel.setTextFill(Color.WHITE);
+        titlelabel.setTextFill(Color.web(Configs.black));
         rightImageInfoPane.getChildren().add(titlelabel);
 
         for(int i=0;i<Configs.RightPaneImageInfo.row;i++){
             Line line = CenterPane.getInstance().drawLine(Configs.RightPaneImageInfo.startX, Configs.RightPaneImageInfo.startY +
                             Configs.RightPaneImageInfo.offsetY*i, Configs.RightPaneImageInfo.endX,
-                    Configs.RightPaneImageInfo.startY + Configs.RightPaneImageInfo.offsetY*i, Configs.grey_color);
+                    Configs.RightPaneImageInfo.startY + Configs.RightPaneImageInfo.offsetY*i, Configs.light_black);
             rightImageInfoPane.getChildren().add(line);
         }
 
         for(int i=0;i<3;i++){
             Line line = CenterPane.getInstance().drawLine(Configs.RightPaneImageInfo.startX + Configs.RightPaneImageInfo.offsetX*i,
                     Configs.RightPaneImageInfo.startY, Configs.RightPaneImageInfo.startX +
-                            Configs.RightPaneImageInfo.offsetX*i, Configs.RightPaneImageInfo.endY, Configs.grey_color);
+                            Configs.RightPaneImageInfo.offsetX*i, Configs.RightPaneImageInfo.endY, Configs.light_black);
             rightImageInfoPane.getChildren().add(line);
         }
     }
@@ -218,13 +218,13 @@ public class RightPane {
         titlelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
         titlelabel.setTranslateY(Configs.RightPaneImageInfo.marginTop + Configs.RightPaneImageInfo.lineHeight * i + 8);
         titlelabel.setText(title);
-        titlelabel.setTextFill(Color.WHITE);
+        titlelabel.setTextFill(Color.web(Configs.black));
         rightImageInfoPane.getChildren().add(titlelabel);
         Label infolabel = new Label();
         infolabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + Configs.RightPaneImageInfo.offsetX + 5);
         infolabel.setTranslateY(Configs.RightPaneImageInfo.marginTop + Configs.RightPaneImageInfo.lineHeight * i + 8);
         infolabel.setText(info);
-        infolabel.setTextFill(Color.WHITE);
+        infolabel.setTextFill(Color.web(Configs.black));
         rightImageInfoPane.getChildren().add(infolabel);
         return new Label[]{titlelabel,infolabel};
     }
