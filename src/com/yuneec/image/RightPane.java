@@ -51,7 +51,7 @@ public class RightPane {
         pane1.setPrefWidth(Configs.RightPanelWidth);
         // pane1.setStyle("-fx-background-color: gray;");
         pane1.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
-        pane1.setTranslateX(1);
+//        pane1.setTranslateX(1);
 
         showXYlabel = new Label();
         showXYlabel.setTranslateX(10);
@@ -63,8 +63,15 @@ public class RightPane {
 
         rightPane.getChildren().add(pane1);
 
+        Line line1 = CenterPane.getInstance().drawLine(0,Configs.LineHeight,Configs.RightPanelWidth,Configs.LineHeight,Configs.light_gray);
+        rightPane.getChildren().add(line1);
+
         initRightPaneImageInfo();
         rightPane.getChildren().add(rightImageInfoPane);
+
+        Line line2 = CenterPane.getInstance().drawLine(0,Configs.LineHeight+Configs.RightPaneImageInfoHeight,
+                Configs.RightPanelWidth,Configs.LineHeight+Configs.RightPaneImageInfoHeight,Configs.light_gray);
+        rightPane.getChildren().add(line2);
 
         initRightPaneImagePreview();
         rightPane.getChildren().add(rightImagePreviewPane);
@@ -98,9 +105,9 @@ public class RightPane {
     private StackPane rightImagePreviewPane;
     private void initRightPaneImagePreview() {
         rightImagePreviewPane = new StackPane();
-        rightImagePreviewPane.setPrefHeight(210);
+        rightImagePreviewPane.setPrefHeight(220);
         rightImagePreviewPane.setPrefWidth(Configs.RightPanelWidth);
-        rightImagePreviewPane.setTranslateY(10);
+//        rightImagePreviewPane.setTranslateY(10);
         rightImagePreviewPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
     }
 
@@ -115,7 +122,7 @@ public class RightPane {
         if (imagePreview == null){
             imagePreview = new ImageView(image);
             imagePreview.setFitWidth(Configs.RightPaneImageInfo.endX - Configs.RightPaneImageInfo.startX);
-            imagePreview.setFitHeight(512 / 3);
+            imagePreview.setFitHeight(180);
             rightImagePreviewPane.setAlignment(Pos.CENTER);
             rightImagePreviewPane.getChildren().add(imagePreview);
         }else {
@@ -126,9 +133,9 @@ public class RightPane {
     private Pane rightImageInfoPane;
     private void initRightPaneImageInfo() {
         rightImageInfoPane = new Pane();
-        rightImageInfoPane.setPrefHeight(405);
+        rightImageInfoPane.setPrefHeight(Configs.RightPaneImageInfoHeight);
         rightImageInfoPane.setPrefWidth(Configs.RightPanelWidth);
-        rightImageInfoPane.setTranslateY(5);
+//        rightImageInfoPane.setTranslateY(5);
 //        rightImageInfoPane.setTranslateY(Configs.Spacing);
         rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
 

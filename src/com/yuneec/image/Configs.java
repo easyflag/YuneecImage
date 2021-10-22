@@ -25,6 +25,7 @@ public class Configs {
 	public static double CenterPanelHeight = DefaultCenterPanelHeight;
 
 	public final static int RightPanelWidth = 320;
+	public final static int RightPaneImageInfoHeight = 400;
 
 	public final static int DefaultImageWidth = 640;
 	public final static int DefaultImageHeight = 512;
