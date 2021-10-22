@@ -140,11 +140,11 @@ public class RightPane {
         rightImageInfoPane.setBackground(new Background(new BackgroundFill(Color.web(Configs.light_gray2), null, null)));
 
         titlelabel = new Label();
-        titlelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft + 5);
+        titlelabel.setTranslateX(Configs.RightPaneImageInfo.marginLeft);
         titlelabel.setTranslateY(Configs.RightPaneImageInfo.marginTop - 30);
         titlelabel.setText(Language.getString(Language.Image_Info_en,Language.Image_Info_ch));
         titlelabel.setFont(Font.font(null, FontWeight.BOLD, 14));
-        titlelabel.setTextFill(Color.web(Configs.black));
+        titlelabel.setTextFill(Color.web(Configs.light_black));
         rightImageInfoPane.getChildren().add(titlelabel);
 
         for(int i=0;i<Configs.RightPaneImageInfo.row;i++){
