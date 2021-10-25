@@ -287,6 +287,7 @@ public class CenterPane {
         centerImagePane.setPrefHeight(Configs.SceneHeight - Configs.MenuHeight - Configs.LineHeight);
         centerImagePane.setBackground(new Background(new BackgroundFill(Color.web(Configs.white_color), null, null)));
         centerPane.getChildren().add(centerImagePane);
+//        MouseWheelScroll.I().init();
 
         showImagePane = new Pane();
         showImagePane.setPrefWidth(Configs.DefaultImageWidth);

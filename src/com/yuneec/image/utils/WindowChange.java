@@ -24,11 +24,11 @@ import java.util.TimerTask;
 public class WindowChange {
 
     private static WindowChange instance;
-    public boolean maxWindow = false;
-    private final double defaultImageZoomRatio = 1;
-    private double maxImageZoomRatio;
-    private double imageZoomRatio = defaultImageZoomRatio;
-    private double maxToMinRatio;
+    public static boolean maxWindow = false;
+    public static final double defaultImageZoomRatio = 1;
+    public static double maxImageZoomRatio;
+    public static double imageZoomRatio = defaultImageZoomRatio;
+    public static double maxToMinRatio;
 
     public static WindowChange I() {
         if (instance == null) {
@@ -70,6 +70,7 @@ public class WindowChange {
                 }
                 imageZoomRatio-=0.1;
                 maxImageZoomRatio = imageZoomRatio;
+                MouseWheelScroll.I().setMax(max);
 //                YLog.I("WindowChange   width:" + width + " , height:" + height + "  ,max :" + max +
 //                        " ,wRatio:" + wRatio + " ,hRatio:" + hRatio + " ,imageZoomRatio:" + imageZoomRatio);
                 reLoadImage();
@@ -105,7 +106,7 @@ public class WindowChange {
         reLayoutTemperature();
     }
 
-    private void reLayoutTemperature() {
+    public void reLayoutTemperature() {
         reLayoutPointTemperatureLocation();
         reLayoutBoxTemperatureLocation();
         reLayoutCurveTemperatureLocation();
