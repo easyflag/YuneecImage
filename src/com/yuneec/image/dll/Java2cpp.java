@@ -1,16 +1,13 @@
 package com.yuneec.image.dll;
 
-import com.yuneec.image.utils.ByteUtils;
-import com.yuneec.image.utils.ParseTemperatureBytes;
-import com.yuneec.image.utils.YLog;
-import sun.misc.BASE64Decoder;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Java2cpp {
 
     static {
-        System.loadLibrary("lib/guide");
+        System.loadLibrary("lib/Guide");
         System.loadLibrary("lib/GuideImageAnalysis");
     }
 
@@ -37,10 +34,16 @@ public class Java2cpp {
 
     public native byte[] guideToRGB(byte[] TemperatureBytes, int size, int paletteIndex);
 
+    //int guide_image_convertgray2temper( short* pY16, char* pParamline, int len, guide_image_measure_external_param_t pParamExt, float* pTemper)
+//    public native byte[] guideGrayTemper(byte[] TemperatureBytes, byte[] pParamline, int len,
+//                                         int emiss, int relHum, int distance, short reflectedTemper, short atmosphericTemper, int modifyK, short modifyB);
+
+    public native float guideGrayTemper(short TemperatureBytes, byte[] pParamline, int len,
+                                         int emiss, int relHum, int distance, short reflectedTemper, short atmosphericTemper, int modifyK, short modifyB);
 
     public byte[] y16torgb24(byte[] y16Data, int paletteIndex){
         int size = 640*512;
-        byte[]  rgb24Data = Java2cpp.I().guideToRGB(y16Data,size,paletteIndex);
+        byte[]  rgb24Data = guideToRGB(y16Data,size,paletteIndex);
 //        setImage(y16Data);
 //        YLog.I("y16torgb24 rgb24: " + rgb24Data.length);
 //        YLog.I("y16torgb24 rgb24: " + ByteUtils.byteArrayToHexString(rgb24Data,0,100));
@@ -88,7 +91,7 @@ public class Java2cpp {
 
 /*
    javac Java2cpp.java
-*  javah -classpath F:\intellijSpace\YuneecImage\src com.yuneec.image.dll.Java2cpp
+   javah -classpath F:\git\github\YuneecImage\src -jni com.yuneec.image.dll.Java2cpp
 *
 
 
@@ -107,6 +110,27 @@ JNIEXPORT jbyteArray JNICALL Java_com_yuneec_image_dll_Java2cpp_guideToRGB
 
 		return rgb24DataToJave;
 	}
+
+JNIEXPORT jfloat JNICALL Java_com_yuneec_image_dll_Java2cpp_guideGrayTemper
+(JNIEnv * env, jobject, jshort y16, jbyteArray paramline, jint len,
+	jint emiss, jint relHum, jint distance, jshort reflectedTemper, jshort atmosphericTemper, jint modifyK, jshort modifyB)
+{
+	guide_image_measure_external_param_t pParamExt;
+	pParamExt.emiss = emiss;
+	pParamExt.relHum = relHum;
+	pParamExt.distance = distance;
+	pParamExt.reflectedTemper = reflectedTemper;
+	pParamExt.atmosphericTemper = atmosphericTemper;
+	pParamExt.modifyK = modifyK;
+	pParamExt.modifyB = modifyB;
+
+	//int guide_imge_convertgray2temper(short* pY16, char* pParamLine, int len, guide_image_measure_external_param_t* pParamExt, float* pTemper);
+	jbyte* pParamLine = env->GetByteArrayElements(paramline, NULL);
+	float temper = 0.0;
+	guide_imge_convertgray2temper(&y16, (char*)pParamLine, len, &pParamExt, &temper);
+
+	return temper;
+}
 
 * */
 

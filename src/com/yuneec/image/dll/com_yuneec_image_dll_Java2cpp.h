@@ -31,6 +31,14 @@ JNIEXPORT jint JNICALL Java_com_yuneec_image_dll_Java2cpp_DLL_1SUB
 JNIEXPORT jbyteArray JNICALL Java_com_yuneec_image_dll_Java2cpp_guideToRGB
   (JNIEnv *, jobject, jbyteArray, jint, jint);
 
+/*
+ * Class:     com_yuneec_image_dll_Java2cpp
+ * Method:    guideGrayTemper
+ * Signature: (S[BIIIISSIS)F
+ */
+JNIEXPORT jfloat JNICALL Java_com_yuneec_image_dll_Java2cpp_guideGrayTemper
+  (JNIEnv *, jobject, jshort, jbyteArray, jint, jint, jint, jint, jshort, jshort, jint, jshort);
+
 #ifdef __cplusplus
 }
 #endif

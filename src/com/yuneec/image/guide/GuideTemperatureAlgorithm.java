@@ -1,6 +1,7 @@
 package com.yuneec.image.guide;
 
 import com.yuneec.image.Global;
+import com.yuneec.image.dll.Java2cpp;
 import com.yuneec.image.module.colorpalette.ZoomManager;
 import com.yuneec.image.utils.ByteUtils;
 import com.yuneec.image.utils.ParseTemperatureBytes;
@@ -21,7 +22,12 @@ public class GuideTemperatureAlgorithm {
 
     public float getTemperature(int x, int y) {
         int pGray = getTemperaByteForXY(x,y);
-        float pointTemperature = guide_measure_convertgray2temper(pGray,1);
+//        float pointTemperature = guide_measure_convertgray2temper(pGray,1);
+
+        //change to call guide dll
+        float pointTemperature = Java2cpp.I().guideGrayTemper((short) pGray, GuiDeUtil.getInstance().pParamLine, 1,
+                pParamExt.emiss, pParamExt.relHum, pParamExt.distance, pParamExt.reflectedTemper, pParamExt.atmosphericTemper, pParamExt.modifyK, pParamExt.modifyB);
+
 //        YLog.I(" --E20T-- > pointTemperature :" + pointTemperature);
 //        YLog.I(" -----------------------------------------------------------------------");
         return pointTemperature;
