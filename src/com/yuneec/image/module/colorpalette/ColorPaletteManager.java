@@ -4,10 +4,9 @@ package com.yuneec.image.module.colorpalette;
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Global;
 import com.yuneec.image.RightPane;
-import com.yuneec.image.dll.Java2cpp;
+import com.yuneec.image.dll.YuneecGuide;
 import com.yuneec.image.utils.ByteUtils;
 import com.yuneec.image.utils.ParseTemperatureBytes;
-import com.yuneec.image.utils.YLog;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -78,7 +77,7 @@ public class ColorPaletteManager {
     private byte[] rgb24Data;
     public Image pixWithImage(int type){
         PaletteParam.currentPalette = type;
-        rgb24Data = Java2cpp.I().y16torgb24(ParseTemperatureBytes.getInstance().TemperatureBytes,type);
+        rgb24Data = YuneecGuide.I().guideToRGB(ParseTemperatureBytes.getInstance().TemperatureBytes,640*512,type);
         Image image = new Image("file:" + Global.currentOpenImagePath);
         PixelReader pixelReader = image.getPixelReader();
         if(image.getWidth()>0 && image.getHeight() >0){
