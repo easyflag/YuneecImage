@@ -79,7 +79,7 @@ public class YButton {
         button.setTranslateX(10);
         button.setTranslateY(5);
         button.setPrefWidth(80);
-        button.setTextFill(Paint.valueOf(Configs.grey_color));
+        button.setTextFill(Paint.valueOf(Configs.black));
         if(imagePath != null){
             ImageView imageView = new ImageView(new Image(imagePath));
             imageView.setFitHeight(20);
@@ -87,7 +87,7 @@ public class YButton {
             button.setGraphic(imageView);
         }
         button.setBackground(centerSettingButtonUnclickBackground);
-        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.blue_color),BorderStrokeStyle.SOLID,new CornerRadii(5),new BorderWidths(1.5)));
+        Border border = new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1.0)));
         button.setBorder(border);
         return button;
     }
