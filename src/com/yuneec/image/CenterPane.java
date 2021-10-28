@@ -49,6 +49,7 @@ public class CenterPane {
         BOX,
         CURVE,
         LINE,
+        CIRCLE,
         ColorPalette,
         Undo,
         ColorPicker

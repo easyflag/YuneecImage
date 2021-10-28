@@ -1,15 +1,15 @@
-package com.yuneec.image.module.line;
+package com.yuneec.image.module.circle;
 
 import com.yuneec.image.CenterPane;
 import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.module.Temperature;
-import com.yuneec.image.module.circle.CircleTemperManager;
 import com.yuneec.image.module.curve.CurveManager;
-import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.curve.OneLine;
+import com.yuneec.image.module.line.LineTemperature;
 import com.yuneec.image.utils.*;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 import java.awt.*;
@@ -17,13 +17,13 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LineTemperManager {
+public class CircleTemperManager {
 
-    public static LineTemperManager instance;
+    public static CircleTemperManager instance;
 
-    public static LineTemperManager getInstance() {
+    public static CircleTemperManager getInstance() {
         if (instance == null) {
-            instance = new LineTemperManager();
+            instance = new CircleTemperManager();
         }
         return instance;
     }
@@ -32,8 +32,7 @@ public class LineTemperManager {
     private int startx, starty;
 
     public void setMouseMousePressedXY(int x, int y, CurveManager.MouseStatus status) {
-        CircleTemperManager.getInstance().setMouseMousePressedXY(x,y,status);
-        if (CenterPane.getInstance().centerSettingFlag != CenterPane.CenterSettingSelect.LINE) {
+        if (CenterPane.getInstance().centerSettingFlag != CenterPane.CenterSettingSelect.CIRCLE) {
             return;
         }
         if (x >= Global.currentOpenImageWidth){
@@ -60,41 +59,43 @@ public class LineTemperManager {
             }
         }
 
-        CenterPane.getInstance().showImagePane.getChildren().remove(line);
-        line = CenterPane.getInstance().drawLine(startx,starty,x,y,Configs.temperatureColor);
-        CenterPane.getInstance().showImagePane.getChildren().add(line);
+        CenterPane.getInstance().showImagePane.getChildren().remove(circle);
+        double radius = Math.sqrt((x-startx)*(x-startx)+(y-starty)*(y-starty));
+        circle = drawCircle(startx,starty,radius);
+        CenterPane.getInstance().showImagePane.getChildren().add(circle);
 
-        for (int i=0;i<lineList.size();i++){
-            Line line = ((OneLine) lineList.get(i)).getLine();
-            if (!CenterPane.getInstance().showImagePane.getChildren().contains(line)){
-                CenterPane.getInstance().showImagePane.getChildren().add(line);
+        for (int i=0;i<circleList.size();i++){
+            Circle circle = ((OneCircle) circleList.get(i)).getCircle();
+            if (!CenterPane.getInstance().showImagePane.getChildren().contains(circle)){
+                CenterPane.getInstance().showImagePane.getChildren().add(1,circle);
             }
         }
 
         if (status == CurveManager.MouseStatus.MouseReleased){
-            oneLine = new OneLine(line,startx,starty,x,y);
-            lineList.add(oneLine);
-            getOneLineAllxy();
+            oneCircle = new OneCircle(circle,startx,starty,radius);
+            circleList.add(oneCircle);
+            getOneCircleAllxy();
             startCalculate();
         }
     }
 
-    private void getOneLineAllxy() {
-        int x1 = (int) line.getStartX(), y1 = (int) line.getStartY(), x2 = (int) line.getEndX(), y2 = (int) line.getEndY();
-        BufferedImage img = new BufferedImage(1920, 1080, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = img.getGraphics();
-        Color color = Color.BLACK;
-        g.setColor(color);
-        g.drawLine(x1, y1, x2, y2);
-        int[] rgbArray = new int[img.getWidth()];
+    private Circle drawCircle(int x,int y,double radius){
+        Circle circle = new Circle();
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+        circle.setRadius(radius);
+        circle.setStroke(javafx.scene.paint.Color.web(Configs.temperatureColor));
+        circle.setFill(javafx.scene.paint.Color.TRANSPARENT);
+        return circle;
+    }
 
-        for (int y = 0; y < img.getHeight(); y++) {
-            img.getRGB(0, y, img.getWidth(), 1, rgbArray, 0, img.getWidth());
-            for (int x = 0; x < rgbArray.length; x++) {
-                if (rgbArray[x] == color.getRGB()) {
-                    int[] xy = new int[]{x ,y};
-                    linexylist.add(xy);
-                }
+    private void getOneCircleAllxy() {
+        for (int j = (int) oneCircle.getRadius(); j > 0; j--){
+            for (int i = 0; i < 360; i += 1) {
+                int x = (int) (oneCircle.getStartX() + j * Math.cos(i));
+                int y = (int) (oneCircle.getStartY() + j * Math.sin(i));
+                int[] xy = new int[]{x, y};
+                oneCirclexylist.add(xy);
             }
         }
     }
@@ -103,14 +104,14 @@ public class LineTemperManager {
         temperatureList.clear();
         getLineAllTemperature();
         getLineMaxMinTemperature();
-        linexylist.clear();
+        oneCirclexylist.clear();
     }
 
 
     private void getLineAllTemperature() {
-        for (int i=0;i<linexylist.size();i++){
-            int x = linexylist.get(i)[0];
-            int y = linexylist.get(i)[1];
+        for (int i=0;i<oneCirclexylist.size();i++){
+            int x = oneCirclexylist.get(i)[0];
+            int y = oneCirclexylist.get(i)[1];
             temperatureList.add(TemperatureAlgorithm.getInstance().getTemperature(x,y));
         }
     }
@@ -134,30 +135,30 @@ public class LineTemperManager {
                 minTemperatureIndex = i;
             }
         }
-        int[] maxTemperatureXY = linexylist.get(maxTemperatureIndex);
-        int[] minTemperatureXY = linexylist.get(minTemperatureIndex);
+        int[] maxTemperatureXY = oneCirclexylist.get(maxTemperatureIndex);
+        int[] minTemperatureXY = oneCirclexylist.get(minTemperatureIndex);
 
         ArrayList lineTemperatureNodeMax = CenterPane.getInstance().addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
         ArrayList lineTemperatureNodeMin = CenterPane.getInstance().addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
 
-        LineTemperature lineTemperature = new LineTemperature(oneLine,lineTemperatureNodeMax,lineTemperatureNodeMin);
-        lineTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
-        lineTemperatureList.add(lineTemperature);
-        BackStepManager.getInstance().addTemperatureInfo(lineTemperature);
+//        LineTemperature lineTemperature = new LineTemperature(oneLine,lineTemperatureNodeMax,lineTemperatureNodeMin);
+//        lineTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
+//        lineTemperatureList.add(lineTemperature);
+//        BackStepManager.getInstance().addTemperatureInfo(lineTemperature);
     }
 
     public void recalculate(){
         for (int i = 0; i < lineTemperatureList.size(); i++) {
             LineTemperature lineTemperature = (LineTemperature) lineTemperatureList.get(i);
             if (!lineTemperature.getLineTemperatureNodeMax().isEmpty()){
-                javafx.scene.control.Label label = (javafx.scene.control.Label) lineTemperature.getLineTemperatureNodeMax().get(0);
+                Label label = (Label) lineTemperature.getLineTemperatureNodeMax().get(0);
                 int x = (int) lineTemperature.getLineTemperatureNodeMax().get(5);
                 int y = (int) lineTemperature.getLineTemperatureNodeMax().get(6);
                 float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
                 label.setText(Utils.getFormatTemperature(newPointTemperature));
             }
             if (!lineTemperature.getLineTemperatureNodeMin().isEmpty()){
-                javafx.scene.control.Label label = (Label) lineTemperature.getLineTemperatureNodeMin().get(0);
+                Label label = (Label) lineTemperature.getLineTemperatureNodeMin().get(0);
                 int x = (int) lineTemperature.getLineTemperatureNodeMin().get(5);
                 int y = (int) lineTemperature.getLineTemperatureNodeMin().get(6);
                 float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
@@ -166,12 +167,13 @@ public class LineTemperManager {
         }
     }
 
-    List<int[]> linexylist = new ArrayList<int[]>();
+    Circle circle = null;
+    public ArrayList circleList = new ArrayList();
+    OneCircle oneCircle;
+
+    List<int[]> oneCirclexylist = new ArrayList<int[]>();
     public ArrayList temperatureList = new ArrayList();
     public ArrayList lineTemperatureList = new ArrayList();
-    Line line = null;
-    OneLine oneLine;
-    public ArrayList lineList = new ArrayList();
     private boolean getStartXY = false;
 
 
