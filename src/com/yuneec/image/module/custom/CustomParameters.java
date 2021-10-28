@@ -5,6 +5,7 @@ import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.curve.CurveManager;
+import com.yuneec.image.module.line.LineTemperManager;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
@@ -121,6 +122,7 @@ public class CustomParameters extends Application {
             PointManager.getInstance().recalculate();
             BoxTemperatureManager.getInstance().recalculate();
             CurveManager.getInstance().recalculate();
+            LineTemperManager.getInstance().recalculate();
             ToastUtil.toast("Change Succeed !!!",new int[]{90,0});
 //            DownLoad.I().dowanload(DownLoad.url,DownLoad.downloadPath);
 //            String result = DownLoad.I().sendGet(DownLoad.getUrl);

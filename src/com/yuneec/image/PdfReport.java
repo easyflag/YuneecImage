@@ -13,6 +13,8 @@ import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.line.LineTemperManager;
+import com.yuneec.image.module.line.LineTemperature;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import com.yuneec.image.utils.ToastUtil;
@@ -139,6 +141,8 @@ public class PdfReport {
 		addBoxTemperature();
 		//4、曲线测温数据
 		addCurveTemperature();
+		//5、直线测温数据
+		addLineTemperature();
 
 //		Paragraph paragraphEnd = new Paragraph("...", textfont);
 //		paragraphEnd.setSpacingAfter(30f);
@@ -279,7 +283,6 @@ public class PdfReport {
 			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			for (int i = 0; i < CurveManager.getInstance().curveTemperatureList.size(); i++) {
-				BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
 				float maxTemperature = 0;
 				float minTemperature = 0;
 				CurveTemperature curveTemperature = (CurveTemperature) CurveManager.getInstance().curveTemperatureList.get(i);
@@ -290,6 +293,48 @@ public class PdfReport {
 				if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
 					ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
 					minTemperature = (float) curveTemperatureNodeMin.get(4);
+				}
+				table.addCell(createCell(""+(i+1), textfont));
+				table.addCell(createCell(Utils.getFormatTemperature(maxTemperature), textfontCh));
+				table.addCell(createCell(Utils.getFormatTemperature(minTemperature), textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss / 100f + "", Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance / 10 + "", Language.isEnglish()?textfont:textfontCh));
+			}
+			try {
+				document.add(title);
+				document.add(table);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				document.close();
+			}
+		}
+	}
+
+	private void addLineTemperature() {
+		if (LineTemperManager.getInstance().lineTemperatureList.size() > 0){
+			Paragraph title = new Paragraph(Language.getString("Line Temperature Data:","直线测温数据:"), Language.isEnglish()?headfont:headfontCh);
+			title.setAlignment(0);
+			title.setIndentationLeft(12);
+			title.setSpacingBefore(15f);
+
+			PdfPTable table = createTable(new float[] {70, 100, 100, 100, 100},Element.ALIGN_CENTER);
+			table.setSpacingBefore(10f);
+			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Max","最大值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Min","最小值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			for (int i = 0; i < LineTemperManager.getInstance().lineTemperatureList.size(); i++) {
+				float maxTemperature = 0;
+				float minTemperature = 0;
+				LineTemperature lineTemperature = (LineTemperature) LineTemperManager.getInstance().lineTemperatureList.get(i);
+				if (!lineTemperature.getLineTemperatureNodeMax().isEmpty()){
+					ArrayList lineTemperatureNodeMax = lineTemperature.getLineTemperatureNodeMax();
+					maxTemperature = (float) lineTemperatureNodeMax.get(4);
+				}
+				if (!lineTemperature.getLineTemperatureNodeMin().isEmpty()){
+					ArrayList lineTemperatureNodeMin = lineTemperature.getLineTemperatureNodeMin();
+					minTemperature = (float) lineTemperatureNodeMin.get(4);
 				}
 				table.addCell(createCell(""+(i+1), textfont));
 				table.addCell(createCell(Utils.getFormatTemperature(maxTemperature), textfontCh));

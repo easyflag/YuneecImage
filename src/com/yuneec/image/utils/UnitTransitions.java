@@ -7,6 +7,8 @@ import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.line.LineTemperManager;
+import com.yuneec.image.module.line.LineTemperature;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import javafx.scene.control.Label;
@@ -43,6 +45,17 @@ public class UnitTransitions {
             if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
                 ((Label)curveTemperature.getCurveTemperatureNodeMin().get(0)).setText(
                         Utils.getFormatTemperature((float) curveTemperature.getCurveTemperatureNodeMin().get(4)));
+            }
+        }
+        for (int i = 0; i < LineTemperManager.getInstance().lineTemperatureList.size(); i++) {
+            LineTemperature lineTemperature = (LineTemperature) LineTemperManager.getInstance().lineTemperatureList.get(i);
+            if (!lineTemperature.getLineTemperatureNodeMax().isEmpty()){
+                ((Label)lineTemperature.getLineTemperatureNodeMax().get(0)).setText(
+                        Utils.getFormatTemperature((float) lineTemperature.getLineTemperatureNodeMax().get(4)));
+            }
+            if (!lineTemperature.getLineTemperatureNodeMin().isEmpty()){
+                ((Label)lineTemperature.getLineTemperatureNodeMin().get(0)).setText(
+                        Utils.getFormatTemperature((float) lineTemperature.getLineTemperatureNodeMin().get(4)));
             }
         }
         if (Global.currentOpenImagePath != null){

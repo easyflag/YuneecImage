@@ -6,6 +6,7 @@ public class Temperature {
         POINT,
         BOX,
         CURVE,
+        LINE,
         NONE
     }
 

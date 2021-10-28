@@ -9,6 +9,8 @@ import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.curve.OneLine;
+import com.yuneec.image.module.line.LineTemperManager;
+import com.yuneec.image.module.line.LineTemperature;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import javafx.geometry.Rectangle2D;
@@ -110,6 +112,7 @@ public class WindowChange {
         reLayoutPointTemperatureLocation();
         reLayoutBoxTemperatureLocation();
         reLayoutCurveTemperatureLocation();
+        reLayoutLineTemperatureLocation();
     }
 
     private void reLayoutPointTemperatureLocation() {
@@ -212,6 +215,25 @@ public class WindowChange {
                         oneLine.getEndX()*imageZoomRatio,oneLine.getEndY()*imageZoomRatio,
                         oneLine.getLine());
             }
+        }
+    }
+
+    public void reLayoutLineTemperatureLocation() {
+        for (int i = 0; i < LineTemperManager.getInstance().lineTemperatureList.size(); i++) {
+            LineTemperature lineTemperature = (LineTemperature) LineTemperManager.getInstance().lineTemperatureList.get(i);
+            boolean maxClickPoint = lineTemperature.isMaxWindowDraw();
+            if (!lineTemperature.getLineTemperatureNodeMax().isEmpty()) {
+                ArrayList lineTemperatureNodeMax = lineTemperature.getLineTemperatureNodeMax();
+                reLayoutPoint(lineTemperatureNodeMax, maxClickPoint);
+            }
+            if (!lineTemperature.getLineTemperatureNodeMin().isEmpty()) {
+                ArrayList lineTemperatureNodeMin = lineTemperature.getLineTemperatureNodeMin();
+                reLayoutPoint(lineTemperatureNodeMin, maxClickPoint);
+            }
+            OneLine oneLine = lineTemperature.getOneLine();
+            reLayoutLine(oneLine.getStartX()*imageZoomRatio,oneLine.getStartY()*imageZoomRatio,
+                    oneLine.getEndX()*imageZoomRatio,oneLine.getEndY()*imageZoomRatio,
+                    oneLine.getLine());
         }
     }
 

@@ -7,6 +7,8 @@ import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.curve.OneLine;
+import com.yuneec.image.module.line.LineTemperManager;
+import com.yuneec.image.module.line.LineTemperature;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import javafx.scene.control.Label;
@@ -30,6 +32,7 @@ public class ColorPickerManager {
         setPointTemperatureColor();
         setBoxTemperatureColor();
         setCurveTemperatureColor();
+        setLineTemperatureColor();
     }
 
     private void setPointTemperatureColor() {
@@ -79,6 +82,24 @@ public class ColorPickerManager {
                 OneLine oneLine = (OneLine) allLine.get(j);
                 oneLine.getLine().setStroke(Color.web(Configs.temperatureColor));
             }
+        }
+    }
+
+    private void setLineTemperatureColor(){
+        for (int i = 0; i < LineTemperManager.getInstance().lineTemperatureList.size(); i++) {
+            LineTemperature lineTemperature = (LineTemperature) LineTemperManager.getInstance().lineTemperatureList.get(i);
+            if (!lineTemperature.getLineTemperatureNodeMax().isEmpty()){
+                ArrayList curveTemperatureNodeMax = lineTemperature.getLineTemperatureNodeMax();
+                Label label = (Label) curveTemperatureNodeMax.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            if (!lineTemperature.getLineTemperatureNodeMin().isEmpty()){
+                ArrayList lineTemperatureNodeMin = lineTemperature.getLineTemperatureNodeMin();
+                Label label = (Label) lineTemperatureNodeMin.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            OneLine oneLine = (OneLine) lineTemperature.getOneLine();
+            oneLine.getLine().setStroke(Color.web(Configs.temperatureColor));
         }
     }
 }

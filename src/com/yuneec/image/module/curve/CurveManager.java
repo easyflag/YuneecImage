@@ -5,6 +5,7 @@ import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.module.Temperature;
 import com.yuneec.image.module.box.BoxTemperature;
+import com.yuneec.image.module.line.LineTemperManager;
 import com.yuneec.image.utils.*;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Line;
@@ -33,6 +34,8 @@ public class CurveManager {
     private int x, y;
 
     public void setMouseMousePressedXY(int x, int y, MouseStatus status) {
+        LineTemperManager.getInstance().setMouseMousePressedXY(x,y,status);
+
         if (CenterPane.getInstance().centerSettingFlag != CenterPane.CenterSettingSelect.CURVE) {
             return;
         }

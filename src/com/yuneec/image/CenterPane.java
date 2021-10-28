@@ -8,6 +8,7 @@ import com.yuneec.image.module.Language;
 import com.yuneec.image.module.colorpalette.ColorPaletteManager;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
+import com.yuneec.image.module.line.LineTemperManager;
 import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.utils.*;
 import javafx.application.Platform;
@@ -47,6 +48,7 @@ public class CenterPane {
         POINT,
         BOX,
         CURVE,
+        LINE,
         ColorPalette,
         Undo,
         ColorPicker
@@ -65,7 +67,7 @@ public class CenterPane {
     public CenterSettingSelect centerSettingFlag = CenterSettingSelect.NONE;
     public Background centerSettingButtonUnclickBackground;
     public Background centerSettingButtonClickBackground;
-    public Button SingleClickButton,BoxChooseButton,CurveChooseButton,ColorPaletteButton,ClearButton,UndoButton;
+    public Button SingleClickButton,BoxChooseButton,CurveChooseButton,LineChooseButton,ColorPaletteButton,ClearButton,UndoButton;
     public ColorPicker ColorPickerButton;
     public ArrayList centerSettingButtonNodeList = new ArrayList();
 
@@ -313,6 +315,9 @@ public class CenterPane {
         CurveChooseButton = creatSettingButton("image/center_curve.png",null);
         CurveChooseButton.setTranslateX(translateX);
         translateX +=10;
+        LineChooseButton = creatSettingButton("image/center_line.png",null);
+        LineChooseButton.setTranslateX(translateX);
+        translateX +=10;
         ColorPaletteButton = creatSettingButton("image/color_palette.png",null);
         ColorPaletteButton.setTranslateX(translateX);
         ColorPalette.getInstance().init();
@@ -366,6 +371,17 @@ public class CenterPane {
                 if (Utils.mouseLeftClick(e)) {
                     setButtonClickBackground(centerSettingButtonNodeList,CurveChooseButton);
                     centerSettingFlag = CenterSettingSelect.CURVE;
+                    ColorPalette.getInstance().dmissColorPalettePane();
+                }
+            }
+        });
+
+        LineChooseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (Utils.mouseLeftClick(e)) {
+                    setButtonClickBackground(centerSettingButtonNodeList,LineChooseButton);
+                    centerSettingFlag = CenterSettingSelect.LINE;
                     ColorPalette.getInstance().dmissColorPalettePane();
                 }
             }
@@ -434,6 +450,7 @@ public class CenterPane {
         centerSettingButtonNodeList.add(SingleClickButton);
         centerSettingButtonNodeList.add(BoxChooseButton);
         centerSettingButtonNodeList.add(CurveChooseButton);
+        centerSettingButtonNodeList.add(LineChooseButton);
         centerSettingButtonNodeList.add(ColorPaletteButton);
         centerSettingButtonNodeList.add(ClearButton);
         centerSettingButtonNodeList.add(UndoButton);
@@ -441,6 +458,7 @@ public class CenterPane {
         centerSettingPane.getChildren().add(SingleClickButton);
         centerSettingPane.getChildren().add(BoxChooseButton);
         centerSettingPane.getChildren().add(CurveChooseButton);
+        centerSettingPane.getChildren().add(LineChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
         centerSettingPane.getChildren().add(UndoButton);
@@ -462,6 +480,7 @@ public class CenterPane {
         SingleClickButton.setTooltip(getTooltip(Language.getString(Language.SinglePointTemperature_en,Language.SinglePointTemperature_ch)));
         BoxChooseButton.setTooltip(getTooltip(Language.getString(Language.BoxTemperature_en,Language.BoxTemperature_ch)));
         CurveChooseButton.setTooltip(getTooltip(Language.getString(Language.CurveTemperature_en,Language.CurveTemperature_ch)));
+        LineChooseButton.setTooltip(getTooltip(Language.getString(Language.CurveTemperature_en,Language.CurveTemperature_ch)));
         ColorPaletteButton.setTooltip(getTooltip(Language.getString(Language.ColorPaletteTip_en,Language.ColorPaletteTip_ch)));
         ClearButton.setTooltip(getTooltip(Language.getString(Language.ClearTip_en,Language.ClearTip_ch)));
         UndoButton.setTooltip(getTooltip(Language.getString(Language.UndoTip_en,Language.UndoTip_ch)));
@@ -504,6 +523,8 @@ public class CenterPane {
         PointManager.getInstance().pointTemperatureNodeList.clear();
         BoxTemperatureManager.getInstance().boxTemperatureList.clear();
         CurveManager.getInstance().curveTemperatureList.clear();
+        LineTemperManager.getInstance().lineTemperatureList.clear();
+        LineTemperManager.getInstance().lineList.clear();
         BackStepManager.getInstance().temperatureInfoList.clear();
         showImagePane.getChildren().clear();
         if (imageView != null){
