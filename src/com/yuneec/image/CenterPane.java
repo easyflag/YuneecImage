@@ -315,7 +315,7 @@ public class CenterPane {
         translateX +=10;
         CurveChooseButton = creatSettingButton("image/center_curve.png",null);
         CurveChooseButton.setTranslateX(translateX);
-        translateX +=10;
+//        translateX +=10;
         LineChooseButton = creatSettingButton("image/center_line.png",null);
         LineChooseButton.setTranslateX(translateX);
         translateX +=10;
@@ -459,7 +459,7 @@ public class CenterPane {
         centerSettingPane.getChildren().add(SingleClickButton);
         centerSettingPane.getChildren().add(BoxChooseButton);
         centerSettingPane.getChildren().add(CurveChooseButton);
-        centerSettingPane.getChildren().add(LineChooseButton);
+//        centerSettingPane.getChildren().add(LineChooseButton);
         centerSettingPane.getChildren().add(ColorPaletteButton);
         centerSettingPane.getChildren().add(ClearButton);
         centerSettingPane.getChildren().add(UndoButton);

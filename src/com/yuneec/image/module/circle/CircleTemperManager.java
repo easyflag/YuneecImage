@@ -5,15 +5,13 @@ import com.yuneec.image.Configs;
 import com.yuneec.image.Global;
 import com.yuneec.image.module.Temperature;
 import com.yuneec.image.module.curve.CurveManager;
-import com.yuneec.image.module.curve.OneLine;
 import com.yuneec.image.module.line.LineTemperature;
-import com.yuneec.image.utils.*;
+import com.yuneec.image.utils.BackStepManager;
+import com.yuneec.image.utils.TemperatureAlgorithm;
+import com.yuneec.image.utils.Utils;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,13 +59,31 @@ public class CircleTemperManager {
 
         CenterPane.getInstance().showImagePane.getChildren().remove(circle);
         double radius = Math.sqrt((x-startx)*(x-startx)+(y-starty)*(y-starty));
+
+        int centerXtoTop = starty;
+        int centerXtoBottom = (int) (Global.currentOpenImageHeight - starty);
+        int centerXtoLeft = startx;
+        int centerXtoRight = (int) (Global.currentOpenImageWidth - startx);
+        if (radius >= centerXtoTop){
+            radius = centerXtoTop;
+        }
+        if (radius >= centerXtoBottom){
+            radius = centerXtoBottom;
+        }
+        if (radius >= centerXtoLeft){
+            radius = centerXtoLeft;
+        }
+        if (radius >= centerXtoRight){
+            radius = centerXtoRight;
+        }
+
         circle = drawCircle(startx,starty,radius);
         CenterPane.getInstance().showImagePane.getChildren().add(circle);
 
         for (int i=0;i<circleList.size();i++){
             Circle circle = ((OneCircle) circleList.get(i)).getCircle();
             if (!CenterPane.getInstance().showImagePane.getChildren().contains(circle)){
-                CenterPane.getInstance().showImagePane.getChildren().add(1,circle);
+                CenterPane.getInstance().showImagePane.getChildren().add(circle);
             }
         }
 
