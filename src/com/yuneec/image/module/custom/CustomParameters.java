@@ -25,6 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
@@ -176,6 +177,8 @@ public class CustomParameters extends Application {
         field.setEditable(true);
         field.setText(data);
         field.setAlignment(Pos.CENTER_LEFT);
+        field.setBorder(new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
+        field.setStyle("-fx-focus-color:#d0d0d0");
         hBox1.getChildren().addAll(label, field);
         hBox1.setMargin(label,new Insets(0, 0, 0, 30));
         textFieldList.add(field);
@@ -219,13 +222,16 @@ public class CustomParameters extends Application {
             int emiss = (int) (Float.parseFloat(newValue) * 100);
             if (emiss < 1 || emiss > 100){
                 infoLabel.setText(Language.getString("Emissivity Out of range. Range is (0.1-1.0) !","发射率超出范围，范围是(0.1-1.0) !"));
+                setTextFieldFocusColor(((TextField) textFieldList.get(0)),false);
                 return false;
             }else {
                 infoLabel.setText("");
+                setTextFieldFocusColor(((TextField) textFieldList.get(0)),true);
                 return true;
             }
         }catch (Exception e){
             infoLabel.setText(Language.getString("Emissivity Invalid input !","发射率无效输入!"));
+            setTextFieldFocusColor(((TextField) textFieldList.get(0)),false);
             return false;
         }
     }
@@ -235,13 +241,16 @@ public class CustomParameters extends Application {
             int relHum =  Integer.parseInt(newValue);
             if (relHum < 20 || relHum > 100){
                 infoLabel.setText(Language.getString("relHum Out of range. Range is (20-100) !","空气湿度超出范围，范围是(20-100) !"));
+                setTextFieldFocusColor(((TextField) textFieldList.get(1)),false);
                 return false;
             }else {
                 infoLabel.setText("");
+                setTextFieldFocusColor(((TextField) textFieldList.get(1)),true);
                 return true;
             }
         }catch (Exception e){
             infoLabel.setText(Language.getString("relHum Invalid input !","空气湿度无效输入!"));
+            setTextFieldFocusColor(((TextField) textFieldList.get(1)),false);
             return false;
         }
     }
@@ -251,13 +260,16 @@ public class CustomParameters extends Application {
             int distance =  Integer.parseInt(newValue);
             if (distance < 1 || distance > 25){
                 infoLabel.setText(Language.getString("Distance Out of range. Range is (1-25) !","距离超出范围，范围是(1-25) !"));
+                setTextFieldFocusColor(((TextField) textFieldList.get(2)),false);
                 return false;
             }else {
                 infoLabel.setText("");
+                setTextFieldFocusColor(((TextField) textFieldList.get(2)),true);
                 return true;
             }
         }catch (Exception e){
             infoLabel.setText(Language.getString("Distance Invalid input !","距离无效输入!"));
+            setTextFieldFocusColor(((TextField) textFieldList.get(2)),false);
             return false;
         }
     }
@@ -267,14 +279,27 @@ public class CustomParameters extends Application {
             int reflectedTemperature =  Integer.parseInt(newValue);
             if (reflectedTemperature < -40 || reflectedTemperature > 500){
                 infoLabel.setText(Language.getString("ReflectedTemperature Out of range. Range is (-40-500) !","反射温度超出范围，范围是(-40-500) !"));
+                setTextFieldFocusColor(((TextField) textFieldList.get(3)),false);
                 return false;
             }else {
                 infoLabel.setText("");
+                setTextFieldFocusColor(((TextField) textFieldList.get(3)),true);
                 return true;
             }
         }catch (Exception e){
             infoLabel.setText(Language.getString("ReflectedTemperature Invalid input !","反射温度无效输入!"));
+            setTextFieldFocusColor(((TextField) textFieldList.get(3)),false);
             return false;
+        }
+    }
+
+    private void setTextFieldFocusColor(TextField textField, boolean pass) {
+        if (pass){
+            textField.setStyle("-fx-focus-color:#d0d0d0");
+            textField.setBorder(new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
+        }else {
+            textField.setStyle("-fx-focus-color:red");
+            textField.setBorder(new Border(new BorderStroke(Paint.valueOf(Configs.red_color),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
         }
     }
 
