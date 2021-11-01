@@ -85,7 +85,7 @@ public class CustomParameters extends Application {
         changeButton = YButton.getInstance().initButton(null,Language.getString("Change","确认修改"));
         HBox hBox8 = new HBox();
         hBox8.setPrefHeight(50);
-        hBox8.setMargin(changeButton,new Insets(0, 10, 0, 0));
+        hBox8.setMargin(changeButton,new Insets(0, 20, 0, 0));
         hBox8.setAlignment(Pos.BOTTOM_RIGHT);
         hBox8.getChildren().add(changeButton);
         changeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -223,96 +223,88 @@ public class CustomParameters extends Application {
     }
 
     private boolean verifyEmiss(String newValue){
+        String rangeEmissEn = "Range:(0.1-1.0)";
+        String rangeEmissCh = "范围:(0.1-1.0)";
         try {
             int emiss = (int) (Float.parseFloat(newValue) * 100);
             if (emiss < 1 || emiss > 100){
-                setInfoLabel(((Label)infoLabelList.get(0)),"Range:(0.1-1.0)","范围:(0.1-1.0)",true);
-                setTextFieldFocusColor(((TextField) textFieldList.get(0)),false);
+                updateVerifyUI(0,rangeEmissEn,rangeEmissCh,false);
                 return false;
             }else {
-                setInfoLabel(((Label)infoLabelList.get(0)),"Range:(0.1-1.0)","范围:(0.1-1.0)",false);
-                setTextFieldFocusColor(((TextField) textFieldList.get(0)),true);
+                updateVerifyUI(0,rangeEmissEn,rangeEmissCh,true);
                 return true;
             }
         }catch (Exception e){
-            setInfoLabel(((Label)infoLabelList.get(0)),"Range:(0.1-1.0)","范围:(0.1-1.0)",true);
-            setTextFieldFocusColor(((TextField) textFieldList.get(0)),false);
+            updateVerifyUI(0,rangeEmissEn,rangeEmissCh,false);
             return false;
         }
     }
 
     private boolean verifyrelHum(String newValue){
+        String rangeHumEn = "Range:(20-100)";
+        String rangeHumCh = "范围:(20-100)";
         try {
             int relHum =  Integer.parseInt(newValue);
             if (relHum < 20 || relHum > 100){
-                setInfoLabel(((Label)infoLabelList.get(1)),"Range:(20-100)","范围:(20-100)",true);
-                setTextFieldFocusColor(((TextField) textFieldList.get(1)),false);
+                updateVerifyUI(1,rangeHumEn,rangeHumCh,false);
                 return false;
             }else {
-                setInfoLabel(((Label)infoLabelList.get(1)),"Range:(20-100)","范围:(20-100)",false);
-                setTextFieldFocusColor(((TextField) textFieldList.get(1)),true);
+                updateVerifyUI(1,rangeHumEn,rangeHumCh,true);
                 return true;
             }
         }catch (Exception e){
-            setInfoLabel(((Label)infoLabelList.get(1)),"Range:(20-100)","范围:(20-100)",true);
-            setTextFieldFocusColor(((TextField) textFieldList.get(1)),false);
+            updateVerifyUI(1,rangeHumEn,rangeHumCh,false);
             return false;
         }
     }
 
     private boolean verifyDistance(String newValue){
+        String rangeDistanceEn = "Range:(1-25)";
+        String rangeDistanceCh = "范围:(1-25)";
         try {
             int distance =  Integer.parseInt(newValue);
             if (distance < 1 || distance > 25){
-                setInfoLabel(((Label)infoLabelList.get(2)),"Range:(1-25)","范围:(1-25)",true);
-                setTextFieldFocusColor(((TextField) textFieldList.get(2)),false);
+                updateVerifyUI(2,rangeDistanceEn,rangeDistanceCh,false);
                 return false;
             }else {
-                setInfoLabel(((Label)infoLabelList.get(2)),"Range:(1-25)","范围:(1-25)",false);
-                setTextFieldFocusColor(((TextField) textFieldList.get(2)),true);
+                updateVerifyUI(2,rangeDistanceEn,rangeDistanceCh,true);
                 return true;
             }
         }catch (Exception e){
-            setInfoLabel(((Label)infoLabelList.get(2)),"Range:(1-25)","范围:(1-25)",true);
-            setTextFieldFocusColor(((TextField) textFieldList.get(2)),false);
+            updateVerifyUI(2,rangeDistanceEn,rangeDistanceCh,false);
             return false;
         }
     }
 
     private boolean verifyreflectedTemperature(String newValue){
+        String rangereflectedTemperatureEn = "Range:(-40-500)";
+        String rangereflectedTemperatureCh = "范围:(-40-500)";
         try {
             int reflectedTemperature =  Integer.parseInt(newValue);
             if (reflectedTemperature < -40 || reflectedTemperature > 500){
-                setInfoLabel(((Label)infoLabelList.get(3)),"Range:(-40-500)","范围:(-40-500)",true);
-                setTextFieldFocusColor(((TextField) textFieldList.get(3)),false);
+                updateVerifyUI(3,rangereflectedTemperatureEn,rangereflectedTemperatureCh,false);
                 return false;
             }else {
-                setInfoLabel(((Label)infoLabelList.get(3)),"Range:(-40-500)","范围:(-40-500)",false);
-                setTextFieldFocusColor(((TextField) textFieldList.get(3)),true);
+                updateVerifyUI(3,rangereflectedTemperatureEn,rangereflectedTemperatureCh,true);
                 return true;
             }
         }catch (Exception e){
-            setInfoLabel(((Label)infoLabelList.get(3)),"Range:(-40-500)","范围:(-40-500)",true);
-            setTextFieldFocusColor(((TextField) textFieldList.get(3)),false);
+            updateVerifyUI(3,rangereflectedTemperatureEn,rangereflectedTemperatureCh,false);
             return false;
         }
     }
 
-    private void setInfoLabel(Label label, String en, String ch, boolean show) {
-        if (show){
-            label.setText(Language.getString(en, ch));
-        }else {
-            label.setText("");
-        }
-    }
-
-    private void setTextFieldFocusColor(TextField textField, boolean pass) {
+    private void updateVerifyUI(int index, String en, String ch, boolean pass) {
         if (pass){
-            textField.setStyle("-fx-focus-color:#d0d0d0");
-            textField.setBorder(new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
+            ((Label)infoLabelList.get(index)).setText("");
+            ((TextField) textFieldList.get(index)).setStyle("-fx-focus-color:#d0d0d0");
+            ((TextField) textFieldList.get(index)).setBorder(new Border(
+                    new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
         }else {
-            textField.setStyle("-fx-focus-color:red");
-            textField.setBorder(new Border(new BorderStroke(Paint.valueOf(Configs.red_color),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
+            ((Label)infoLabelList.get(index)).setText(Language.getString(en, ch));
+            ((TextField) textFieldList.get(index)).setStyle("-fx-focus-color:red");
+            ((TextField) textFieldList.get(index)).setBorder(new Border(
+                    new BorderStroke(Paint.valueOf(Configs.red_color),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
         }
     }
 
