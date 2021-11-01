@@ -36,10 +36,9 @@ import java.util.ArrayList;
 
 public class CustomParameters extends Application {
     double screenWidth,screenHeight;
-    double windowWidth = 660;
-    double windowHeight = 260;
+    double windowWidth = 570;
+    double windowHeight = 250;
     FlowPane rootPane;
-    Label infoLabel;
     Button changeButton;
 
     public void start(Stage primaryStage) {
@@ -69,6 +68,7 @@ public class CustomParameters extends Application {
     private void initView() {
         leftLabelList.clear();
         textFieldList.clear();
+        infoLabelList.clear();
         VBox vBox = new VBox();
         vBox.setPrefWidth(windowWidth - 50);
         vBox.setPrefHeight(windowHeight - 10);
@@ -87,11 +87,6 @@ public class CustomParameters extends Application {
         hBox8.setPrefHeight(50);
         hBox8.setMargin(changeButton,new Insets(0, 10, 0, 0));
         hBox8.setAlignment(Pos.BOTTOM_RIGHT);
-        infoLabel = new Label("");
-        infoLabel.setTranslateX(-90);
-        infoLabel.setFont(Font.font(16));
-        infoLabel.setTextFill(Color.web(Configs.red_color));
-        hBox8.getChildren().add(infoLabel);
         hBox8.getChildren().add(changeButton);
         changeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -113,6 +108,7 @@ public class CustomParameters extends Application {
 
     ArrayList textFieldList = new ArrayList();
     ArrayList leftLabelList = new ArrayList();
+    ArrayList infoLabelList = new ArrayList();
     private boolean allDataTrue = false;
     private void changeData() {
         try {
@@ -162,16 +158,17 @@ public class CustomParameters extends Application {
         hBox1.setPadding(new Insets(5,5,5,5));
 
         Label text1 = new Label(name + " : " + data);
-        text1.setPrefWidth(220);
+        text1.setPrefWidth(200);
         text1.setTextFill(Color.web(Configs.black));
         text1.setFont(Font.font(14));
         hBox1.getChildren().add(text1);
         leftLabelList.add(text1);
 
-        Label label = new Label("--->   " + Language.getString("new ","新的 ") + name + " : ");
+        Label label = new Label("---> ");
         label.setFont(Font.font(14));
-        label.setPrefWidth(265);
+        label.setPrefWidth(50);
         label.setTextFill(Color.web(Configs.black));
+
         TextField field = new TextField();
         field.setPrefSize(80, 25);
         field.setEditable(true);
@@ -179,7 +176,15 @@ public class CustomParameters extends Application {
         field.setAlignment(Pos.CENTER_LEFT);
         field.setBorder(new Border(new BorderStroke(Paint.valueOf(Configs.light_black),BorderStrokeStyle.SOLID,new CornerRadii(3),new BorderWidths(1))));
         field.setStyle("-fx-focus-color:#d0d0d0");
-        hBox1.getChildren().addAll(label, field);
+
+        Label infoLabel = new Label("");
+        infoLabel.setFont(Font.font(14));
+        infoLabel.setTranslateX(5);
+        infoLabel.setTranslateY(2);
+        infoLabel.setTextFill(Color.web(Configs.red_color));
+        infoLabelList.add(infoLabel);
+
+        hBox1.getChildren().addAll(label, field, infoLabel);
         hBox1.setMargin(label,new Insets(0, 0, 0, 30));
         textFieldList.add(field);
         field.textProperty().addListener(new ChangeListener<String>() {
@@ -221,16 +226,16 @@ public class CustomParameters extends Application {
         try {
             int emiss = (int) (Float.parseFloat(newValue) * 100);
             if (emiss < 1 || emiss > 100){
-                infoLabel.setText(Language.getString("Emissivity Out of range. Range is (0.1-1.0) !","发射率超出范围，范围是(0.1-1.0) !"));
+                setInfoLabel(((Label)infoLabelList.get(0)),"Range:(0.1-1.0)","范围:(0.1-1.0)",true);
                 setTextFieldFocusColor(((TextField) textFieldList.get(0)),false);
                 return false;
             }else {
-                infoLabel.setText("");
+                setInfoLabel(((Label)infoLabelList.get(0)),"Range:(0.1-1.0)","范围:(0.1-1.0)",false);
                 setTextFieldFocusColor(((TextField) textFieldList.get(0)),true);
                 return true;
             }
         }catch (Exception e){
-            infoLabel.setText(Language.getString("Emissivity Invalid input !","发射率无效输入!"));
+            setInfoLabel(((Label)infoLabelList.get(0)),"Range:(0.1-1.0)","范围:(0.1-1.0)",true);
             setTextFieldFocusColor(((TextField) textFieldList.get(0)),false);
             return false;
         }
@@ -240,16 +245,16 @@ public class CustomParameters extends Application {
         try {
             int relHum =  Integer.parseInt(newValue);
             if (relHum < 20 || relHum > 100){
-                infoLabel.setText(Language.getString("relHum Out of range. Range is (20-100) !","空气湿度超出范围，范围是(20-100) !"));
+                setInfoLabel(((Label)infoLabelList.get(1)),"Range:(20-100)","范围:(20-100)",true);
                 setTextFieldFocusColor(((TextField) textFieldList.get(1)),false);
                 return false;
             }else {
-                infoLabel.setText("");
+                setInfoLabel(((Label)infoLabelList.get(1)),"Range:(20-100)","范围:(20-100)",false);
                 setTextFieldFocusColor(((TextField) textFieldList.get(1)),true);
                 return true;
             }
         }catch (Exception e){
-            infoLabel.setText(Language.getString("relHum Invalid input !","空气湿度无效输入!"));
+            setInfoLabel(((Label)infoLabelList.get(1)),"Range:(20-100)","范围:(20-100)",true);
             setTextFieldFocusColor(((TextField) textFieldList.get(1)),false);
             return false;
         }
@@ -259,16 +264,16 @@ public class CustomParameters extends Application {
         try {
             int distance =  Integer.parseInt(newValue);
             if (distance < 1 || distance > 25){
-                infoLabel.setText(Language.getString("Distance Out of range. Range is (1-25) !","距离超出范围，范围是(1-25) !"));
+                setInfoLabel(((Label)infoLabelList.get(2)),"Range:(1-25)","范围:(1-25)",true);
                 setTextFieldFocusColor(((TextField) textFieldList.get(2)),false);
                 return false;
             }else {
-                infoLabel.setText("");
+                setInfoLabel(((Label)infoLabelList.get(2)),"Range:(1-25)","范围:(1-25)",false);
                 setTextFieldFocusColor(((TextField) textFieldList.get(2)),true);
                 return true;
             }
         }catch (Exception e){
-            infoLabel.setText(Language.getString("Distance Invalid input !","距离无效输入!"));
+            setInfoLabel(((Label)infoLabelList.get(2)),"Range:(1-25)","范围:(1-25)",true);
             setTextFieldFocusColor(((TextField) textFieldList.get(2)),false);
             return false;
         }
@@ -278,18 +283,26 @@ public class CustomParameters extends Application {
         try {
             int reflectedTemperature =  Integer.parseInt(newValue);
             if (reflectedTemperature < -40 || reflectedTemperature > 500){
-                infoLabel.setText(Language.getString("ReflectedTemperature Out of range. Range is (-40-500) !","反射温度超出范围，范围是(-40-500) !"));
+                setInfoLabel(((Label)infoLabelList.get(3)),"Range:(-40-500)","范围:(-40-500)",true);
                 setTextFieldFocusColor(((TextField) textFieldList.get(3)),false);
                 return false;
             }else {
-                infoLabel.setText("");
+                setInfoLabel(((Label)infoLabelList.get(3)),"Range:(-40-500)","范围:(-40-500)",false);
                 setTextFieldFocusColor(((TextField) textFieldList.get(3)),true);
                 return true;
             }
         }catch (Exception e){
-            infoLabel.setText(Language.getString("ReflectedTemperature Invalid input !","反射温度无效输入!"));
+            setInfoLabel(((Label)infoLabelList.get(3)),"Range:(-40-500)","范围:(-40-500)",true);
             setTextFieldFocusColor(((TextField) textFieldList.get(3)),false);
             return false;
+        }
+    }
+
+    private void setInfoLabel(Label label, String en, String ch, boolean show) {
+        if (show){
+            label.setText(Language.getString(en, ch));
+        }else {
+            label.setText("");
         }
     }
 
