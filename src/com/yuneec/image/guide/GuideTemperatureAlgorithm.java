@@ -2,8 +2,10 @@ package com.yuneec.image.guide;
 
 import com.yuneec.image.Global;
 import com.yuneec.image.dll.YuneecGuide;
+import com.yuneec.image.module.colorpalette.ZoomManager;
 import com.yuneec.image.utils.ByteUtils;
 import com.yuneec.image.utils.ParseTemperatureBytes;
+import com.yuneec.image.utils.YLog;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
@@ -88,9 +90,9 @@ public class GuideTemperatureAlgorithm {
         tifWidth = 640;
         tifHeight = 512;
         lineTemperaBytes = tifWidth * 2;
+
         double yScale = Global.currentOpenImageHeight / tifHeight;
         double xScale = Global.currentOpenImageWidth / tifWidth;
-
         int s_y = (int) (y / yScale);
         int s_x = (int) (x / xScale);
         if(y==0){
@@ -101,24 +103,26 @@ public class GuideTemperatureAlgorithm {
             index = ((s_y * lineTemperaBytes) + s_x * 2);
         }
 
-/*
-//        if (Global.dzoom != 1.0){
+/* */
+        if (Global.dzoom != 1.0){
         int topLeftX = ZoomManager.zoomRect[0];
         int topLeftY = ZoomManager.zoomRect[1];
         int width = ZoomManager.zoomRect[2];
         double zoom = Global.currentOpenImageWidth / width;
-//            index = (int) ((topLeftY + y/Global.dzoom) * lineTemperaBytes + (topLeftX + x/Global.dzoom)*2);
-        index = (int) ((topLeftY + y/zoom) * lineTemperaBytes + (topLeftX + x/zoom)*2);
-        YLog.I(" zoomRect : " + ZoomManager.zoomRect[0] + "," + ZoomManager.zoomRect[1] +","+ ZoomManager.zoomRect[2] + "," + ZoomManager.zoomRect[3]
-                + " ,zoom:" +zoom + " ,index:" + index);
-//        }
-*/
+//        index = (int) ( (topLeftY + y/Global.dzoom) * lineTemperaBytes + (topLeftX + x/Global.dzoom)*2 );
+        int x1 = (int) (topLeftX + x/zoom);
+        int y1 = (int) (topLeftY + y/zoom);
+        index = (y1 * lineTemperaBytes + x1*2);
+//        YLog.I(" zoomRect : {" + ZoomManager.zoomRect[0] + "," + ZoomManager.zoomRect[1] +","+ ZoomManager.zoomRect[2] + "," + ZoomManager.zoomRect[3] + "}" +
+//               " ,Global.dzoom:" + Global.dzoom + " ,zoom:" +zoom + " ,index:" + index +
+//                " ,x1:" + x1 + " ,y:" + y1);
+        }
         return index;
     }
 
     int tifWidth = 320;
     int tifHeight = 256;
-    static int TemperatureLen = 320*256*2;
+    static int TemperatureLen = 640*512*2;
     private int getTemperaByteIndexForXY(int x, int y) {
         int index = 0;
         int lineTemperaBytes = 0;
