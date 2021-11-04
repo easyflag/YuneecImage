@@ -3,6 +3,9 @@ package com.yuneec.image.utils;
 import com.yuneec.image.Configs;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.circle.CircleTemperManager;
+import com.yuneec.image.module.circle.CircleTemperature;
+import com.yuneec.image.module.circle.OneCircle;
 import com.yuneec.image.module.colorpalette.ColorPalette;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
@@ -33,6 +36,7 @@ public class ColorPickerManager {
         setBoxTemperatureColor();
         setCurveTemperatureColor();
         setLineTemperatureColor();
+        setCircleTemperatureColor();
     }
 
     private void setPointTemperatureColor() {
@@ -100,6 +104,24 @@ public class ColorPickerManager {
             }
             OneLine oneLine = (OneLine) lineTemperature.getOneLine();
             oneLine.getLine().setStroke(Color.web(Configs.temperatureColor));
+        }
+    }
+
+    private void setCircleTemperatureColor(){
+        for (int i = 0; i < CircleTemperManager.getInstance().circleTemperatureList.size(); i++) {
+            CircleTemperature circleTemperature = (CircleTemperature) CircleTemperManager.getInstance().circleTemperatureList.get(i);
+            if (!circleTemperature.getCircleTemperatureNodeMax().isEmpty()){
+                ArrayList temperatureNodeMax = circleTemperature.getCircleTemperatureNodeMax();
+                Label label = (Label) temperatureNodeMax.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            if (!circleTemperature.getCircleTemperatureNodeMin().isEmpty()){
+                ArrayList temperatureNodeMin = circleTemperature.getCircleTemperatureNodeMin();
+                Label label = (Label) temperatureNodeMin.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            OneCircle oneCircle = (OneCircle) circleTemperature.getOneCircle();
+            oneCircle.getCircle().setStroke(Color.web(Configs.temperatureColor));
         }
     }
 }

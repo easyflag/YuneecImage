@@ -4,6 +4,8 @@ import com.yuneec.image.CenterPane;
 import com.yuneec.image.module.Temperature;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.circle.CircleTemperManager;
+import com.yuneec.image.module.circle.CircleTemperature;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.curve.OneLine;
@@ -23,8 +25,10 @@ public class BackStepManager {
     public static final int MAX_BOX_COUNT = 3;
     public static final int MAX_CURVE_COUNT = 3;
     public static final int MAX_LINE_COUNT = 5;
+    public static final int MAX_CIRCLE_COUNT = 3;
     public int currentCurveCount = 0;
     public int currentLineCount = 0;
+    public int currentCircleCount = 0;
     public int currentBoxCount = 0;
 
     public static BackStepManager instance;
@@ -93,6 +97,13 @@ public class BackStepManager {
             CenterPane.getInstance().showImagePane.getChildren().removeAll(lineTemperature.getLineTemperatureNodeMin());
             LineTemperManager.getInstance().lineTemperatureList.remove(LineTemperManager.getInstance().lineTemperatureList.size()-1);
             LineTemperManager.getInstance().lineList.remove(LineTemperManager.getInstance().lineList.size()-1);
+        } else if (type == Temperature.TYPE.CIRCLE){
+            CircleTemperature circleTemperature = (CircleTemperature) temperature;
+            CenterPane.getInstance().showImagePane.getChildren().remove(circleTemperature.getOneCircle().getCircle());
+            CenterPane.getInstance().showImagePane.getChildren().removeAll(circleTemperature.getCircleTemperatureNodeMax());
+            CenterPane.getInstance().showImagePane.getChildren().removeAll(circleTemperature.getCircleTemperatureNodeMin());
+            CircleTemperManager.getInstance().circleTemperatureList.remove(CircleTemperManager.getInstance().circleTemperatureList.size()-1);
+            CircleTemperManager.getInstance().circleList.remove(CircleTemperManager.getInstance().circleList.size()-1);
         }
     }
 
@@ -136,6 +147,20 @@ public class BackStepManager {
             }
         }
         return currentLineCount;
+    }
+
+    public int getCurrentCircleCount() {
+        currentCircleCount = 0;
+        if (!temperatureInfoList.isEmpty()) {
+            int len = temperatureInfoList.size();
+            for (int i = len - 1; i >= 0; i--) {
+                Temperature temperature = (Temperature) temperatureInfoList.get(i);
+                if (temperature.type == Temperature.TYPE.CIRCLE) {
+                    currentCircleCount++;
+                }
+            }
+        }
+        return currentCircleCount;
     }
 
     public int getCurrentBoxCount() {

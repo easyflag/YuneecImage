@@ -5,6 +5,8 @@ import com.yuneec.image.Global;
 import com.yuneec.image.RightPane;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.circle.CircleTemperManager;
+import com.yuneec.image.module.circle.CircleTemperature;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.line.LineTemperManager;
@@ -56,6 +58,17 @@ public class UnitTransitions {
             if (!lineTemperature.getLineTemperatureNodeMin().isEmpty()){
                 ((Label)lineTemperature.getLineTemperatureNodeMin().get(0)).setText(
                         Utils.getFormatTemperature((float) lineTemperature.getLineTemperatureNodeMin().get(4)));
+            }
+        }
+        for (int i = 0; i < CircleTemperManager.getInstance().circleTemperatureList.size(); i++) {
+            CircleTemperature circleTemperature = (CircleTemperature) CircleTemperManager.getInstance().circleTemperatureList.get(i);
+            if (!circleTemperature.getCircleTemperatureNodeMax().isEmpty()){
+                ((Label)circleTemperature.getCircleTemperatureNodeMax().get(0)).setText(
+                        Utils.getFormatTemperature((float) circleTemperature.getCircleTemperatureNodeMax().get(4)));
+            }
+            if (!circleTemperature.getCircleTemperatureNodeMin().isEmpty()){
+                ((Label)circleTemperature.getCircleTemperatureNodeMin().get(0)).setText(
+                        Utils.getFormatTemperature((float) circleTemperature.getCircleTemperatureNodeMin().get(4)));
             }
         }
         if (Global.currentOpenImagePath != null){

@@ -7,6 +7,7 @@ public class Temperature {
         BOX,
         CURVE,
         LINE,
+        CIRCLE,
         NONE
     }
 

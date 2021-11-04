@@ -6,6 +6,9 @@ import com.yuneec.image.Global;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.circle.CircleTemperManager;
+import com.yuneec.image.module.circle.CircleTemperature;
+import com.yuneec.image.module.circle.OneCircle;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.curve.OneLine;
@@ -113,6 +116,7 @@ public class WindowChange {
         reLayoutBoxTemperatureLocation();
         reLayoutCurveTemperatureLocation();
         reLayoutLineTemperatureLocation();
+        reLayoutCircleTemperatureLocation();
     }
 
     private void reLayoutPointTemperatureLocation() {
@@ -235,6 +239,30 @@ public class WindowChange {
                     oneLine.getEndX()*imageZoomRatio,oneLine.getEndY()*imageZoomRatio,
                     oneLine.getLine());
         }
+    }
+
+    public void reLayoutCircleTemperatureLocation() {
+        for (int i = 0; i < CircleTemperManager.getInstance().circleTemperatureList.size(); i++) {
+            CircleTemperature circleTemperature = (CircleTemperature) CircleTemperManager.getInstance().circleTemperatureList.get(i);
+            boolean maxClickPoint = circleTemperature.isMaxWindowDraw();
+            if (!circleTemperature.getCircleTemperatureNodeMax().isEmpty()) {
+                ArrayList circleTemperatureNodeMax = circleTemperature.getCircleTemperatureNodeMax();
+                reLayoutPoint(circleTemperatureNodeMax, maxClickPoint);
+            }
+            if (!circleTemperature.getCircleTemperatureNodeMin().isEmpty()) {
+                ArrayList circleTemperatureNodeMin = circleTemperature.getCircleTemperatureNodeMin();
+                reLayoutPoint(circleTemperatureNodeMin, maxClickPoint);
+            }
+            OneCircle oneCircle = circleTemperature.getOneCircle();
+            reLayoutCircle(oneCircle.getStartX()*imageZoomRatio,oneCircle.getStartY()*imageZoomRatio,
+                    oneCircle.getRadius()*imageZoomRatio,oneCircle.getCircle());
+        }
+    }
+
+    private void reLayoutCircle(double x, double y, double radius, Circle circle) {
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+        circle.setRadius(radius);
     }
 
 

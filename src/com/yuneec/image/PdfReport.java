@@ -11,6 +11,8 @@ import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 import com.yuneec.image.module.Language;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
+import com.yuneec.image.module.circle.CircleTemperManager;
+import com.yuneec.image.module.circle.CircleTemperature;
 import com.yuneec.image.module.curve.CurveManager;
 import com.yuneec.image.module.curve.CurveTemperature;
 import com.yuneec.image.module.line.LineTemperManager;
@@ -19,6 +21,7 @@ import com.yuneec.image.module.point.PointManager;
 import com.yuneec.image.module.point.PointTemperature;
 import com.yuneec.image.utils.ToastUtil;
 import com.yuneec.image.utils.Utils;
+import com.yuneec.image.utils.WindowChange;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
@@ -143,7 +146,8 @@ public class PdfReport {
 		addCurveTemperature();
 		//5、直线测温数据
 		addLineTemperature();
-
+		//6、圆测温数据
+		addCircleTemperature();
 //		Paragraph paragraphEnd = new Paragraph("...", textfont);
 //		paragraphEnd.setSpacingAfter(30f);
 //
@@ -352,6 +356,48 @@ public class PdfReport {
 		}
 	}
 
+	private void addCircleTemperature() {
+		if (CircleTemperManager.getInstance().circleTemperatureList.size() > 0){
+			Paragraph title = new Paragraph(Language.getString("Circle Temperature Data:","圆圈测温数据:"), Language.isEnglish()?headfont:headfontCh);
+			title.setAlignment(0);
+			title.setIndentationLeft(12);
+			title.setSpacingBefore(15f);
+
+			PdfPTable table = createTable(new float[] {70, 100, 100, 100, 100},Element.ALIGN_CENTER);
+			table.setSpacingBefore(10f);
+			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Max","最大值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Min","最小值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			for (int i = 0; i < CircleTemperManager.getInstance().circleTemperatureList.size(); i++) {
+				float maxTemperature = 0;
+				float minTemperature = 0;
+				CircleTemperature circleTemperature = (CircleTemperature) CircleTemperManager.getInstance().circleTemperatureList.get(i);
+				if (!circleTemperature.getCircleTemperatureNodeMax().isEmpty()){
+					ArrayList circleTemperatureNodeMax = circleTemperature.getCircleTemperatureNodeMax();
+					maxTemperature = (float) circleTemperatureNodeMax.get(4);
+				}
+				if (!circleTemperature.getCircleTemperatureNodeMin().isEmpty()){
+					ArrayList circleTemperatureNodeMin = circleTemperature.getCircleTemperatureNodeMin();
+					minTemperature = (float) circleTemperatureNodeMin.get(4);
+				}
+				table.addCell(createCell(""+(i+1), textfont));
+				table.addCell(createCell(Utils.getFormatTemperature(maxTemperature), textfontCh));
+				table.addCell(createCell(Utils.getFormatTemperature(minTemperature), textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss / 100f + "", Language.isEnglish()?textfont:textfontCh));
+				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance / 10 + "", Language.isEnglish()?textfont:textfontCh));
+			}
+			try {
+				document.add(title);
+				document.add(table);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				document.close();
+			}
+		}
+	}
+
 	private void addImage() {
 		try {
 			Paragraph title = new Paragraph(Language.getString("Temperature Image:","温度图像:"), Language.isEnglish()?headfont:headfontCh);
@@ -363,7 +409,11 @@ public class PdfReport {
 			ImageIO.write(SwingFXUtils.fromFXImage(showImagePane, null), "png", new File(tempImagePath));
 			Image image = Image.getInstance(tempImagePath);
 			image.setAlignment(Image.ALIGN_CENTER);
-			image.scalePercent(70); //依照比例缩放
+			if (WindowChange.maxWindow){
+				image.scalePercent((float) (70 * WindowChange.maxToMinRatio));
+			}else {
+				image.scalePercent(70); //依照比例缩放
+			}
 
 			document.add(title);
 			document.add(image);

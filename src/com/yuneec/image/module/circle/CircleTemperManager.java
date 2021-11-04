@@ -9,6 +9,7 @@ import com.yuneec.image.module.line.LineTemperature;
 import com.yuneec.image.utils.BackStepManager;
 import com.yuneec.image.utils.TemperatureAlgorithm;
 import com.yuneec.image.utils.Utils;
+import com.yuneec.image.utils.WindowChange;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Circle;
 
@@ -46,8 +47,8 @@ public class CircleTemperManager {
             y = 0;
         }
         if (status == CurveManager.MouseStatus.MousePressed){
-            if (BackStepManager.getInstance().getCurrentLineCount() == BackStepManager.MAX_LINE_COUNT && BackStepManager.openTemperatureLimit){
-                BackStepManager.getInstance().backStep(Temperature.TYPE.LINE);
+            if (BackStepManager.getInstance().getCurrentCircleCount() == BackStepManager.MAX_CIRCLE_COUNT && BackStepManager.openTemperatureLimit){
+                BackStepManager.getInstance().backStep(Temperature.TYPE.CIRCLE);
             }
             getStartXY = true;
             if (getStartXY){
@@ -154,29 +155,29 @@ public class CircleTemperManager {
         int[] maxTemperatureXY = oneCirclexylist.get(maxTemperatureIndex);
         int[] minTemperatureXY = oneCirclexylist.get(minTemperatureIndex);
 
-        ArrayList lineTemperatureNodeMax = CenterPane.getInstance().addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
-        ArrayList lineTemperatureNodeMin = CenterPane.getInstance().addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
+        ArrayList circleTemperatureNodeMax = CenterPane.getInstance().addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
+        ArrayList circleTemperatureNodeMin = CenterPane.getInstance().addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
 
-//        LineTemperature lineTemperature = new LineTemperature(oneLine,lineTemperatureNodeMax,lineTemperatureNodeMin);
-//        lineTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
-//        lineTemperatureList.add(lineTemperature);
-//        BackStepManager.getInstance().addTemperatureInfo(lineTemperature);
+        CircleTemperature circleTemperature = new CircleTemperature(oneCircle,circleTemperatureNodeMax,circleTemperatureNodeMin);
+        circleTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
+        circleTemperatureList.add(circleTemperature);
+        BackStepManager.getInstance().addTemperatureInfo(circleTemperature);
     }
 
     public void recalculate(){
-        for (int i = 0; i < lineTemperatureList.size(); i++) {
-            LineTemperature lineTemperature = (LineTemperature) lineTemperatureList.get(i);
-            if (!lineTemperature.getLineTemperatureNodeMax().isEmpty()){
-                Label label = (Label) lineTemperature.getLineTemperatureNodeMax().get(0);
-                int x = (int) lineTemperature.getLineTemperatureNodeMax().get(5);
-                int y = (int) lineTemperature.getLineTemperatureNodeMax().get(6);
+        for (int i = 0; i < circleTemperatureList.size(); i++) {
+            CircleTemperature circleTemperature = (CircleTemperature) circleTemperatureList.get(i);
+            if (!circleTemperature.getCircleTemperatureNodeMax().isEmpty()){
+                Label label = (Label) circleTemperature.getCircleTemperatureNodeMax().get(0);
+                int x = (int) circleTemperature.getCircleTemperatureNodeMax().get(5);
+                int y = (int) circleTemperature.getCircleTemperatureNodeMax().get(6);
                 float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
                 label.setText(Utils.getFormatTemperature(newPointTemperature));
             }
-            if (!lineTemperature.getLineTemperatureNodeMin().isEmpty()){
-                Label label = (Label) lineTemperature.getLineTemperatureNodeMin().get(0);
-                int x = (int) lineTemperature.getLineTemperatureNodeMin().get(5);
-                int y = (int) lineTemperature.getLineTemperatureNodeMin().get(6);
+            if (!circleTemperature.getCircleTemperatureNodeMin().isEmpty()){
+                Label label = (Label) circleTemperature.getCircleTemperatureNodeMin().get(0);
+                int x = (int) circleTemperature.getCircleTemperatureNodeMin().get(5);
+                int y = (int) circleTemperature.getCircleTemperatureNodeMin().get(6);
                 float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
                 label.setText(Utils.getFormatTemperature(newPointTemperature));
             }
@@ -189,7 +190,7 @@ public class CircleTemperManager {
 
     List<int[]> oneCirclexylist = new ArrayList<int[]>();
     public ArrayList temperatureList = new ArrayList();
-    public ArrayList lineTemperatureList = new ArrayList();
+    public ArrayList circleTemperatureList = new ArrayList();
     private boolean getStartXY = false;
 
 

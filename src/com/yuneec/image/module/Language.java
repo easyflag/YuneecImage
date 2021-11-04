@@ -76,6 +76,8 @@ public class Language {
     public static String BoxTemperature_ch = "在图片上框选一个矩形可获取此区域的最大最小温度信息.";
     public static String CurveTemperature_en = "Draw a line on the picture to obtain the maximum and minimum temperature information on the line.";
     public static String CurveTemperature_ch = "在图片上画一个线条可获取此线条上的最大最小温度信息.";
+    public static String CircleTemperature_en = "Draw a circle on the picture to obtain the maximum and minimum temperature information within the circle.";
+    public static String CircleTemperature_ch = "在图片上画一个圆可获取此圆内的最大最小温度信息.";
     public static String ColorPaletteTip_en = "Color Palette";
     public static String ColorPaletteTip_ch = "调色板";
     public static String ClearTip_en = "One key to clear all temperature information.";
