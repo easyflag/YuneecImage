@@ -126,18 +126,31 @@ public class ImageUtil {
 			RightImageInfo.time[3] = description;
 		}
 		if(tagName.equals(RightImageInfo.longitude[0])){
-			RightImageInfo.longitude[3] = description;
+			RightImageInfo.longitude[3] = Dms2D(description);
 		}
 		if(tagName.equals(RightImageInfo.latitude[0])){
-			RightImageInfo.latitude[3] = description;
+			RightImageInfo.latitude[3] = Dms2D(description);
 		}
 		if(tagName.equals(RightImageInfo.altitude[0])){
 			RightImageInfo.altitude[3] = description;
 		}
 		if(tagName.equals(RightImageInfo.fileSize[0])) {
 			Float size = Float.parseFloat(description.replace("bytes", "").trim()) / 1024 / 1024f;
-			RightImageInfo.fileSize[3] = (String.format("%.3f", size) + " M");
+			RightImageInfo.fileSize[3] = (String.format("%.3f", size) + " MB");
 		}
+	}
+
+	public static String Dms2D(String jwd){
+//		double r=度+分/60+秒/3600
+		double du = Double.parseDouble(jwd.split("°")[0]);
+		String fenmiao = jwd.split("°")[1];
+		String fen_s = fenmiao.split("'")[0];
+		double fen = Double.parseDouble(fen_s) / 60;
+		String miao_s = fenmiao.split("'")[1].replace("\"","");
+		double miao = Double.parseDouble(miao_s) / 3600;
+		double lonlat = du + fen + miao;
+//		YLog.I("jwd ---> "+"du:" + du + " fen_s:" + fen_s + " miao_s:" +miao_s);
+		return String.format("%.6f", lonlat);
 	}
 
 }

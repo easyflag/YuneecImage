@@ -7,8 +7,10 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
+import com.yuneec.image.demo.HttpUtils;
 import com.yuneec.image.guide.GuideTemperatureAlgorithm;
 import com.yuneec.image.module.Language;
+import com.yuneec.image.module.RightImageInfo;
 import com.yuneec.image.module.box.BoxTemperature;
 import com.yuneec.image.module.box.BoxTemperatureManager;
 import com.yuneec.image.module.circle.CircleTemperManager;
@@ -62,6 +64,7 @@ public class PdfReport {
             document.close();
 
 			new File(tempImagePath).delete();
+			new File(HttpUtils.tempMapImagePath).delete();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -138,6 +141,8 @@ public class PdfReport {
 		addTestingEnvironment();
 		//5、图片
 		addImage();
+		//map png
+		addMapImage();
 		//2、点测温数据
 		addPointTemperature();
 		//3、区域测温数据
@@ -155,7 +160,6 @@ public class PdfReport {
 //		document.add(paragraphImagePath);
 //
 	}
-
 
 	private void addTestingEnvironment(){
 		Paragraph title = new Paragraph(Language.getString("Image Info:","图片信息:"), Language.isEnglish()?headfont:headfontCh);
@@ -193,7 +197,7 @@ public class PdfReport {
 
 	private void addPointTemperature() {
 		if (PointManager.getInstance().pointTemperatureNodeList.size() > 0){
-			document.newPage();
+//			document.newPage();
 			Paragraph title = new Paragraph(Language.getString("Point Temperature Data:","点测温数据:"), Language.isEnglish()?headfont:headfontCh);
 			title.setAlignment(0);
 //			title.setLeading(30);
@@ -417,6 +421,39 @@ public class PdfReport {
 
 			document.add(title);
 			document.add(image);
+		}catch (Exception e){
+			e.printStackTrace();
+			document.close();
+		}
+	}
+
+	private void addMapImage() {
+		try {
+			document.newPage();
+			Paragraph title = new Paragraph(Language.getString("Location:","拍摄地点:"), Language.isEnglish()?headfont:headfontCh);
+			title.setAlignment(0);
+			title.setIndentationLeft(12);
+			title.setSpacingBefore(15f);
+
+			String lonlat = RightImageInfo.longitude[3] + "," + RightImageInfo.latitude[3]; //120.935157,31.187180
+			String latlon = RightImageInfo.latitude[3] + "," + RightImageInfo.longitude[3];
+			String amapUrl = "https://restapi.amap.com/v3/staticmap?location="+lonlat+"&zoom=12&size=640*512&markers=mid,,A:"+lonlat+"&key=b58d00f5158d46e04f68b2fe471d1db5";
+			String bingMapUrl = "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/"+latlon+"/12?mapSize=640,512&pp="+latlon+";66&mapLayer=Basemap,Buildings" +
+					"&key=AgkhWkLY5kDXRCQOBduHxzCOoPlLC0GsRdHdeug8VzqZ3cwe_PSoPcY70sCnWabc";
+			HttpUtils.I().download(bingMapUrl, new HttpUtils.DownloadCallBack() {
+				@Override
+				public void success() {
+					try {
+						Image image = Image.getInstance(HttpUtils.tempMapImagePath);
+						image.setAlignment(Image.ALIGN_CENTER);
+						image.scalePercent(70);
+						document.add(title);
+						document.add(image);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
+				}
+			});
 		}catch (Exception e){
 			e.printStackTrace();
 			document.close();
