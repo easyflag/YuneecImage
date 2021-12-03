@@ -32,6 +32,7 @@ public class BoxTemperatureManager {
                     boxTemperature.getLeftLine(), boxTemperature.getRightLine());
             CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMax());
             CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMin());
+            CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeAvg());
             boxTemperatureList.remove(endIndex);
         }
     }
@@ -68,6 +69,7 @@ public class BoxTemperatureManager {
     }
 
     public void recalculate(){
+        float allTemperature=0;
         for (int i = 0; i < boxTemperatureList.size(); i++) {
             BoxTemperature boxTemperature = (BoxTemperature) boxTemperatureList.get(i);
             if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()){
@@ -83,6 +85,14 @@ public class BoxTemperatureManager {
                 int y = (int) boxTemperature.getBoxTemperatureNodeMin().get(6);
                 float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
                 label.setText(Utils.getFormatTemperature(newPointTemperature));
+            }
+            if (!boxTemperature.getBoxTemperatureNodeAvg().isEmpty()){
+                Label label = (Label) boxTemperature.getBoxTemperatureNodeAvg().get(0);
+                for (int ii = 0; ii < BoxTemperatureUtil.getInstance().temperatureList.size(); ii++) {
+                    allTemperature += (float) BoxTemperatureUtil.getInstance().temperatureList.get(ii);
+                }
+                float newAvgTemperature = allTemperature / BoxTemperatureUtil.getInstance().temperatureList.size();
+                label.setText(Utils.getFormatTemperature(newAvgTemperature));
             }
         }
     }

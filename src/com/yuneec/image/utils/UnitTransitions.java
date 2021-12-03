@@ -37,6 +37,10 @@ public class UnitTransitions {
                 ((Label)boxTemperature.getBoxTemperatureNodeMin().get(0)).setText(
                         Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeMin().get(4)));
             }
+            if (!boxTemperature.getBoxTemperatureNodeAvg().isEmpty()){
+                ((Label)boxTemperature.getBoxTemperatureNodeAvg().get(0)).setText("Avg:"+
+                        Utils.getFormatTemperature((float) boxTemperature.getBoxTemperatureNodeAvg().get(4)));
+            }
         }
         for (int i = 0; i < CurveManager.getInstance().curveTemperatureList.size(); i++) {
             CurveTemperature curveTemperature = (CurveTemperature) CurveManager.getInstance().curveTemperatureList.get(i);
@@ -47,6 +51,10 @@ public class UnitTransitions {
             if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
                 ((Label)curveTemperature.getCurveTemperatureNodeMin().get(0)).setText(
                         Utils.getFormatTemperature((float) curveTemperature.getCurveTemperatureNodeMin().get(4)));
+            }
+            if (!curveTemperature.getCurveTemperatureNodeAvg().isEmpty()){
+                ((Label)curveTemperature.getCurveTemperatureNodeAvg().get(0)).setText("Avg:" +
+                        Utils.getFormatTemperature((float) curveTemperature.getCurveTemperatureNodeAvg().get(4)));
             }
         }
         for (int i = 0; i < LineTemperManager.getInstance().lineTemperatureList.size(); i++) {

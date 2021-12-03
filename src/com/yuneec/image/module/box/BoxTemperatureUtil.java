@@ -15,7 +15,7 @@ public class BoxTemperatureUtil {
 	}
 
 	private ArrayList<int[]> xyList = new ArrayList<int[]>();
-	private ArrayList temperatureList = new ArrayList();
+	public ArrayList temperatureList = new ArrayList();
 	private int startX = 0;
 	private int startY = 0;
 	private int endX = 0;
@@ -68,9 +68,12 @@ public class BoxTemperatureUtil {
 	int maxTemperatureIndex = 0;
 	float minTemperature = 0;
 	int minTemperatureIndex = 0;
+	float avgTemperature = 0;
+	float allTemperature = 0;
 	private void getMaxMinTemperature(){
 		maxTemperatureIndex = 0;
 		minTemperatureIndex = 0;
+		allTemperature = 0;
 		maxTemperature = (float)temperatureList.get(0);
 		minTemperature = (float)temperatureList.get(0);
 		for (int i = 0; i < temperatureList.size(); i++) {
@@ -82,15 +85,17 @@ public class BoxTemperatureUtil {
 				minTemperature = (float)temperatureList.get(i);
 				minTemperatureIndex = i;
 			}
+			allTemperature += (float)temperatureList.get(i);
 		}
 //		YLog.I("BoxTemperatureUtil..." + " maxTemperature:" + maxTemperature  + " maxTemperatureIndex:" + maxTemperatureIndex
 //				+ " minTemperature:" + minTemperature + " minTemperatureIndex:" + minTemperatureIndex);
 
 		int[] maxTemperatureXY = xyList.get(maxTemperatureIndex);
 		int[] minTemperatureXY = xyList.get(minTemperatureIndex);
-
+		avgTemperature = allTemperature / temperatureList.size();
+		int[] avgTemperatureXY = {startX,startY};
 		if (maxMinTemperature != null){
-			maxMinTemperature.onResust(maxTemperature,maxTemperatureXY,minTemperature,minTemperatureXY);
+			maxMinTemperature.onResust(maxTemperature,maxTemperatureXY,minTemperature,minTemperatureXY,avgTemperature,avgTemperatureXY);
 		}
 	}
 
@@ -100,7 +105,7 @@ public class BoxTemperatureUtil {
 
 	public MaxMinTemperature maxMinTemperature;
 	public interface MaxMinTemperature{
-		void onResust(float maxTemperature,int[] maxTemperatureXY,float minTemperature,int[] minTemperatureXY);
+		void onResust(float maxTemperature,int[] maxTemperatureXY,float minTemperature,int[] minTemperatureXY,float avgTemperature,int[] avgTemperatureXY);
 	}
 
 

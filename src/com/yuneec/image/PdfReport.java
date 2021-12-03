@@ -241,17 +241,19 @@ public class PdfReport {
 			title.setIndentationLeft(12);
 			title.setSpacingBefore(15f);
 
-			PdfPTable table = createTable(new float[] {70, 100, 100, 100, 100},Element.ALIGN_CENTER);
+			PdfPTable table = createTable(new float[] {50, 80, 80, 80, 95, 85},Element.ALIGN_CENTER);
 			table.setSpacingBefore(10f);
 			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Max","最大值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Min","最小值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Avg","平均值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			for (int i = 0; i < BoxTemperatureManager.getInstance().boxTemperatureList.size(); i++) {
 				BoxTemperature boxTemperature = (BoxTemperature) BoxTemperatureManager.getInstance().boxTemperatureList.get(i);
 				float maxTemperature = 0;
 				float minTemperature = 0;
+				float avgTemperature = 0;
 				if (!boxTemperature.getBoxTemperatureNodeMax().isEmpty()) {
 					ArrayList boxTemperatureNodeMaxList = boxTemperature.getBoxTemperatureNodeMax();
 					maxTemperature = (float) boxTemperatureNodeMaxList.get(4);
@@ -260,9 +262,14 @@ public class PdfReport {
 					ArrayList boxTemperatureNodeMinList = boxTemperature.getBoxTemperatureNodeMin();
 					minTemperature = (float) boxTemperatureNodeMinList.get(4);
 				}
+				if (!boxTemperature.getBoxTemperatureNodeAvg().isEmpty()) {
+					ArrayList boxTemperatureNodeAvgList = boxTemperature.getBoxTemperatureNodeAvg();
+					avgTemperature = (float) boxTemperatureNodeAvgList.get(4);
+				}
 				table.addCell(createCell(""+(i+1), textfont));
 				table.addCell(createCell(Utils.getFormatTemperature(maxTemperature), textfontCh));
 				table.addCell(createCell(Utils.getFormatTemperature(minTemperature), textfontCh));
+				table.addCell(createCell(Utils.getFormatTemperature(avgTemperature), textfontCh));
 				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss / 100f + "", Language.isEnglish()?textfont:textfontCh));
 				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance / 10 + "", Language.isEnglish()?textfont:textfontCh));
 			}
@@ -283,16 +290,18 @@ public class PdfReport {
 			title.setIndentationLeft(12);
 			title.setSpacingBefore(15f);
 
-			PdfPTable table = createTable(new float[] {70, 100, 100, 100, 100},Element.ALIGN_CENTER);
+			PdfPTable table = createTable(new float[] {50, 80, 80, 80, 95, 85},Element.ALIGN_CENTER);
 			table.setSpacingBefore(10f);
 			table.addCell(createCell(Language.getString("No","编号"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Max","最大值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Min","最小值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
+			table.addCell(createCell(Language.getString("Avg","平均值"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Emissivity","发射率"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			table.addCell(createCell(Language.getString("Distance","距离"), Language.isEnglish()?keyfont:keyfontCh, Element.ALIGN_CENTER));
 			for (int i = 0; i < CurveManager.getInstance().curveTemperatureList.size(); i++) {
 				float maxTemperature = 0;
 				float minTemperature = 0;
+				float avgTemperature = 0;
 				CurveTemperature curveTemperature = (CurveTemperature) CurveManager.getInstance().curveTemperatureList.get(i);
 				if (!curveTemperature.getCurveTemperatureNodeMax().isEmpty()){
 					ArrayList curveTemperatureNodeMax = curveTemperature.getCurveTemperatureNodeMax();
@@ -302,9 +311,14 @@ public class PdfReport {
 					ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
 					minTemperature = (float) curveTemperatureNodeMin.get(4);
 				}
+				if (!curveTemperature.getCurveTemperatureNodeAvg().isEmpty()){
+					ArrayList curveTemperatureNodeAvg = curveTemperature.getCurveTemperatureNodeAvg();
+					avgTemperature = (float) curveTemperatureNodeAvg.get(4);
+				}
 				table.addCell(createCell(""+(i+1), textfont));
 				table.addCell(createCell(Utils.getFormatTemperature(maxTemperature), textfontCh));
 				table.addCell(createCell(Utils.getFormatTemperature(minTemperature), textfontCh));
+				table.addCell(createCell(Utils.getFormatTemperature(avgTemperature), textfontCh));
 				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.emiss / 100f + "", Language.isEnglish()?textfont:textfontCh));
 				table.addCell(createCell(GuideTemperatureAlgorithm.pParamExt.distance / 10 + "", Language.isEnglish()?textfont:textfontCh));
 			}

@@ -32,12 +32,18 @@ public class CurveManager {
 
     private int lastx, lasty;
     private int x, y;
+    private int startX = 0;
+    private int startY = 0;
 
     public void setMouseMousePressedXY(int x, int y, MouseStatus status) {
         LineTemperManager.getInstance().setMouseMousePressedXY(x,y,status);
 
         if (CenterPane.getInstance().centerSettingFlag != CenterPane.CenterSettingSelect.CURVE) {
             return;
+        }
+        if (status == MouseStatus.MousePressed){
+            startX = x;
+            startY = y;
         }
         if (x >= Global.currentOpenImageWidth){
             x = (int) Global.currentOpenImageWidth;
@@ -105,9 +111,12 @@ public class CurveManager {
     int maxTemperatureIndex = 0;
     float minTemperature = 0;
     int minTemperatureIndex = 0;
+    float avgTemperature = 0;
+    float allTemperature = 0;
     private void getCurveMaxMinTemperature(){
         maxTemperatureIndex = 0;
         minTemperatureIndex = 0;
+        allTemperature = 0;
         maxTemperature = (float)temperatureList.get(0);
         minTemperature = (float)temperatureList.get(0);
         for (int i = 0; i < temperatureList.size(); i++) {
@@ -119,23 +128,28 @@ public class CurveManager {
                 minTemperature = (float)temperatureList.get(i);
                 minTemperatureIndex = i;
             }
+            allTemperature += (float)temperatureList.get(i);
         }
 //		YLog.I("CurveTemperatureUtil..." + " maxTemperature:" + maxTemperature  + " maxTemperatureIndex:" + maxTemperatureIndex
 //				+ " minTemperature:" + minTemperature + " minTemperatureIndex:" + minTemperatureIndex);
 
         int[] maxTemperatureXY = xyList.get(maxTemperatureIndex);
         int[] minTemperatureXY = xyList.get(minTemperatureIndex);
+        avgTemperature = allTemperature / temperatureList.size();
+        int[] avgTemperatureXY = {startX,startY};
 
         ArrayList curveTemperatureNodeMax = CenterPane.getInstance().addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
         ArrayList curveTemperatureNodeMin = CenterPane.getInstance().addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
+        ArrayList curveTemperatureNodeAvg = CenterPane.getInstance().addAvgLabelInImage(avgTemperatureXY[0],avgTemperatureXY[1],avgTemperature,Configs.white_color);
 
-        CurveTemperature curveTemperature = new CurveTemperature(lineList,curveTemperatureNodeMax,curveTemperatureNodeMin);
+        CurveTemperature curveTemperature = new CurveTemperature(lineList,curveTemperatureNodeMax,curveTemperatureNodeMin,curveTemperatureNodeAvg);
         curveTemperature.setMaxWindowDraw(WindowChange.I().maxWindow);
         curveTemperatureList.add(curveTemperature);
         BackStepManager.getInstance().addTemperatureInfo(curveTemperature);
     }
 
     public void recalculate(){
+        allTemperature = 0;
         for (int i = 0; i < curveTemperatureList.size(); i++) {
             CurveTemperature curveTemperature = (CurveTemperature) curveTemperatureList.get(i);
             if (!curveTemperature.getCurveTemperatureNodeMax().isEmpty()){
@@ -150,6 +164,14 @@ public class CurveManager {
                 int x = (int) curveTemperature.getCurveTemperatureNodeMin().get(5);
                 int y = (int) curveTemperature.getCurveTemperatureNodeMin().get(6);
                 float newPointTemperature = TemperatureAlgorithm.getInstance().getTemperature(x,y);
+                label.setText(Utils.getFormatTemperature(newPointTemperature));
+            }
+            if (!curveTemperature.getCurveTemperatureNodeAvg().isEmpty()){
+                Label label = (Label) curveTemperature.getCurveTemperatureNodeMin().get(0);
+                for (int j = 0; j < temperatureList.size(); j++) {
+                    allTemperature += (float)temperatureList.get(j);
+                }
+                float newPointTemperature = allTemperature / temperatureList.size();
                 label.setText(Utils.getFormatTemperature(newPointTemperature));
             }
         }

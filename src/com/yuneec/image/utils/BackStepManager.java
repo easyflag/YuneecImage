@@ -79,6 +79,7 @@ public class BackStepManager {
                     boxTemperature.getLeftLine(), boxTemperature.getRightLine());
             CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMax());
             CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeMin());
+            CenterPane.getInstance().showImagePane.getChildren().removeAll(boxTemperature.getBoxTemperatureNodeAvg());
             BoxTemperatureManager.getInstance().boxTemperatureList.remove(BoxTemperatureManager.getInstance().boxTemperatureList.size()-1);
         } else if (type == Temperature.TYPE.CURVE){
             CurveTemperature curveTemperature = (CurveTemperature) temperature;
@@ -89,6 +90,7 @@ public class BackStepManager {
             }
             CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getCurveTemperatureNodeMax());
             CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getCurveTemperatureNodeMin());
+            CenterPane.getInstance().showImagePane.getChildren().removeAll(curveTemperature.getCurveTemperatureNodeAvg());
             CurveManager.getInstance().curveTemperatureList.remove(CurveManager.getInstance().curveTemperatureList.size()-1);
         } else if (type == Temperature.TYPE.LINE){
             LineTemperature lineTemperature = (LineTemperature) temperature;

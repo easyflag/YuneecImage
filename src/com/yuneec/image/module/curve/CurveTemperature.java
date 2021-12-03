@@ -10,11 +10,13 @@ public class CurveTemperature extends Temperature {
     private ArrayList allLine; // one curveline Consists of multiple line
     private ArrayList curveTemperatureNodeMax;
     private ArrayList curveTemperatureNodeMin;
+    private ArrayList curveTemperatureNodeAvg;
 
-    public CurveTemperature(ArrayList allLine, ArrayList curveTemperatureNodeMax, ArrayList curveTemperatureNodeMin) {
+    public CurveTemperature(ArrayList allLine, ArrayList curveTemperatureNodeMax, ArrayList curveTemperatureNodeMin, ArrayList curveTemperatureNodeAvg) {
         this.allLine = allLine;
         this.curveTemperatureNodeMax = curveTemperatureNodeMax;
         this.curveTemperatureNodeMin = curveTemperatureNodeMin;
+        this.curveTemperatureNodeAvg = curveTemperatureNodeAvg;
         setType(TYPE.CURVE);
     }
 
@@ -28,6 +30,10 @@ public class CurveTemperature extends Temperature {
 
     public ArrayList getCurveTemperatureNodeMin() {
         return curveTemperatureNodeMin;
+    }
+
+    public ArrayList getCurveTemperatureNodeAvg() {
+        return curveTemperatureNodeAvg;
     }
 
     private boolean maxWindowDraw;

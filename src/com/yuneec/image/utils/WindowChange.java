@@ -181,6 +181,12 @@ public class WindowChange {
                 ArrayList boxTemperatureNodeMinList = boxTemperature.getBoxTemperatureNodeMin();
                 reLayoutPoint(boxTemperatureNodeMinList,maxClickPoint);
             }
+            if (!boxTemperature.getBoxTemperatureNodeAvg().isEmpty()){
+                ArrayList boxTemperatureNodeAvgList = boxTemperature.getBoxTemperatureNodeAvg();
+                Label label = (Label) boxTemperatureNodeAvgList.get(0);
+                label.setTranslateX((boxTemperature.getStartLineX()*imageZoomRatio));
+                label.setTranslateY((boxTemperature.getStartLineY()*imageZoomRatio-15));
+            }
 //            topLine = drawLine(startLineX, startLineY, endLineX, startLineY,Configs.white_color);
             reLayoutLine(boxTemperature.getStartLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
                     boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
@@ -197,6 +203,9 @@ public class WindowChange {
             reLayoutLine(boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getStartLineY()*imageZoomRatio,
                     boxTemperature.getEndLineX()*imageZoomRatio,boxTemperature.getEndLineY()*imageZoomRatio,
                     boxTemperature.getRightLine());
+
+
+
         }
     }
 
@@ -211,6 +220,12 @@ public class WindowChange {
             if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
                 ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
                 reLayoutPoint(curveTemperatureNodeMin,maxClickPoint);
+            }
+            if (!curveTemperature.getCurveTemperatureNodeAvg().isEmpty()){
+                ArrayList curveTemperatureNodeAvgList = curveTemperature.getCurveTemperatureNodeAvg();
+                Label label = (Label) curveTemperatureNodeAvgList.get(0);
+                label.setTranslateX((((OneLine)curveTemperature.getAllLine().get(0)).getStartX()*imageZoomRatio));
+                label.setTranslateY((((OneLine)curveTemperature.getAllLine().get(0)).getStartY()*imageZoomRatio-15));
             }
             ArrayList allLine = curveTemperature.getAllLine();
             for (int j=0;j<allLine.size();j++){

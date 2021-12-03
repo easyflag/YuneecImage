@@ -193,11 +193,12 @@ public class CenterPane {
                 }
                 BoxTemperatureUtil.getInstance().init(startLineX, startLineY, endLineX, endLineY, new BoxTemperatureUtil.MaxMinTemperature() {
                     @Override
-                    public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY) {
+                    public void onResust(float maxTemperature, int[] maxTemperatureXY, float minTemperature, int[] minTemperatureXY, float avgTemperature, int[] avgTemperatureXY) {
                         ArrayList boxTemperatureNodeMax = addLabelInImage(maxTemperatureXY[0],maxTemperatureXY[1],maxTemperature,Configs.red_color);
                         ArrayList boxTemperatureNodeMin = addLabelInImage(minTemperatureXY[0],minTemperatureXY[1],minTemperature,Configs.blue2_color);
+                        ArrayList boxTemperatureNodeAvg = addAvgLabelInImage(avgTemperatureXY[0],avgTemperatureXY[1],avgTemperature,Configs.white_color);
                         BoxTemperature boxTemperature = new BoxTemperature(startLineX, startLineY, endLineX, endLineY,
-                                topLine,bottomLine,leftLine,rightLine, boxTemperatureNodeMax,boxTemperatureNodeMin);
+                                topLine,bottomLine,leftLine,rightLine, boxTemperatureNodeMax,boxTemperatureNodeMin,boxTemperatureNodeAvg);
                         BoxTemperatureManager.getInstance().addBoxTemperature(boxTemperature);
                     }
                 });
@@ -265,6 +266,37 @@ public class CenterPane {
         Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,color);
         Line yLine = drawLine(x,y-lineLEN,x,y+lineLEN,color);
         showImagePane.getChildren().addAll(xLine,yLine);
+        onePointTemperatureNode.add(label);
+        onePointTemperatureNode.add(circle);
+        onePointTemperatureNode.add(xLine);
+        onePointTemperatureNode.add(yLine);
+        onePointTemperatureNode.add(temperature);//original temperature ℃
+        onePointTemperatureNode.add(x);
+        onePointTemperatureNode.add(y);
+        return onePointTemperatureNode;
+    }
+
+    public ArrayList addAvgLabelInImage(int x, int y ,float temperature,String color) {
+        ArrayList onePointTemperatureNode = new ArrayList();
+        Label label = new Label();
+//        int num = new Random().nextInt(100) - 50;
+        label.setText("Avg:"+Utils.getFormatTemperature(temperature));
+        label.setTextFill(Color.web(Configs.temperatureColor));
+        label.setTranslateX(x);
+        y = y-15;
+        label.setTranslateY(y);
+        showImagePane.getChildren().add(label);
+        Circle circle = new Circle();
+        circle.setStroke(Color.web(color));
+        circle.setFill(Color.TRANSPARENT);
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+        circle.setRadius(3.5f);
+//        showImagePane.getChildren().add(circle);
+        int lineLEN = 7;
+        Line xLine = drawLine(x-lineLEN,y,x+lineLEN,y,color);
+        Line yLine = drawLine(x,y-lineLEN,x,y+lineLEN,color);
+//        showImagePane.getChildren().addAll(xLine,yLine);
         onePointTemperatureNode.add(label);
         onePointTemperatureNode.add(circle);
         onePointTemperatureNode.add(xLine);

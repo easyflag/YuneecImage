@@ -19,12 +19,14 @@ public class BoxTemperature extends Temperature {
     private Line rightLine;
     private ArrayList boxTemperatureNodeMax;
     private ArrayList boxTemperatureNodeMin;
+    private ArrayList boxTemperatureNodeAvg;
 
     public BoxTemperature(){}
 
     public BoxTemperature(int startLineX,int startLineY,int endLineX,int endLineY,
                           Line topLine,Line bottomLine,Line leftLine,Line rightLine,
-                          ArrayList boxTemperatureNodeMax,ArrayList boxTemperatureNodeMin){
+                          ArrayList boxTemperatureNodeMax,ArrayList boxTemperatureNodeMin,
+                          ArrayList boxTemperatureNodeAvg){
         this.startLineX = startLineX;
         this.startLineY = startLineY;
         this.endLineX = endLineX;
@@ -35,6 +37,7 @@ public class BoxTemperature extends Temperature {
         this.rightLine = rightLine;
         this.boxTemperatureNodeMax = boxTemperatureNodeMax;
         this.boxTemperatureNodeMin = boxTemperatureNodeMin;
+        this.boxTemperatureNodeAvg = boxTemperatureNodeAvg;
         setType(TYPE.BOX);
     }
 
@@ -116,6 +119,14 @@ public class BoxTemperature extends Temperature {
 
     public void setBoxTemperatureNodeMin(ArrayList boxTemperatureNodeMin) {
         this.boxTemperatureNodeMin = boxTemperatureNodeMin;
+    }
+
+    public ArrayList getBoxTemperatureNodeAvg() {
+        return boxTemperatureNodeAvg;
+    }
+
+    public void setBoxTemperatureNodeAvg(ArrayList boxTemperatureNodeAvg) {
+        this.boxTemperatureNodeAvg = boxTemperatureNodeAvg;
     }
 
     private boolean maxWindowDraw;

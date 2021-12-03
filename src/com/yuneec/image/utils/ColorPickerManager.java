@@ -61,6 +61,11 @@ public class ColorPickerManager {
                 Label label = (Label) boxTemperatureNodeMinList.get(0);
                 label.setTextFill(Color.web(Configs.temperatureColor));
             }
+            if (!boxTemperature.getBoxTemperatureNodeAvg().isEmpty()) {
+                ArrayList boxTemperatureNodeAvgList = boxTemperature.getBoxTemperatureNodeAvg();
+                Label label = (Label) boxTemperatureNodeAvgList.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
             boxTemperature.getTopLine().setStroke(Color.web(Configs.temperatureColor));
             boxTemperature.getBottomLine().setStroke(Color.web(Configs.temperatureColor));
             boxTemperature.getLeftLine().setStroke(Color.web(Configs.temperatureColor));
@@ -79,6 +84,11 @@ public class ColorPickerManager {
             if (!curveTemperature.getCurveTemperatureNodeMin().isEmpty()){
                 ArrayList curveTemperatureNodeMin = curveTemperature.getCurveTemperatureNodeMin();
                 Label label = (Label) curveTemperatureNodeMin.get(0);
+                label.setTextFill(Color.web(Configs.temperatureColor));
+            }
+            if (!curveTemperature.getCurveTemperatureNodeAvg().isEmpty()){
+                ArrayList curveTemperatureNodeAvg = curveTemperature.getCurveTemperatureNodeAvg();
+                Label label = (Label) curveTemperatureNodeAvg.get(0);
                 label.setTextFill(Color.web(Configs.temperatureColor));
             }
             ArrayList allLine = curveTemperature.getAllLine();
