@@ -1,10 +1,7 @@
 package com.yuneec.image;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.yuneec.image.demo.HttpUtils;
@@ -32,6 +29,7 @@ import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +39,7 @@ public class PdfReport {
 
 	private String tempImagePath = FileSystemView.getFileSystemView().getDefaultDirectory() + "\\tempYImage.png";
 	private static PdfReport pdfReport;
+	private PdfWriter pdfWriter;
 	private Document document;
 	public static PdfReport getInstance() {
 		if (pdfReport == null) {
@@ -52,14 +51,16 @@ public class PdfReport {
     public void creat(String fileName) throws Exception {
         try {
 			document = new Document(PageSize.A4);
- 
+
             File file = new File(fileName);
             file.createNewFile();
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+			pdfWriter = PdfWriter.getInstance(document, new FileOutputStream(file));
  
             document.open();
 
             generatePDF();
+
+//			addWater();
  
             document.close();
 
@@ -71,7 +72,35 @@ public class PdfReport {
         }
 		ToastUtil.toast(Language.getString("PDF report generated successfully !","PDF报告生成成功!"));
     }
- 
+
+	private void addWater() {
+		PdfContentByte waterMar = pdfWriter.getDirectContentUnder();
+		// 开始设置水印
+		waterMar.beginText();
+		// 设置水印透明度
+		PdfGState gs = new PdfGState();
+		// 设置填充字体不透明度为0.4f
+		gs.setFillOpacity(0.4f);
+		try {
+			// 设置水印字体参数及大小 (字体参数，字体编码格式，是否将字体信息嵌入到pdf中（一般不需要嵌入），字体大小)
+			waterMar.setFontAndSize(BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED), 60);
+			// 设置透明度
+			waterMar.setGState(gs);
+			// 设置水印对齐方式 水印内容 X坐标 Y坐标 旋转角度
+			waterMar.showTextAligned(Element.ALIGN_RIGHT, "www.yuneec.com" , 500, 380, 45);
+			// 设置水印颜色
+			waterMar.setColorFill(BaseColor.GRAY);
+			//结束设置
+			waterMar.endText();
+			waterMar.stroke();
+		} catch (IOException | DocumentException e) {
+			e.printStackTrace();
+		}finally {
+			waterMar = null;
+			gs = null;
+		}
+	}
+
 	private static Font titlefont,titlefontCh;
 	private static Font headfont,headfontCh;
 	private static Font keyfont,keyfontCh;
