@@ -17,6 +17,8 @@ public class Global {
     public static String cameraMode = "";
     public static String cameraE20TMode = "E20T";
     public static String cameraE10TMode = "E10T";
+    public static String cameraETxProMode = "ETx Pro";
+    public static String cameraE20ProMode = "E20 Pro";
 
     public static TemperatureUnit NowTemperatureUnit = TemperatureUnit.Celsius;
     public enum TemperatureUnit {

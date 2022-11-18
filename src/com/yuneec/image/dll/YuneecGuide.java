@@ -1,8 +1,16 @@
 package com.yuneec.image.dll;
 
+import com.yuneec.image.module.Language;
+import com.yuneec.image.utils.ToastUtil;
+
 public class YuneecGuide {
     static {
-        System.loadLibrary("lib/YuneecGuide");
+        try {
+            String path = System.getProperty("user.dir") + "\\lib\\";
+            System.load(path + "YuneecGuide.dll");
+        } catch (Exception e) {
+            ToastUtil.toast("loadLibrary fail:", new int[]{50,0});
+        }
 //        System.loadLibrary("lib/GuideImageAnalysis");
     }
 
@@ -29,7 +37,7 @@ public class YuneecGuide {
                                         int emiss, int relHum, int distance, short reflectedTemper, short atmosphericTemper, int modifyK, short modifyB);
 
 
-/*
+/*com.yuneec.image.demo.ProgressDemo.CallBack
    javac YuneecGuide.java
    javah -classpath F:\git\github\YuneecImage\src -jni com.yuneec.image.dll.YuneecGuide
    javah -classpath . -jni com.yuneec.image.dll.YuneecGuide

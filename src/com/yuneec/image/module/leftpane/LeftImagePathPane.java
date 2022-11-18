@@ -107,7 +107,10 @@ public class LeftImagePathPane{
                                 return;
                             }
                         }
-                        if (!(Global.cameraMode.startsWith(Global.cameraE20TMode) || Global.cameraMode.startsWith(Global.cameraE10TMode))){
+                        if (!(Global.cameraMode.startsWith(Global.cameraE20TMode) ||
+                              Global.cameraMode.startsWith(Global.cameraE10TMode) ||
+                              Global.cameraMode.startsWith(Global.cameraETxProMode) ||
+                              Global.cameraMode.startsWith(Global.cameraE20ProMode))){
                             ToastUtil.toast(Language.getString("Not Yuneec product image !","不是Yuneec产品图片 !"),new int[]{50,0});
                             return;
                         }

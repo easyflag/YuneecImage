@@ -19,7 +19,9 @@ public class GuiDeUtil {
     }
 
     public boolean isE20T(){
-        if (Global.cameraMode.startsWith(Global.cameraE20TMode)){
+        if (Global.cameraMode.startsWith(Global.cameraE20TMode) ||
+            Global.cameraMode.startsWith(Global.cameraETxProMode) ||
+            Global.cameraMode.startsWith(Global.cameraE20ProMode)){
             return true;
         }else {
             return false;

@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="YuneecImage:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/YuneecImage_jar</output-path>
+    <root id="archive" name="JavaFxApplication.jar">
+      <element id="module-output" name="JavaFxApplication" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/xmpcore-6.1.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/itext-asian-5.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/itextpdf-5.5.13.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/itext-pdfa-5.5.13.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/metadata-extractor-2.15.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

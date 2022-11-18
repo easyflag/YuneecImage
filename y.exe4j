@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="8.0" transformSequenceNumber="3">
+  <directoryPresets config="C:/Users/24213/Desktop/yunnec/work/YuneecImage/out/artifacts/YuneecImage_jar" />
+  <application name="YuneecImage" distributionSourceDir="C:/Users/24213/Desktop/yunnec/work/YuneecImage" />
+  <executable name="YuneecImage" wrapperType="embed" iconSet="true" iconFile="C:/Users/24213/Desktop/yunnec/work/YuneecImage/src/image/yuneecImageIco.ico" executableDir="." executableMode="gui" dpiAware="true" />
+  <java mainClass="com.yuneec.image.YuneecImage" vmParameters="-Dfile.encoding=UTF-8" preferredVM="client" minVersion="1.8">
+    <searchSequence>
+      <directory location="./jre1.8.0_131" />
+    </searchSequence>
+    <classPath>
+      <archive location="C:/Users/24213/Desktop/yunnec/work/YuneecImage/out/artifacts/YuneecImage_jar/JavaFxApplication.jar" failOnError="false" />
+      <archive location="C:/Users/24213/Desktop/yunnec/work/YuneecImage/lib/itext-asian-5.2.0.jar" failOnError="false" />
+      <archive location="C:/Users/24213/Desktop/yunnec/work/YuneecImage/lib/itextpdf-5.5.13.2.jar" failOnError="false" />
+      <archive location="C:/Users/24213/Desktop/yunnec/work/YuneecImage/lib/itext-pdfa-5.5.13.2.jar" failOnError="false" />
+      <archive location="C:/Users/24213/Desktop/yunnec/work/YuneecImage/lib/metadata-extractor-2.15.0.jar" failOnError="false" />
+      <archive location="C:/Users/24213/Desktop/yunnec/work/YuneecImage/lib/xmpcore-6.1.11.jar" failOnError="false" />
+    </classPath>
+    <nativeLibraryDirectories>
+      <directory name="./lib" />
+    </nativeLibraryDirectories>
+  </java>
+</exe4j>
